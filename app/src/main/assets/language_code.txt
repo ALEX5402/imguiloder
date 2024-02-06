@@ -1,0 +1,10 @@
+zh	简体中文
+zh	繁體中文
+en	English
+it	Italiano
+de	Deutsch
+fr	Français
+ja	日本語
+ru	Русский язык
+ko	한국어
+in	Indonesia
