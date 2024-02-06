@@ -1,7 +1,6 @@
 package com.alex.mmop.composable
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Send
@@ -26,11 +26,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,7 +53,6 @@ import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.viewmodels.modelmain
 import kotlinx.coroutines.runBlocking
 
-
 fun savestring(context: Context, key: String, value: String) {
     runBlocking {
         val sharedPreferences = context.getSharedPreferences(any.prefskey, Context.MODE_PRIVATE)
@@ -65,7 +68,7 @@ fun getstring(context: Context, key: String): String? {
 }
 
 @Composable
-fun Loginpage(context: Context){
+fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reason:String) -> Unit ){
     val localcontext  = LocalContext.current
     val mainmodel = modelmain() //viewmodel
     val usersave = getstring(localcontext, any.usersafe)
@@ -95,10 +98,7 @@ fun Loginpage(context: Context){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         }
-
     }
-
-
 
     Box(modifier = Modifier
     ){
@@ -138,9 +138,7 @@ fun Loginpage(context: Context){
                         trailingIcon = {
                             Icon(imageVector = Icons.Rounded.CheckCircle, contentDescription = null)
                         }
-
                     )
-
                 ConstraintLayout(constraintSet = constrains1,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -160,8 +158,6 @@ fun Loginpage(context: Context){
                             alexapi.GetDeviceBrand()
                         )
                         val uuid = generateuuid(userinfoclass)
-                        Log.w("kuroapi", uuid)
-
                         val kuroapi = kuroapi(
                             userkey = userkey!!,
                             uuid = uuid,
@@ -169,10 +165,15 @@ fun Loginpage(context: Context){
                             devicemodel = userinfoclass.devicemodel,
                             devicebrand = userinfoclass.devicemodel
                         )
-                        alexapi.loginapi(kuroapi,context)
                         progressbarshow.value = true
-                      
-                        
+                        alexapi.loginapi(kuroapi,context, onsucess = {
+                            progressbarshow.value = false
+                            onlogindone()
+                        } , onfailed = {
+                            progressbarshow.value = false
+                            onloginfailed(it)
+                        })
+
                     }, modifier = Modifier
                         .fillMaxWidth()
                         .layoutId(any.loginbtn),
@@ -198,16 +199,17 @@ fun Loginpage(context: Context){
                                 modifier = Modifier.offset(10.dp,12.dp)
                             )
                         }
+                        val offset = Offset(5.0f, 10.0f)
+                        ClickableText(text = AnnotatedString("! Register"),
+                         onClick = {
+                                   
 
-                        TextButton(
-                            onClick = {
-
-                            },
-                        ){
-                            Text(text = "Register !",
-                                color = registercolour()
+                         } ,
+                            style = TextStyle(shadow = Shadow(
+                                color = registercolour(), offset = offset, blurRadius = 3f)
                             )
-                        }
+                        )
+
                     }
 
                 }
@@ -225,8 +227,8 @@ fun generateuuid(userinfo: userinfo) : String {
     }
 }
 
-
 /*
+@SuppressLint("ComposableNaming")
 @Preview(showBackground = true,
     device = "spec:width=411dp,height=891dp"
 )
@@ -237,25 +239,18 @@ fun showpreviewlogin() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
- Box(modifier = Modifier
-                  .padding()
-                  .fillMaxSize() ) {
-                  Image(painter = painterResource(id = R.drawable.backgr) ,
-                      contentDescription ="null" ,
-                      modifier = Modifier.fillMaxSize(),
-                      contentScale = ContentScale.FillBounds
-                      )
-              }
+            val offset = Offset(5.0f, 10.0f)
+            ClickableText(text = AnnotatedString("! Register"), onClick = {
 
-            val userkey = remember {
-                mutableStateOf("hi")
-            }
-
-            loginpage(context = LocalContext.current)
-
-        }
+            }, style = TextStyle(
+                    shadow = Shadow(
+                        color = registercolour(), offset = offset, blurRadius = 3f
+                    )
+                ))
+          }
     }
 }
-*/
 
+
+*/
 

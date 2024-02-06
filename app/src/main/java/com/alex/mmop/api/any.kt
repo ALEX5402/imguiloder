@@ -11,5 +11,4 @@ object any {
     const val prefskey = "userkeyinfo"
     const val usersafe = "usersafe"
 
-
 }

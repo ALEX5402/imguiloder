@@ -7,6 +7,7 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import com.alex.mmop.R
 import com.alex.mmop.authapi.getuserinfo
 import com.alex.mmop.authapi.kuroapi
 import com.google.gson.Gson
@@ -59,10 +60,8 @@ object alexapi {
     }
     fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
         val activeNetwork = connectivityManager.activeNetwork
         val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
 
     }
@@ -75,9 +74,9 @@ object alexapi {
         }
     }
 
-    fun loginapi(kuroapi: kuroapi, context: Context)
+    fun loginapi(kuroapi: kuroapi, context: Context , onsucess: () -> Unit, onfailed: ( reason : String ) -> Unit )
     {
-        // kuto login api made by alex5402 using native kotlin
+        // kuro login api made by alex5402 using native kotlin and okhttp and google gson
         val scope = CoroutineScope(Dispatchers.Default)
         val clint = OkHttpClient()
         val gson = Gson()
@@ -120,21 +119,26 @@ object alexapi {
                                                 Log.i("kuroapi", "verified")
                                                 Log.i("kuroapi", "checktocken : $checktocken")
                                                 Log.i("kuroapi", tocken)
+                                               CoroutineScope(Dispatchers.Main)
+                                                   .launch {
+                                                       onsucess()
+                                                   }
                                             }else{
                                                 CoroutineScope(Dispatchers.Main)
                                                     .launch {
-                                                        Toast.makeText(context,"Cracked Account Not allowed",
+                                                        onfailed(R.string.iscrack.toString())
+                                                        Toast.makeText(context, R.string.iscrack,
                                                             Toast.LENGTH_LONG).show()
                                                         delay(3000)
                                                         System.exit(0)
                                                     }
                                             }
                                         }
-
                                     }else{
                                         CoroutineScope(Dispatchers.Main)
                                             .launch {
                                                 getinfo?.reason.let {
+                                                    onfailed(it!!)
                                                     Toast.makeText(context ,"Login error : $it",
                                                         Toast.LENGTH_LONG).show()
                                                     Log.w("login", it.toString())
@@ -142,8 +146,8 @@ object alexapi {
 
                                             }
                                     }
-
                                 }catch (err : Exception){
+                                    onfailed(err.toString())
                                     err.printStackTrace()
                                 }
                             }
@@ -152,11 +156,13 @@ object alexapi {
                     }
                     override fun onFailure(call: Call, e: IOException)
                     {
+                        onfailed(e.toString())
                         Log.e("kuroapi",e.toString())
                     }
                 })
             }catch (err : Exception){
                 err.printStackTrace()
+                onfailed(err.toString())
                 Log.e("kuroapi",err.toString())
             }
 

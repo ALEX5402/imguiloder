@@ -1,76 +1,99 @@
 package com.alex.mmop.activity
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.alex.mmop.R
+import com.alex.mmop.api.alexapi
+import com.alex.mmop.api.any
+import com.alex.mmop.authapi.kuroapi
+import com.alex.mmop.authapi.userinfo
+import com.alex.mmop.composable.generateuuid
+import com.alex.mmop.composable.splashscreen
 import com.alex.mmop.ui.theme.ImguiloderTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class splash : ComponentActivity() {
-
-
+    private var getuserkey : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ImguiloderTheme{
+            val prefffs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
+
+                ImguiloderTheme{
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = colorScheme.background
                 ) {
                     splashscreen()
-                    startnect(this)
+                    runBlocking {
+                        getuserkey = prefffs.getString(any.usersafe,"").toString()
+                    }
+                    startnect(this,getuserkey)
                 }
             }
-
         }
-
     }
-    fun startnect( context : Context){
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            context.startActivity(Intent(this,Login::class.java))
-            finish()
-        },3000)
+    fun startnect( context : Context , userkey : String? ){
+        if (getuserkey == "")
+        {
+            CoroutineScope(Dispatchers.Main).launch {
+                donext(context)
+            }
+        }else{
+            if (!alexapi.isInternetAvailable(context))
+                return Toast.makeText(context, "Unable to connect to internet", Toast.LENGTH_LONG).show()
 
+            CoroutineScope(Dispatchers.Default).launch{
+                val userinfoclass = userinfo(
+                    userkey!!,
+                    alexapi.GetAndroidID(),
+                    alexapi.GetDeviceModel(),
+                    alexapi.GetDeviceBrand()
+                )
+                val uuid = generateuuid(userinfoclass)
+                val kuroapi = kuroapi(
+                    userkey = userkey,
+                    uuid = uuid,
+                    androidid = userinfoclass.androidid,
+                    devicemodel = userinfoclass.devicemodel,
+                    devicebrand = userinfoclass.devicemodel
+                )
+                alexapi.loginapi(kuroapi,context, onsucess = {
+                    CoroutineScope(Dispatchers.Main).launch{
+                        Toast.makeText(context,R.string.splashtost,Toast.LENGTH_LONG)
+                            .show()
+                        startactivity(context)
+                    }
+                }, onfailed = {
+                    Toast.makeText(context , "${R.string.login_failed} $it",Toast.LENGTH_LONG)
+                        .show()
+                    runBlocking {
+                        donext(context)
+                    }
+                } )
+            }
+        }
     }
-}
-
-
-@SuppressLint("ComposableNaming", "UnrememberedMutableState")
-@Composable
-fun splashscreen( ){
-    val isplayin by remember {
-        mutableStateOf(true)
+    fun startactivity(context : Context){
+        context.startActivity(Intent(this,selectgame::class.java))
+        finish()
     }
-
-    val compisition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animate))
-
-    val state by animateLottieCompositionAsState(composition =compisition,
-        isPlaying = isplayin,
-        iterations = LottieConstants.IterateForever
-    )
-    Box {
+    suspend fun donext(context: Context){
+        delay(3000)
+        context.startActivity(Intent(this,Login::class.java))
+        finish()
     }
-    LottieAnimation(composition = compisition, progress = state)
-
 }
 
