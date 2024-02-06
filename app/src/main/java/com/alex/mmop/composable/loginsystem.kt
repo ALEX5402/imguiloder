@@ -202,8 +202,7 @@ fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reaso
                         val offset = Offset(5.0f, 10.0f)
                         ClickableText(text = AnnotatedString("! Register"),
                          onClick = {
-                                   
-
+                                   alexapi.openLink(localcontext,"https://t.me/esp68")
                          } ,
                             style = TextStyle(shadow = Shadow(
                                 color = registercolour(), offset = offset, blurRadius = 3f)

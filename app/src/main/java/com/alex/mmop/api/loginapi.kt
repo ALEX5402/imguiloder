@@ -1,8 +1,10 @@
 package com.alex.mmop.api
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
@@ -39,7 +41,10 @@ object alexapi {
             }.toString()
         }
     }
-
+    fun openLink(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(intent)
+    }
     fun GetDeviceModel():String {
         Log.i(any.globaltag, Build.MODEL)
         return Build.MODEL
