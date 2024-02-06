@@ -5,7 +5,4 @@ import androidx.lifecycle.ViewModel
 class modelmain : ViewModel() {
     var usersafe : String = ""
 
-
-
-
 }

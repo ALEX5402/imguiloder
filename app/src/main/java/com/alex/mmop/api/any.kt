@@ -1,6 +1,7 @@
 package com.alex.mmop.api
 
 object any {
+    external fun valueof() : Array<String>
     const val installbtn = "box1"
     const val uninstallbtn = "box2"
     const val loginbtn = "login"

@@ -1,5 +1,6 @@
 package com.alex.mmop.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,8 +25,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+
 class splash : ComponentActivity() {
+    init {
+        System.loadLibrary("mmco")
+    }
     private var getuserkey : String = ""
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

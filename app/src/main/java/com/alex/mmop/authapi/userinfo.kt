@@ -1,11 +1,8 @@
 package com.alex.mmop.authapi
 
-data class kuroapi(
-    val userkey: String,
-    val uuid : String,
+data class userinfo(
+    val userkey : String,
     val androidid : String,
     val devicemodel : String,
     val devicebrand : String
 )
-
-

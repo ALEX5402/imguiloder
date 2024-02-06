@@ -81,7 +81,7 @@ object alexapi {
 
     fun loginapi(kuroapi: kuroapi, context: Context , onsucess: () -> Unit, onfailed: ( reason : String ) -> Unit )
     {
-        // kuro login api made by alex5402 using native kotlin and okhttp and google gson
+        // kuro login api made by alex5402 using kotlin and okhttp and google gson
         val scope = CoroutineScope(Dispatchers.Default)
         val clint = OkHttpClient()
         val gson = Gson()

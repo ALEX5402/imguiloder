@@ -65,11 +65,18 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    externalNativeBuild {
+        ndkBuild {
+            path 'jni/Android.mk'
+        }
+        ndkVersion = "24.0.8215888"
+    }
 
 }
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
+    implementation 'net.lingala.zip4j:zip4j:2.11.5'
 
     // implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
@@ -81,7 +88,7 @@ dependencies {
 
     //courotines and stdlibs
     implementation "androidx.appcompat:appcompat:1.6.1"
-   implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.21"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.21"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
 

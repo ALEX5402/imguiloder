@@ -1,4 +1,4 @@
-package com.alex.mmop
+package com.alex.mmop.libonline.enc
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

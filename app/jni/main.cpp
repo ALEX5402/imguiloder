@@ -1,53 +1,37 @@
-#include <pthread.h>
-#include <jni.h>
-#include <string>
-#include "backend/Tools.h"
-#include "backend/openssl/md5.h"
-
-
-std::string CalcMD5(std::string s) {
-    std::string result;
-
-    unsigned char hash[MD5_DIGEST_LENGTH];
-    char tmp[4];
-    MD5_CTX md5;
-    MD5_Init(&md5);
-    MD5_Update(&md5, s.c_str(), s.length());
-    MD5_Final(hash, &md5);
-    for (unsigned char i : hash) {
-        sprintf(tmp, "%02x", i);
-        result += tmp;
-    }
-    return result;
-}
-
+#include "Includes.h"
+#include "obfuscate.h"
 
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_alex_mmop_api_alexapi_getmd5fromc(JNIEnv *env, jobject thiz, jstring input) {
-    const char *inputStr = env->GetStringUTFChars(input, nullptr);
-    std::string md5Result = CalcMD5(inputStr);
-    env->ReleaseStringUTFChars(input, inputStr);
-    LOGE(inputStr);
-    LOGE(md5Result.c_str());
-    return env->NewStringUTF(md5Result.c_str());
+JNIEXPORT jobjectArray JNICALL
+Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
+    const char *strings[] = {
+            OBFUSCATE("https://raw.githubusercontent.com/ALEX5402/test-host/main/alex.json"),
+            OBFUSCATE("mk23hdoie79kmaju"), // licence please don't change it 16 / 24 byte
+            OBFUSCATE("DESede/ECB/PKCS5Padding"),
+            OBFUSCATE("DESede"),
+            OBFUSCATE("dw234"), //server status
+            OBFUSCATE("awfd3wr"), // notice mode
+            OBFUSCATE("awd435"), // logclearmode
+            OBFUSCATE("sefsgtr"), // zip passwordmode
+            OBFUSCATE("dwaesrt43"), // notice_title
+            OBFUSCATE("adfret43"), // lib_url
+            OBFUSCATE("alex_example_rebrander"), // rebrander name
+            OBFUSCATE("1234"), //zip pass offline
+            OBFUSCATE("waff33aw"), // zip code
+            OBFUSCATE(""),
+            OBFUSCATE(""),
+            OBFUSCATE("")
+    };
+
+    int numStrings = sizeof(strings) / sizeof(strings[0]);
+    jclass stringClass = env->FindClass("java/lang/String");
+    jobjectArray stringArray = env->NewObjectArray(numStrings, stringClass, nullptr);
+    for (int i = 0; i < numStrings; i++) {
+        jstring string = env->NewStringUTF(strings[i]);
+        env->SetObjectArrayElement(stringArray, i, string);
+        env->DeleteLocalRef(string);
+    }
+    return stringArray;
 }
-
-/*
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-    JNIEnv *globalEnv;
-    vm->GetEnv((void **) &globalEnv, JNI_VERSION_1_6);
-  */
-/*  pthread_t t;
-    pthread_create(&t, 0, hook, 0);*//*
-
-
-    //  return funtion_name(arguments); // impliment the funtion here which one you want to call after hooks are loaded
-
-}
-JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved) {}
-
-
-*/
 
