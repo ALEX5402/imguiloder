@@ -73,9 +73,13 @@ fun Loginpage(context: Context){
     var userkey by remember {
         mutableStateOf(usersave)
     }
-    val progressbarshow by remember {
+    val progressbarshow = remember {
         mutableStateOf(false)
     }
+    if (progressbarshow.value){
+        Showprogressbar(progressbarshow = progressbarshow.value)
+    }
+    
     val compositon by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.userlogin))
     val constrains1 = ConstraintSet {
         val loginbtn = createRefFor(any.loginbtn)
@@ -166,7 +170,9 @@ fun Loginpage(context: Context){
                             devicebrand = userinfoclass.devicemodel
                         )
                         alexapi.loginapi(kuroapi,context)
-
+                        progressbarshow.value = true
+                      
+                        
                     }, modifier = Modifier
                         .fillMaxWidth()
                         .layoutId(any.loginbtn),
