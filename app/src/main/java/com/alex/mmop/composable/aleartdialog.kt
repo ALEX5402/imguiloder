@@ -1,11 +1,7 @@
 package com.alex.mmop.composable
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,33 +24,27 @@ fun Showprogressbar(progressbarshow : Boolean){
                     .padding(16.dp),
                 shape = RoundedCornerShape(16.dp),
             ) {
-                Row(modifier = Modifier.padding(20.dp)) {
-                    Column {
                         CircularProgressIndicator(
                             modifier = Modifier
-                                .width(100.dp)
-                                .height(80.dp)
-                                .fillMaxWidth()
-                                .padding(5.dp),
+                                .size(100.dp)
+                                .padding(20.dp),
                             color = MaterialTheme.colorScheme.secondary,
                             trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                        )
-                        Text(
-                            text = "Please wait",
-                            modifier = Modifier.padding(5.dp),
-                            textAlign = TextAlign.Center,
+                            )
+                 Text(
+                    text = "Please wait",
+                    modifier = Modifier.padding(5.dp),
+                    textAlign = TextAlign.Center,
 
-                        )
-                    }
-                }
+                    )
+
             }
         }
-
     }
 }
 
-
 /*
+
 @Preview(showBackground = true,
     device = "spec:width=411dp,height=891dp"
 )

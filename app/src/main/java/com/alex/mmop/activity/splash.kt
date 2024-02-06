@@ -48,7 +48,7 @@ class splash : ComponentActivity() {
     fun startnect( context : Context , userkey : String? ){
         if (getuserkey == "")
         {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Default).launch {
                 donext(context)
             }
         }else{
@@ -79,7 +79,8 @@ class splash : ComponentActivity() {
                 }, onfailed = {
                     Toast.makeText(context , "${R.string.login_failed} $it",Toast.LENGTH_LONG)
                         .show()
-                    runBlocking {
+                    alexapi.openLink(context,"https://t.me/esp68")
+                    CoroutineScope(Dispatchers.Default).launch{
                         donext(context)
                     }
                 } )

@@ -108,7 +108,7 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let {
                                 try {
-//                                    Log.w("kuro", it.toString())
+                               //    Log.w("boom", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
@@ -121,14 +121,15 @@ object alexapi {
 //                                            Log.i("kuroapi", checktocken)
 //                                            Log.e("tocken", tocken)
                                            if (tocken == checktocken){
-                                                Log.i("kuroapi", "verified")
+                                               /* Log.i("kuroapi", "verified")
                                                 Log.i("kuroapi", "checktocken : $checktocken")
-                                                Log.i("kuroapi", tocken)
+                                                Log.i("kuroapi", tocken)*/
                                                CoroutineScope(Dispatchers.Main)
                                                    .launch {
                                                        onsucess()
                                                    }
                                             }else{
+
                                                 CoroutineScope(Dispatchers.Main)
                                                     .launch {
                                                         onfailed(R.string.iscrack.toString())

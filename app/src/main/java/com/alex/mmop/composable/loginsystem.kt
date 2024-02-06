@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
@@ -26,10 +24,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
@@ -191,22 +187,11 @@ fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reaso
                         .layoutId(any.register)
                         .padding(20.dp)
                         ){
-
-                        Box (Modifier.padding(horizontal = 10.dp)
-
-                        ){
-                            Icon(imageVector = Icons.Rounded.Send, contentDescription = null,
-                                modifier = Modifier.offset(10.dp,12.dp)
-                            )
-                        }
-                        val offset = Offset(5.0f, 10.0f)
                         ClickableText(text = AnnotatedString("! Register"),
                          onClick = {
                                    alexapi.openLink(localcontext,"https://t.me/esp68")
                          } ,
-                            style = TextStyle(shadow = Shadow(
-                                color = registercolour(), offset = offset, blurRadius = 3f)
-                            )
+                            style = TextStyle(color = registercolour())
                         )
 
                     }
