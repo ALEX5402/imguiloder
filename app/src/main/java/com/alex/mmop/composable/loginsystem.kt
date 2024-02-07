@@ -211,30 +211,6 @@ fun generateuuid(userinfo: userinfo) : String {
     }
 }
 
-/*
-@SuppressLint("ComposableNaming")
-@Preview(showBackground = true,
-    device = "spec:width=411dp,height=891dp"
-)
-@Composable
-fun showpreviewlogin() {
-    selectgametheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            val offset = Offset(5.0f, 10.0f)
-            ClickableText(text = AnnotatedString("! Register"), onClick = {
-
-            }, style = TextStyle(
-                    shadow = Shadow(
-                        color = registercolour(), offset = offset, blurRadius = 3f
-                    )
-                ))
-          }
-    }
-}
 
 
-*/
 

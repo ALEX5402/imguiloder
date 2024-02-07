@@ -6,12 +6,35 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import com.alex.mmop.R
 import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
@@ -43,50 +66,116 @@ class selectgame : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             selectgametheme{
+                val constraintsss = ConstraintSet {
+                    val flot =  createRefFor("floatingbutton")
+                    constrain(flot){
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+
+                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LazyColumn(modifier = Modifier.fillMaxSize()
-                    ){
-                     items(mutablelistfgames()) {
+                    ConstraintLayout(constraintSet = constraintsss,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    {
+                        var isshowing by remember {
+                            mutableStateOf(false)
+                        }
 
-                        Selectmode(
-                            version = it.version,
-                            packagename = it.packagename,
-                            icon = it.icon,
-                            apkname = it.apkname,
-                            oninstall = {
+                        var checked by remember {
+                            mutableStateOf(false)
+                        }
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(mutablelistfgames()) {
 
+                            Selectmode(
+                                version = it.version,
+                                packagename = it.packagename,
+                                icon = it.icon,
+                                apkname = it.apkname,
+                                oninstall = {
 
-                            }, onuninstall =
-                            {
+                                }, onuninstall =
+                                {
 
+                                }
+                            )
+
+                            runBlocking {
+                                val prefs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
+                                val userkey = prefs.getString(any.usersafe, "")
+                                val userinfoclass = userinfo(
+                                    userkey!!,
+                                    alexapi.GetAndroidID(),
+                                    alexapi.GetDeviceModel(),
+                                    alexapi.GetDeviceBrand()
+                                )
+                                val uuid = generateuuid(userinfoclass)
+                                val kuroapi = kuroapi(
+                                    userkey = userkey,
+                                    uuid = uuid,
+                                    androidid = userinfoclass.androidid,
+                                    devicemodel = userinfoclass.devicemodel,
+                                    devicebrand = userinfoclass.devicemodel
+                                )
+                                checkingagaun(
+                                    kuroapi = kuroapi,
+                                    context = this@selectgame
+                                )
+                            }
+                            if (isshowing){
+                                Dialog(onDismissRequest = {
+                                    isshowing = false
+
+                                }) {
+                                    Card(colors = CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                    ),
+                                        //shape = RoundedCornerShape(50),
+                                        modifier = Modifier.padding(30.dp)
+                                    ) {
+                                        Column(Modifier.padding(10.dp))
+                                        {
+                                            Row(modifier = Modifier.toggleable(
+                                                value = checked,
+                                                role = Role.Switch,
+                                                onValueChange = {
+                                                    checked = !checked
+
+                                                }
+                                            )) {
+                                                Icon(Icons.Filled.MailOutline, contentDescription = "" )
+                                                Column (Modifier.padding(10.dp)){
+                                                    Text(text = "Enable Gms")
+                                                }
+                                                Switch(checked = checked, onCheckedChange ={
+                                                    checked = it
+                                                } )
+
+                                            }
+                                        }
+                                    }
+
+                                }
 
                             }
-                        )
-                         runBlocking {
-                             val prefs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
-                             val userkey = prefs.getString(any.usersafe,"")
-                             val userinfoclass = userinfo(
-                                 userkey!!,
-                                 alexapi.GetAndroidID(),
-                                 alexapi.GetDeviceModel(),
-                                 alexapi.GetDeviceBrand()
-                             )
-                             val uuid = generateuuid(userinfoclass)
-                             val kuroapi = kuroapi(
-                                 userkey = userkey,
-                                 uuid = uuid,
-                                 androidid = userinfoclass.androidid,
-                                 devicemodel = userinfoclass.devicemodel,
-                                 devicebrand = userinfoclass.devicemodel
-                             )
-                             checkingagaun(kuroapi = kuroapi,
-                                 context = this@selectgame
-                             )
-                         }
-                      }
+                        }
+                    }
+                        FloatingActionButton(onClick = {
+                            isshowing = true
+                            Log.w("haha","CLICKED")
+
+                        }, modifier = Modifier.layoutId("floatingbutton").padding(30.dp)
+                        ) {
+                            Icon(Icons.Filled.Settings, "Settings button")
+                        }
+
                     }
                 }
             }
@@ -94,6 +183,7 @@ class selectgame : ComponentActivity() {
     }
 
     fun checkingagaun(kuroapi: kuroapi, context: Context){
+        Log.i("check","done")
         // kuro login api made by alex5402 using kotlin and okhttp and google gson
         val scope = CoroutineScope(Dispatchers.Default)
         val clint = OkHttpClient()
