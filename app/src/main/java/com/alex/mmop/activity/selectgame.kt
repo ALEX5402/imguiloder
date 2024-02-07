@@ -1,7 +1,14 @@
 package com.alex.mmop.activity
 
+import android.Manifest
+import android.Manifest.permission.REQUEST_INSTALL_PACKAGES
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -28,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.alex.mmop.R
 import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
@@ -68,6 +77,9 @@ class selectgame : ComponentActivity() {
                     }
 
                 }
+                checkAndRequestFilePermission(this)
+                isUnknownSourcesPermissionAllowed(this)
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -152,6 +164,32 @@ class selectgame : ComponentActivity() {
                 }
             }
         }
+    }
+
+    fun checkAndRequestFilePermission(activity: Activity): Boolean {
+        val filePermission = Manifest.permission.READ_EXTERNAL_STORAGE
+        if (ContextCompat.checkSelfPermission(activity, filePermission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, arrayOf(filePermission), 1001)
+            return false
+        }
+        return true
+    }
+
+    fun isUnknownSourcesPermissionAllowed(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val permissonquery = ContextCompat.checkSelfPermission(context , REQUEST_INSTALL_PACKAGES)
+            if(permissonquery.equals(PackageManager.PERMISSION_GRANTED)){
+                Log.i("Permisson", "done")
+                return true
+            }else{
+                val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                startActivity(intent)
+            }
+        }else{
+            val intent = Intent(Settings.ACTION_SECURITY_SETTINGS)
+            startActivity(intent)
+        }
+        return false
     }
 
     fun checkingagaun(kuroapi: kuroapi, context: Context){

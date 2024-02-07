@@ -145,6 +145,7 @@ fun Selectmode(version : String,
                     }
                 }
             }
+
                 ConstraintLayout(modifier = Modifier
                     .fillMaxSize()
                     , constraintSet = constraints

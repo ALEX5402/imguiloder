@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 
 class injectinto : ComponentActivity(){
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

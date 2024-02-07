@@ -32,17 +32,36 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Settingsmenu(){
-    var checked by remember {
+    var checkgms by remember {
         mutableStateOf(false)
     }
+    var rootmode by remember {
+        mutableStateOf(false)
+    }
+    var vpnmode by remember {
+        mutableStateOf(false)
+    }
+    var hideroot by remember {
+        mutableStateOf(false)
+    }
+    var killmode by remember {
+        mutableStateOf(false)
+    }
+    var launchanimation by remember {
+        mutableStateOf(false)
+    }
+
+
+
+
     Column(Modifier.padding(10.dp))
     {
         Box(modifier = Modifier
             .toggleable(
-                value = checked,
+                value = checkgms,
                 role = Role.Switch,
                 onValueChange = {
-                    checked = !checked
+                    checkgms = !checkgms
                 }
             ).padding(10.dp)
             .border( // Apply the border modifier
@@ -65,18 +84,18 @@ fun Settingsmenu(){
                         modifier = Modifier.requiredWidth(150.dp)
                     )
                 }
-                Switch(checked = checked, onCheckedChange = {
-                    checked = it
+                Switch(checked = checkgms, onCheckedChange = {
+                    checkgms = it
                 })
             }
         }
 
         Box(modifier = Modifier
             .toggleable(
-                value = checked,
+                value = rootmode,
                 role = Role.Switch,
                 onValueChange = {
-                    checked = !checked
+                    rootmode = !rootmode
                 }
             ).padding(10.dp)
             .border( // Apply the border modifier
@@ -100,17 +119,18 @@ fun Settingsmenu(){
 
                     )
                 }
-                Switch(checked = checked, onCheckedChange = {
-                    checked = it
+                Switch(checked = rootmode, onCheckedChange = {
+                    rootmode = it
                 })
             }
         }
+
         Box(modifier = Modifier
             .toggleable(
-                value = checked,
+                value = vpnmode,
                 role = Role.Switch,
                 onValueChange = {
-                    checked = !checked
+                    vpnmode = !vpnmode
                 }
             ).padding(10.dp)
             .border( // Apply the border modifier
@@ -134,17 +154,18 @@ fun Settingsmenu(){
 
                     )
                 }
-                Switch(checked = checked, onCheckedChange = {
-                    checked = it
+                Switch(checked = vpnmode, onCheckedChange = {
+                    vpnmode = it
                 })
             }
         }
+
         Box(modifier = Modifier
             .toggleable(
-                value = checked,
+                value = hideroot,
                 role = Role.Switch,
                 onValueChange = {
-                    checked = !checked
+                    hideroot = !hideroot
                 }
             )
             .padding(10.dp)
@@ -168,17 +189,18 @@ fun Settingsmenu(){
                         color = themetextcolour2()
                     )
                 }
-                Switch(checked = checked, onCheckedChange = {
-                    checked = it
+                Switch(checked = hideroot, onCheckedChange = {
+                    hideroot = it
                 })
             }
         }
+        
         Box(modifier = Modifier
             .toggleable(
-                value = checked,
+                value = killmode,
                 role = Role.Switch,
                 onValueChange = {
-                    checked = !checked
+                    killmode = !killmode
                 }
             )
             .padding(10.dp)
@@ -202,18 +224,19 @@ fun Settingsmenu(){
                         color = themetextcolour2()
                     )
                 }
-                Switch(checked = checked, onCheckedChange = {
-                    checked = it
+                Switch(checked = killmode, onCheckedChange = {
+                    killmode = it
                 })
             }
         }
 
+
         Box(modifier = Modifier
             .toggleable(
-                value = checked,
+                value = launchanimation,
                 role = Role.Switch,
                 onValueChange = {
-                    checked = !checked
+                    launchanimation = !launchanimation
                 }
             )
             .padding(10.dp)
@@ -237,8 +260,8 @@ fun Settingsmenu(){
                         color = themetextcolour2()
                     )
                 }
-                Switch(checked = checked, onCheckedChange = {
-                    checked = it
+                Switch(checked = launchanimation, onCheckedChange = {
+                    launchanimation = it
                 })
             }
         }
