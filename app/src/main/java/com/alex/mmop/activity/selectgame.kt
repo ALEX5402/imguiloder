@@ -6,15 +6,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,15 +18,12 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -43,6 +36,7 @@ import com.alex.mmop.authapi.getuserinfo
 import com.alex.mmop.authapi.kuroapi
 import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.composable.Selectmode
+import com.alex.mmop.composable.Settingsmenu
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
 import com.google.gson.Gson
@@ -86,9 +80,7 @@ class selectgame : ComponentActivity() {
                             mutableStateOf(false)
                         }
 
-                        var checked by remember {
-                            mutableStateOf(false)
-                        }
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -136,30 +128,10 @@ class selectgame : ComponentActivity() {
                                 }) {
                                     Card(colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant
-                                    ),
-                                        //shape = RoundedCornerShape(50),
-                                        modifier = Modifier.padding(30.dp)
+                                    )
+
                                     ) {
-                                        Column(Modifier.padding(10.dp))
-                                        {
-                                            Row(modifier = Modifier.toggleable(
-                                                value = checked,
-                                                role = Role.Switch,
-                                                onValueChange = {
-                                                    checked = !checked
-
-                                                }
-                                            )) {
-                                                Icon(Icons.Filled.MailOutline, contentDescription = "" )
-                                                Column (Modifier.padding(10.dp)){
-                                                    Text(text = "Enable Gms")
-                                                }
-                                                Switch(checked = checked, onCheckedChange ={
-                                                    checked = it
-                                                } )
-
-                                            }
-                                        }
+                                    Settingsmenu()
                                     }
 
                                 }
@@ -169,9 +141,9 @@ class selectgame : ComponentActivity() {
                     }
                         FloatingActionButton(onClick = {
                             isshowing = true
-                            Log.w("haha","CLICKED")
-
-                        }, modifier = Modifier.layoutId("floatingbutton").padding(30.dp)
+                        }, modifier = Modifier
+                            .layoutId("floatingbutton")
+                            .padding(30.dp)
                         ) {
                             Icon(Icons.Filled.Settings, "Settings button")
                         }
