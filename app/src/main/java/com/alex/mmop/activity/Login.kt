@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -27,8 +29,12 @@ class Login : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                 }
-                LazyColumn(Modifier.padding(10.dp).fillMaxSize()) {
-                    item {
+                Column(
+                    Modifier
+                        .padding(10.dp)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
                         Loginpage(context = this@Login,
                             onlogindone = {
                               startActivity(Intent(this@Login,selectgame::class.java))
@@ -39,7 +45,7 @@ class Login : ComponentActivity() {
                                  .show()
                         }
                         )
-                    }
+
                 }
             }
         }

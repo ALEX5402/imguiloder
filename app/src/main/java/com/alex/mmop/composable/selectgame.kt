@@ -1,5 +1,6 @@
 package com.alex.mmop.composable
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -14,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
@@ -21,12 +23,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.alex.mmop.R
 import com.alex.mmop.api.any
 
 
+@SuppressLint("ComposableNaming")
 @Composable
-fun indiapubg(){
+fun showgame(version : String,
+             packagename : String,
+             icon : Int ,
+             apkname : String ,
+             pkgstatus : Boolean = false,
+             onuninstall : () -> Unit ,
+             oninstall : () -> Unit ,
+){
     val constraints = ConstraintSet {
         val uninstall_button = createRefFor(any.uninstallbtn)
         val install_button = createRefFor(any.installbtn)
@@ -61,30 +70,43 @@ fun indiapubg(){
         Column {
             Row(Modifier.fillMaxSize()) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    painter = painterResource(id = icon),
                     contentDescription = "image",
                     modifier = Modifier
-//                        .clip(CircleShape)
+                        .clip(RoundedCornerShape(10.dp))
                 )
                 Box (modifier= Modifier
                     .fillMaxSize()){
                     Column(Modifier.padding(15.dp)) {
-                        Text(text = "version : 3.0.0",
+                        Text(text = "version : $version",
                             modifier = Modifier.padding(2.dp),
                             fontFamily = FontFamily.Monospace
                         )
                         Row {
-                            Text(text = "status : ",
-                                modifier = Modifier.padding(2.dp),
-                                fontFamily = FontFamily.Monospace
-                            )
-                            Text(text = "online",
-                                modifier = Modifier,
-                                fontFamily = FontFamily.Monospace
-                            )
+                            if (pkgstatus){
+                                Text(text = "status : ",
+                                    modifier = Modifier.padding(2.dp),
+                                    fontFamily = FontFamily.Monospace
+                                )
+                                Text(text = "online",
+                                    color = Color.Green,
+                                    modifier = Modifier,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                            } else{
+                                Text(text = "status : ",
+                                    modifier = Modifier.padding(2.dp),
+                                    fontFamily = FontFamily.Monospace
+                                )
+                                Text(text = "Offline",
+                                    color = Color.Red,
+                                    modifier = Modifier,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                            }
 
                         }
-                        Text(text = "info : BGMI INDIA",
+                        Text(text = "info : $apkname",
                             modifier = Modifier.padding(2.dp),
                             fontFamily = FontFamily.Monospace
                         )
@@ -101,7 +123,9 @@ fun indiapubg(){
                             .layoutId(any.uninstallbtn)
                         ,
                         shape = RoundedCornerShape(10.dp),
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            onuninstall()
+                        }
 
                     ) {
                         Text(text = "  Uninstall  ")
@@ -112,7 +136,9 @@ fun indiapubg(){
                             .padding(10.dp)
                             .layoutId(any.installbtn) ,
                         shape = RoundedCornerShape(10.dp),
-                        onClick = { /*TODO*/ }) {
+                        onClick = {
+                            oninstall()
+                        }) {
                         Text(text = "Setup Files")
                     }
 
@@ -123,6 +149,7 @@ fun indiapubg(){
     }
 }
 
+
 /*
 @Preview(showBackground = true, device = "id:Nexus 5", name = "da")
 @Composable
@@ -132,8 +159,8 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            */
-/*  Box(modifier = Modifier
+
+  Box(modifier = Modifier
                   .padding()
                   .fillMaxSize() ) {
                   Image(painter = painterResource(id = R.drawable.backgr) ,
@@ -141,19 +168,17 @@ fun GreetingPreview() {
                       modifier = Modifier.fillMaxSize(),
                       contentScale = ContentScale.FillBounds
                   )
-              }*//*
+              }
 
             LazyColumn(modifier = Modifier.padding(horizontal = 10.dp)
             ){
                 item {
                     indiapubg()
-                    indiapubg()
-                    indiapubg()
-                    indiapubg()
-                    indiapubg()
+
                 }
             }
         }
     }
 }
 */
+

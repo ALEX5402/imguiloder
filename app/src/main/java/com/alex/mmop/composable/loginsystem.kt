@@ -162,7 +162,7 @@ fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reaso
                             devicebrand = userinfoclass.devicemodel
                         )
                         progressbarshow.value = true
-                        alexapi.loginapi(kuroapi,context, onsucess = {
+                        alexapi.loginnnn(kuroapi,context, onsucess = {
                             progressbarshow.value = false
                             onlogindone()
                         } , onfailed = {
