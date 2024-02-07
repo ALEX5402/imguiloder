@@ -4,5 +4,6 @@
     <string name="error">Something went wrong</string>
     <string name="login_failed">Login failed reason is </string>
     <string name="please_wait">Please wait</string>
+    <string name="somethingwrong">Something went wrong</string>
     <string name="iscrack">Cracked Account Not allowed</string>
 </resources>
