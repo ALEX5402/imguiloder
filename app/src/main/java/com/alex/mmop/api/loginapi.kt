@@ -210,7 +210,7 @@ object alexapi {
                     override fun onResponse(call: Call, response: Response) {
                         if (response.isSuccessful){
                             val extramethoods = response.body?.string()
-                            extramethoods.let {
+                            extramethoods.let { it ->
                                 try {
                                //    Log.w("boom", it.toString())
                                     val getinfo = it?.let {
