@@ -11,6 +11,7 @@ object any {
      val apikey : String = "Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"
     const val prefskey = "userkeyinfo"
     const val usersafe = "usersafe"
+    const val packageinstallpermisson = "packageinstallpermisson"
     const val settings = "settings"
     const val gmsmode = "gmsmode"
     const val crashmode = "crashmode"

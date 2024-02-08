@@ -1,11 +1,6 @@
 package com.alex.mmop.composable
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -16,11 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,33 +21,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.alex.mmop.R
 import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.any
-import com.alex.mmop.ui.theme.selectgametheme
+import com.alex.mmop.viewmodels.modelmain
+import kotlinx.coroutines.delay
 
 
 @Composable
 fun Selectmode(version : String,
-             packagename : String,
              icon : Int ,
              apkname : String ,
-             pkgstatus : Boolean = false,
+             pkgstatus : Boolean = true,
              oninstall: () -> Unit,
              onuninstall: () -> Unit
-
-
 ){
     val constraints = ConstraintSet {
         val uninstall_button = createRefFor(any.uninstallbtn)
@@ -72,8 +60,9 @@ fun Selectmode(version : String,
             bottom.linkTo(parent.bottom)
         }
     }
+    val viewmodel = modelmain()
     val playbuttontext by remember {
-        mutableStateOf(Filesapi.isobb())
+        mutableStateOf(false)
     }
 
     Box (modifier = Modifier
@@ -158,6 +147,9 @@ fun Selectmode(version : String,
                         shape = RoundedCornerShape(10.dp),
                         onClick = {
                             onuninstall()
+                      /*      runBlocking {
+                                checkobb()
+                            }*/
                         }
 
                     ) {
@@ -171,15 +163,20 @@ fun Selectmode(version : String,
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
                                 oninstall()
+                           /*     runBlocking {
+                                    checkobb()
+                                }*/
+
+
                             }) {
 
-                            Text(text = "Setup Files" , modifier = Modifier.animateVisibility(
-                               ! playbuttontext
-                            ))
+                            AnimatedVisibility(visible = !playbuttontext) {
+                                Text(text = "Setup Files")
+                            }
+                            AnimatedVisibility(visible = playbuttontext) {
+                                Text(text = "Play")
+                            }
 
-                            Text(text = "Play" , modifier = Modifier.animateVisibility(
-                                playbuttontext
-                            ))
 
                         }
                     }else{
@@ -204,30 +201,8 @@ fun Selectmode(version : String,
         }
     }
 }
-@SuppressLint("ComposableModifierFactory")
-@Composable
-private fun Modifier.animateVisibility(visible: Boolean): Modifier {
-    val transition = updateTransition(targetState = visible, label = "")
 
-    val opacity = transition.animateFloat(
-        transitionSpec = {
-            tween(
-                durationMillis = 500,
-                easing = LinearOutSlowInEasing
-            )
-        }, label = ""
-    ) { state ->
-        if (state) 1f else 0f
-    }
-    return this
-        .then(animateContentSize())
-        .then(
-            Modifier.alpha(opacity.value)
-        )
-}
-
-
-
+/*
 @Preview(showBackground = true, device = "id:Nexus 5", name = "da")
 @Composable
 fun GreetingPreview() {
@@ -247,11 +222,8 @@ fun GreetingPreview() {
                     modifier = Modifier.padding(horizontal = 10.dp)
                 ) {
                     item {
-
-
                         Selectmode(
                             version = "it.version",
-                            packagename = "it.packagename",
                             icon = R.drawable.bgmi_icon,
                             apkname = "it.apkname",
                             oninstall = {
@@ -262,12 +234,14 @@ fun GreetingPreview() {
                             }
                         )
 
-
                     }
                 }
             }
         }
 
     }
+}*/
+suspend fun checkobb(){
+    delay(3000)
+    Filesapi.isobb()
 }
-

@@ -2,18 +2,23 @@ package com.alex.mmop.activity
 
 import android.Manifest
 import android.Manifest.permission.REQUEST_INSTALL_PACKAGES
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -62,6 +67,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
+import java.io.File
 import java.io.IOException
 
 class selectgame : ComponentActivity() {
@@ -78,7 +84,13 @@ class selectgame : ComponentActivity() {
 
                 }
                 checkAndRequestFilePermission(this)
-                isUnknownSourcesPermissionAllowed(this)
+
+                val prefs = getSharedPreferences(any.packageinstallpermisson, MODE_PRIVATE)
+                val boollll = prefs.getBoolean("installpermisson",false)
+
+                if (!boollll){
+                    isUnknownSourcesPermissionAllowed(this)
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -93,20 +105,44 @@ class selectgame : ComponentActivity() {
                         }
 
 
+
+
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(mutablelistfgames()) {
-
                             Selectmode(
                                 version = it.version,
-                                packagename = it.packagename,
                                 icon = it.icon,
                                 apkname = it.apkname,
                                 oninstall = {
 
+                                    val obbpath = getExternalFilesDir("/fv/storage/emulated/0/Android/obb") // storage/emulated/0/Android/data/com.alex.mmop/files/Android/obb
+                                    if (obbpath != null) {
+                                        if (!obbpath.exists())
+                                            obbpath.mkdirs()
+                                    }
+                                    val obbpath2 = File("/storage/emulated/0/Android/obb/com.pubg.imobile")
+                                    val filelist = obbpath2.listFiles()
+
+                                    Log.w("alex", obbpath.toString())
+                                    for (file in filelist){
+                                        Log.w("obpath2", file.toString())
+                                    }
+
+                                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                        addCategory(Intent.CATEGORY_OPENABLE)
+                                        type = "application/octet-stream" // Set MIME type to allow only .obb files
+                                        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/octet-stream")) // Set MIME type filter
+                                    }
+                                    startActivityForResult(intent, FILE_PICKER_REQUEST_CODE)
+
+
                                 }, onuninstall =
                                 {
+
+
 
                                 }
                             )
@@ -141,9 +177,12 @@ class selectgame : ComponentActivity() {
                                     Card(colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant
                                     )
+                                        , modifier = Modifier.fillMaxWidth().height(400.dp)
 
                                     ) {
-                                    Settingsmenu()
+                                    Settingsmenu(this@selectgame, permissonpopup = {
+                                        isUnknownSourcesPermissionAllowed(this@selectgame)
+                                    } )
                                     }
 
                                 }
@@ -175,21 +214,64 @@ class selectgame : ComponentActivity() {
         return true
     }
 
-    fun isUnknownSourcesPermissionAllowed(context: Context): Boolean {
+    companion object {
+        const val FILE_PICKER_REQUEST_CODE = 1
+    }
+
+   @Deprecated("Deprecated in Java")
+   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val filePath = getFilePathFromUri(uri,this)
+                if (filePath != null) {
+                    Toast.makeText(this, "File selected: $filePath", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Failed to get file path", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    }
+
+
+    @SuppressLint("Range")
+    private fun getFilePathFromUri(uri: Uri, context: Context): String? {
+        return if (DocumentsContract.isDocumentUri(context, uri)) {
+            applicationContext.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    cursor.getString(cursor.getColumnIndex(DocumentsContract.Document.COLUMN_DOCUMENT_ID))
+                } else {
+                    null
+                }
+            }
+        } else {
+            uri.path
+        }
+    }
+
+
+    @SuppressLint("CommitPrefEdits")
+    fun isUnknownSourcesPermissionAllowed(context: Context){
+        val prefs = getSharedPreferences(any.packageinstallpermisson, MODE_PRIVATE)
+        val editor = prefs.edit()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val permissonquery = ContextCompat.checkSelfPermission(context , REQUEST_INSTALL_PACKAGES)
             if(permissonquery.equals(PackageManager.PERMISSION_GRANTED)){
                 Log.i("Permisson", "done")
-                return true
+                return
             }else{
                 val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
                 startActivity(intent)
+                editor.putBoolean("installpermisson",true)
+                editor.apply()
             }
         }else{
             val intent = Intent(Settings.ACTION_SECURITY_SETTINGS)
             startActivity(intent)
+            editor.putBoolean("installpermisson",true)
+            editor.apply()
         }
-        return false
     }
 
     fun checkingagaun(kuroapi: kuroapi, context: Context){
@@ -291,22 +373,34 @@ class selectgame : ComponentActivity() {
         val icons = listOf(
             R.drawable.bgmi_icon,
             R.drawable.globalpubg,
-            R.drawable.icon_foreground
+            R.drawable.icon_foreground,
+            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_launcher_foreground
         )
         val versions = listOf(
             "3.0.0",
             "3.1.1",
+            "3.1.0",
+            "3.1.0",
+            "3.1.0",
             "3.1.0"
         )
         val apknames = listOf(
             "BGMI INDIA",
             "GLOBAL PUBG",
-            "PUBG KOREA"
+            "PUBG KOREA",
+            "CHINA PUBG",
+            "PUBG TIWAN",
+            "PUBG VNG"
         )
         val packagenames = listOf(
             "com.pubg.imobile",
             "com.tencent.ig",
-            "com.pubg.korea"
+            "com.pubg.korea",
+            "com.pubg.china",
+            "com.pubg.tiwan",
+            "com.pubg.Vng"
         )
         val list = mutableListOf<gamedata>()
        return runBlocking {
