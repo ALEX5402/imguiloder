@@ -53,6 +53,7 @@ import com.alex.mmop.composable.Selectmode
 import com.alex.mmop.composable.Settingsmenu
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
+import com.alex.mmop.viewmodels.modelmain
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +84,7 @@ class selectgame : ComponentActivity() {
                     }
 
                 }
+                val viewmodel = modelmain()
                 checkAndRequestFilePermission(this)
 
                 val prefs = getSharedPreferences(any.packageinstallpermisson, MODE_PRIVATE)
@@ -112,13 +114,15 @@ class selectgame : ComponentActivity() {
                                 version = it.version,
                                 icon = it.icon,
                                 apkname = it.apkname,
+                                pkgstatus = it.gamestatus,
                                 packagename = it.packagename,
                                 oninstall = {
-
+                                 startActivity(Intent(this@selectgame,injectinto::class.java))
                                 }, onuninstall =
                                 {
-                                    
-                                }
+
+                                },
+                                liburl = viewmodel.libdownloadurl,
                             )
 
                             runBlocking {
@@ -181,6 +185,32 @@ class selectgame : ComponentActivity() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        runBlocking {
+            val prefs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
+            val userkey = prefs.getString(any.usersafe, "")
+            val userinfoclass = userinfo(
+                userkey!!,
+                alexapi.GetAndroidID(),
+                alexapi.GetDeviceModel(),
+                alexapi.GetDeviceBrand()
+            )
+            val uuid = generateuuid(userinfoclass)
+            val kuroapi = kuroapi(
+                userkey = userkey,
+                uuid = uuid,
+                androidid = userinfoclass.androidid,
+                devicemodel = userinfoclass.devicemodel,
+                devicebrand = userinfoclass.devicemodel
+            )
+            checkingagaun(
+                kuroapi = kuroapi,
+                context = this@selectgame
+            )
+        }
+    }
+
     fun checkAndRequestFilePermission(activity: Activity): Boolean {
         val filePermission = Manifest.permission.READ_EXTERNAL_STORAGE
         if (ContextCompat.checkSelfPermission(activity, filePermission) != PackageManager.PERMISSION_GRANTED) {
@@ -207,9 +237,7 @@ class selectgame : ComponentActivity() {
                 }
             }
         }
-
     }
-
 
     @SuppressLint("Range")
     private fun getFilePathFromUri(uri: Uri, context: Context): String? {
@@ -279,11 +307,13 @@ class selectgame : ComponentActivity() {
                             val extramethoods = response.body?.string()
                             extramethoods.let {
                                 try {
-                                    //    Log.w("boom", it.toString())
+                               //       Log.w("boom", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
                                     if (getinfo?.status == true){
+                                        val viewmodel = modelmain()
+                                        viewmodel.libdownloadurl = getinfo.data.libs
                                         val tocken = getinfo.data.token
                                         CoroutineScope(Dispatchers.Main).launch {
                                             val checktocken =
@@ -321,7 +351,6 @@ class selectgame : ComponentActivity() {
                                     err.printStackTrace()
                                 }
                             }
-
                         }
                     }
                     override fun onFailure(call: Call, e: IOException) {
@@ -356,6 +385,17 @@ class selectgame : ComponentActivity() {
             R.drawable.ic_launcher_foreground,
             R.drawable.ic_launcher_foreground
         )
+        val viewnodel = modelmain()
+
+        val gamestatus = listOf(
+            viewnodel.bgmistatus,
+            viewnodel.globalstatus,
+            viewnodel.koreastatus,
+            viewnodel.chinastatus,
+            viewnodel.tiwanstatus,
+            viewnodel.vngstatus,
+        )
+
         val versions = listOf(
             "3.0.0",
             "3.1.1",
@@ -387,7 +427,8 @@ class selectgame : ComponentActivity() {
                    packagename = packagenames[i],
                    icon = icons[i],
                    apkname = apknames[i],
-                   version = versions[i]
+                   version = versions[i],
+                   gamestatus = gamestatus[i]
                    )
                list.add(data)
            }

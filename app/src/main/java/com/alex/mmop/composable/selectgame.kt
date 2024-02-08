@@ -1,5 +1,6 @@
 package com.alex.mmop.composable
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -34,13 +35,18 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.any
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 @Composable
 fun Selectmode(version : String,
              icon : Int ,
+             liburl : String,
              apkname : String ,
-             pkgstatus : Boolean = true,
+             pkgstatus : Boolean,
              packagename :String,
              oninstall: () -> Unit,
              onuninstall: () -> Unit
@@ -84,7 +90,6 @@ fun Selectmode(version : String,
         .fillMaxSize()
 
     ) {
-
         Column {
             Row {
                 Box (contentAlignment = Alignment.Center,
@@ -141,7 +146,6 @@ fun Selectmode(version : String,
                     }
                 }
             }
-
                 ConstraintLayout(modifier = Modifier
                     .fillMaxSize()
                     , constraintSet = constraints
@@ -153,9 +157,23 @@ fun Selectmode(version : String,
                         shape = RoundedCornerShape(10.dp),
                         enabled = playbuttontext,
                         onClick = {
+                            showprogressbar = true
+                            runBlocking {
+                                Filesapi.removefiles(packagename = packagename,
+                                    context = context,
+                                    copydone = {
+                                        showprogressbar = it
+                                    },
+                                    copyfailed = {bool , reasult->
+                                        showprogressbar = bool
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            Toast.makeText(context,"Delete FAILED $reasult",Toast.LENGTH_SHORT).show()
+
+                                        }
+                                    }
+                                )
+                            }
                             onuninstall()
-
-
 
                         }
 
@@ -169,7 +187,6 @@ fun Selectmode(version : String,
                                 .layoutId(any.installbtn) ,
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
-                                oninstall()
                                 if (!playbuttontext){
                                     showprogressbar = true
                                     Filesapi.copyobb(packagename = packagename,
@@ -184,6 +201,8 @@ fun Selectmode(version : String,
                                         }
                                     )
                                 }else{
+                                    oninstall()
+
 
                                     //the fcore implimentetion
                                 }
@@ -219,9 +238,9 @@ fun Selectmode(version : String,
     }
     if (showprogressbar)
     {
-        Showprogressbar(showprogressbar,"Copying Files")
+        Showprogressbar(showprogressbar,"Please Wait")
     }else{
-        Showprogressbar(showprogressbar,"Copying Files")
+        Showprogressbar(showprogressbar,"Please Wait")
     }
 
 }
@@ -262,6 +281,5 @@ fun GreetingPreview() {
                 }
             }
         }
-
     }
 }*/

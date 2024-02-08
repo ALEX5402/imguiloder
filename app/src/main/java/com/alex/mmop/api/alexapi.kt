@@ -12,6 +12,7 @@ import android.widget.Toast
 import com.alex.mmop.R
 import com.alex.mmop.authapi.getuserinfo
 import com.alex.mmop.authapi.kuroapi
+import com.alex.mmop.viewmodels.modelmain
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -120,6 +121,9 @@ object alexapi {
 //                                            Log.i("kuroapi", checktocken)
 //                                            Log.e("tocken", tocken)
                                             if (tocken == checktocken){
+                                                val viewmodel = modelmain()
+                                                viewmodel.libdownloadurl = getinfo.data.libs
+                                                viewmodel.bgmistatus = getinfo.data.bgmistatus
                                                 /* Log.i("kuroapi", "verified")
                                                  Log.i("kuroapi", "checktocken : $checktocken")
                                                  Log.i("kuroapi", tocken)*/
@@ -212,10 +216,11 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let { it ->
                                 try {
-              //                  Log.w("boom", it.toString())
+                            Log.w("boom", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
+                                    val viewmodel = modelmain()
                                     if (getinfo?.status == true){
                                         val tocken = getinfo.data.token
                                         CoroutineScope(Dispatchers.Main).launch {
@@ -224,7 +229,11 @@ object alexapi {
 //                                            Log.w("kuro", "PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
 //                                            Log.i("kuroapi", checktocken)
 //                                            Log.e("tocken", tocken)
+
                                            if (tocken == checktocken){
+                                               viewmodel.libdownloadurl = getinfo.data.libs
+                                               viewmodel.bgmistatus = getinfo.data.bgmistatus
+                                               Log.w("alex", getinfo.data.libs)
                                                /* Log.i("kuroapi", "verified")
                                                 Log.i("kuroapi", "checktocken : $checktocken")
                                                 Log.i("kuroapi", tocken)*/

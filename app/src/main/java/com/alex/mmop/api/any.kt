@@ -7,7 +7,7 @@ object any {
     const val loginbtn = "login"
     const val register = "reg"
     const val globaltag = "kuroapi"
-    val loginurl : String = "https://anogs.tech/xteam/connect"
+    val loginurl : String = "https://anogs.tech/xvip/connect"
      val apikey : String = "Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"
     const val prefskey = "userkeyinfo"
     const val usersafe = "usersafe"
@@ -16,5 +16,10 @@ object any {
     const val gmsmode = "gmsmode"
     const val crashmode = "crashmode"
     const val hookmode = "hookmode"
+    const val rootmode = "rootmode"
+    const val hideroot = "hideroot"
+    const val vpnmode = "vpnmode"
+    var facebook :String = "com.facebook.katana"
+    var twitter :String = "com.twitter.android"
 
 }

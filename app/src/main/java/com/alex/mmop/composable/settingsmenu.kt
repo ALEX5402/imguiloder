@@ -4,6 +4,7 @@ package com.alex.mmop.composable
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,8 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.alex.mmop.api.any
-import kotlinx.coroutines.runBlocking
-
 
 
 @SuppressLint("CommitPrefEdits", "CoroutineCreationDuringComposition")
@@ -42,23 +41,30 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     val settingsmenu =  context.getSharedPreferences(any.settings,MODE_PRIVATE)
     val prefseditor = settingsmenu.edit()
     val gmsbutton : Boolean = settingsmenu.getBoolean(any.gmsmode,false)
+    val rootbutton : Boolean = settingsmenu.getBoolean(any.rootmode,false)
+    val hiderootd : Boolean = settingsmenu.getBoolean(any.hideroot,false)
+    val vpnbtn : Boolean = settingsmenu.getBoolean(any.vpnmode,false)
+    val crashmode : Boolean = settingsmenu.getBoolean(any.crashmode,false)
 
 
-    var checkgms by remember {
+    val checkgms = remember {
         mutableStateOf(gmsbutton)
     }
 
+
+
     var rootmode by remember {
-        mutableStateOf(false)
+        mutableStateOf(rootbutton)
     }
+
     var vpnmode by remember {
-        mutableStateOf(false)
+        mutableStateOf(vpnbtn)
     }
     var hideroot by remember {
-        mutableStateOf(false)
+        mutableStateOf(hiderootd)
     }
     var killmode by remember {
-        mutableStateOf(false)
+        mutableStateOf(crashmode)
     }
     var launchanimation by remember {
         mutableStateOf(false)
@@ -73,10 +79,12 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     {
         Box(modifier = Modifier
             .toggleable(
-                value = checkgms,
+                value = checkgms.value,
                 role = Role.Switch,
                 onValueChange = {
-                    checkgms = !checkgms
+                    checkgms.value = it
+                    prefseditor.putBoolean(any.gmsmode,it)
+                    prefseditor.apply()
                 }
             )
             .padding(10.dp)
@@ -96,12 +104,11 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         modifier = Modifier.requiredWidth(150.dp)
                     )
                 }
-                Switch(checked = checkgms, onCheckedChange = {
-                    checkgms = it
-                    runBlocking {
+                Switch(checked = checkgms.value, onCheckedChange = {
+                        checkgms.value = it
                         prefseditor.putBoolean(any.gmsmode,it)
                         prefseditor.apply()
-                    }
+
                 })
             }
         }
@@ -253,7 +260,6 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         modifier = Modifier.padding(10.dp)
                     )
                 }
-
                 Column(Modifier.padding(10.dp)) {
                     Text(
                         text = "Launch Animation",
@@ -276,16 +282,15 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
         }
         TextButton(onClick = {
-            permissonpopup()
+            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
         },
             modifier = Modifier.padding(5.dp)
         ) {
             Text(text = "Copy Obb With Documents Provider")
 
         }
-
         TextButton(onClick = {
-            permissonpopup()
+            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
         },
             modifier = Modifier.padding(5.dp)
         ) {
@@ -293,7 +298,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
         }
         TextButton(onClick = {
-            permissonpopup()
+            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
         },
             modifier = Modifier.padding(5.dp)
         ) {
@@ -301,15 +306,14 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
         }
         TextButton(onClick = {
-            permissonpopup()
+            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
         },
             modifier = Modifier.padding(5.dp)
         ) {
             Text(text = "Copy Pubg India Obb With Documents Provider")
-
         }
         TextButton(onClick = {
-            permissonpopup()
+            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
         },
             modifier = Modifier.padding(5.dp)
         ) {
@@ -328,5 +332,4 @@ fun showpriview()
 {
     Settingsmenu()
 }
-
 */

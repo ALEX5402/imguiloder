@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -50,7 +51,31 @@ object Filesapi {
             return@runBlocking false
         }
     }
-    fun copyobb(packagename: String,context: Context,copydone : (reasult : Boolean)-> Unit, copyfailed : (reasult : Boolean)-> Unit, ) {
+    fun removefiles(packagename: String, context: Context,copydone : (reasult : Boolean)-> Unit, copyfailed : (reasult : Boolean,reason:String)-> Unit){
+        val obbdir = context.getExternalFilesDir("/fv/storage/emulated/0/Android/obb/$packagename")
+        runBlocking {
+            val getobb = obbdir?.listFiles { file ->
+                file.isFile && file.name.endsWith(".obb", ignoreCase = true)
+            }
+            withContext(Dispatchers.IO, block = {
+                try {
+                    getobb?.forEach {
+                        it.delete()
+                        copydone(false)
+                    }
+                }catch (err :IOException){
+                    err.printStackTrace()
+                    copyfailed(false,err.toString())
+                }
+
+            })
+        }
+
+
+    }
+
+
+    fun copyobb(packagename: String,context: Context,copydone : (reasult : Boolean)-> Unit, copyfailed : (reasult : Boolean)-> Unit) {
         runBlocking {
             val internalobb = isinternalobb(context,packagename)
             val external = isexternalobb(packagename)
