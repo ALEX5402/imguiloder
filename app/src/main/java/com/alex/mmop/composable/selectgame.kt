@@ -19,12 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -32,8 +34,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.any
-import com.alex.mmop.viewmodels.modelmain
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -41,6 +41,7 @@ fun Selectmode(version : String,
              icon : Int ,
              apkname : String ,
              pkgstatus : Boolean = true,
+             packagename :String,
              oninstall: () -> Unit,
              onuninstall: () -> Unit
 ){
@@ -60,8 +61,14 @@ fun Selectmode(version : String,
             bottom.linkTo(parent.bottom)
         }
     }
-    val viewmodel = modelmain()
-    val playbuttontext by remember {
+    val context = LocalContext.current
+
+    val isobb: Boolean = Filesapi.isinternalobb(context = context, packagename = packagename)
+
+    var playbuttontext by remember {
+        mutableStateOf(isobb)
+    }
+    var showprogressbar by remember {
         mutableStateOf(false)
     }
 
@@ -142,14 +149,14 @@ fun Selectmode(version : String,
                     Button(
                         modifier = Modifier
                             .padding(10.dp)
-                            .layoutId(any.uninstallbtn)
-                        ,
+                            .layoutId(any.uninstallbtn),
                         shape = RoundedCornerShape(10.dp),
+                        enabled = playbuttontext,
                         onClick = {
                             onuninstall()
-                      /*      runBlocking {
-                                checkobb()
-                            }*/
+
+
+
                         }
 
                     ) {
@@ -163,11 +170,23 @@ fun Selectmode(version : String,
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
                                 oninstall()
-                           /*     runBlocking {
-                                    checkobb()
-                                }*/
+                                if (!playbuttontext){
+                                    showprogressbar = true
+                                    Filesapi.copyobb(packagename = packagename,
+                                        context = context,
+                                        copydone = {
+                                            showprogressbar = it
+                                            playbuttontext = true
+                                        },
+                                        copyfailed = {
+                                            showprogressbar = it
+                                            playbuttontext = false
+                                        }
+                                    )
+                                }else{
 
-
+                                    //the fcore implimentetion
+                                }
                             }) {
 
                             AnimatedVisibility(visible = !playbuttontext) {
@@ -176,8 +195,6 @@ fun Selectmode(version : String,
                             AnimatedVisibility(visible = playbuttontext) {
                                 Text(text = "Play")
                             }
-
-
                         }
                     }else{
                         Button(
@@ -200,6 +217,13 @@ fun Selectmode(version : String,
 
         }
     }
+    if (showprogressbar)
+    {
+        Showprogressbar(showprogressbar,"Copying Files")
+    }else{
+        Showprogressbar(showprogressbar,"Copying Files")
+    }
+
 }
 
 /*
@@ -241,7 +265,3 @@ fun GreetingPreview() {
 
     }
 }*/
-suspend fun checkobb(){
-    delay(3000)
-    Filesapi.isobb()
-}

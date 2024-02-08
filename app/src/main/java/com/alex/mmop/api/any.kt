@@ -12,7 +12,7 @@ object any {
     const val prefskey = "userkeyinfo"
     const val usersafe = "usersafe"
     const val packageinstallpermisson = "packageinstallpermisson"
-    const val settings = "settings"
+    const val settings = ""
     const val gmsmode = "gmsmode"
     const val crashmode = "crashmode"
     const val hookmode = "hookmode"

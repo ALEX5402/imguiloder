@@ -67,12 +67,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import java.io.File
 import java.io.IOException
 
 class selectgame : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             selectgametheme{
                 val constraintsss = ConstraintSet {
@@ -91,7 +91,6 @@ class selectgame : ComponentActivity() {
                 if (!boollll){
                     isUnknownSourcesPermissionAllowed(this)
                 }
-
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -102,48 +101,23 @@ class selectgame : ComponentActivity() {
                     {
                         var isshowing by remember {
                             mutableStateOf(false)
-                        }
-
-
-
-
+                        } 
 
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
+
                         items(mutablelistfgames()) {
                             Selectmode(
                                 version = it.version,
                                 icon = it.icon,
                                 apkname = it.apkname,
+                                packagename = it.packagename,
                                 oninstall = {
-
-                                    val obbpath = getExternalFilesDir("/fv/storage/emulated/0/Android/obb") // storage/emulated/0/Android/data/com.alex.mmop/files/Android/obb
-                                    if (obbpath != null) {
-                                        if (!obbpath.exists())
-                                            obbpath.mkdirs()
-                                    }
-                                    val obbpath2 = File("/storage/emulated/0/Android/obb/com.pubg.imobile")
-                                    val filelist = obbpath2.listFiles()
-
-                                    Log.w("alex", obbpath.toString())
-                                    for (file in filelist){
-                                        Log.w("obpath2", file.toString())
-                                    }
-
-                                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                                        addCategory(Intent.CATEGORY_OPENABLE)
-                                        type = "application/octet-stream" // Set MIME type to allow only .obb files
-                                        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/octet-stream")) // Set MIME type filter
-                                    }
-                                    startActivityForResult(intent, FILE_PICKER_REQUEST_CODE)
-
 
                                 }, onuninstall =
                                 {
-
-
-
+                                    
                                 }
                             )
 
@@ -169,22 +143,23 @@ class selectgame : ComponentActivity() {
                                     context = this@selectgame
                                 )
                             }
+
                             if (isshowing){
                                 Dialog(onDismissRequest = {
                                     isshowing = false
-
                                 }) {
                                     Card(colors = CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant
                                     )
-                                        , modifier = Modifier.fillMaxWidth().height(400.dp)
+                                        , modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(400.dp)
 
                                     ) {
                                     Settingsmenu(this@selectgame, permissonpopup = {
                                         isUnknownSourcesPermissionAllowed(this@selectgame)
                                     } )
                                     }
-
                                 }
 
                             }
@@ -204,6 +179,7 @@ class selectgame : ComponentActivity() {
             }
         }
     }
+
 
     fun checkAndRequestFilePermission(activity: Activity): Boolean {
         val filePermission = Manifest.permission.READ_EXTERNAL_STORAGE
@@ -331,8 +307,10 @@ class selectgame : ComponentActivity() {
                                                         Toast.LENGTH_LONG).show()
                                                     Log.w("login", it.toString())
                                                 }
-
+                                                delay(5000)
+                                                System.exit(1)
                                             }
+
                                     }
                                 }catch (err : Exception){
                                     CoroutineScope(Dispatchers.Main)

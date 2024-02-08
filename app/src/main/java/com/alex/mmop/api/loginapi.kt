@@ -212,7 +212,7 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let { it ->
                                 try {
-                               //    Log.w("boom", it.toString())
+              //                  Log.w("boom", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
@@ -240,7 +240,7 @@ object alexapi {
                                                         Toast.makeText(context, R.string.iscrack,
                                                             Toast.LENGTH_LONG).show()
                                                         delay(3000)
-                                                        System.exit(0)
+                                                        System.exit(1)
                                                     }
                                             }
                                         }

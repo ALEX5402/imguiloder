@@ -1,6 +1,9 @@
 package com.alex.mmop.composable
 
+
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,13 +31,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.alex.mmop.api.any
+import kotlinx.coroutines.runBlocking
 
 
+
+@SuppressLint("CommitPrefEdits", "CoroutineCreationDuringComposition")
 @Composable
 fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
+    val settingsmenu =  context.getSharedPreferences(any.settings,MODE_PRIVATE)
+    val prefseditor = settingsmenu.edit()
+    val gmsbutton : Boolean = settingsmenu.getBoolean(any.gmsmode,false)
+
+
     var checkgms by remember {
-        mutableStateOf(false)
+        mutableStateOf(gmsbutton)
     }
+
     var rootmode by remember {
         mutableStateOf(false)
     }
@@ -85,6 +98,10 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 }
                 Switch(checked = checkgms, onCheckedChange = {
                     checkgms = it
+                    runBlocking {
+                        prefseditor.putBoolean(any.gmsmode,it)
+                        prefseditor.apply()
+                    }
                 })
             }
         }
@@ -94,6 +111,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     rootmode = !rootmode
+
                 }
             )
             .padding(10.dp)

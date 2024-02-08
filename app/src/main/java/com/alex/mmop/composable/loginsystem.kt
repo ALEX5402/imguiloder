@@ -76,7 +76,7 @@ fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reaso
         mutableStateOf(false)
     }
     if (progressbarshow.value){
-        Showprogressbar(progressbarshow = progressbarshow.value)
+        Showprogressbar(progressbarshow = progressbarshow.value,"Please wait")
     }
     
     val compositon by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.userlogin))
