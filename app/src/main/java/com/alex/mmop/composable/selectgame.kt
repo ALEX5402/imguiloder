@@ -162,13 +162,17 @@ fun Selectmode(version : String,
                                 Filesapi.removefiles(packagename = packagename,
                                     context = context,
                                     copydone = {
-                                        showprogressbar = it
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            showprogressbar = false
+                                            playbuttontext = false
+                                        }
+
                                     },
                                     copyfailed = {bool , reasult->
-                                        showprogressbar = bool
                                         CoroutineScope(Dispatchers.Main).launch {
+                                            showprogressbar = false
+                                            playbuttontext = false
                                             Toast.makeText(context,"Delete FAILED $reasult",Toast.LENGTH_SHORT).show()
-
                                         }
                                     }
                                 )
