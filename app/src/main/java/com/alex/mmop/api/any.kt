@@ -15,7 +15,7 @@ object any {
     const val settings = ""
     const val gmsmode = "gmsmode"
     const val crashmode = "crashmode"
-    const val hookmode = "hookmode"
+    const val animation = "animation"
     const val rootmode = "rootmode"
     const val hideroot = "hideroot"
     const val vpnmode = "vpnmode"

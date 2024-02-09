@@ -25,10 +25,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -45,29 +43,28 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     val hiderootd : Boolean = settingsmenu.getBoolean(any.hideroot,false)
     val vpnbtn : Boolean = settingsmenu.getBoolean(any.vpnmode,false)
     val crashmode : Boolean = settingsmenu.getBoolean(any.crashmode,false)
+    val splash : Boolean = settingsmenu.getBoolean(any.animation,false)
 
 
     val checkgms = remember {
         mutableStateOf(gmsbutton)
     }
 
-
-
-    var rootmode by remember {
+    val rootmode = remember {
         mutableStateOf(rootbutton)
     }
 
-    var vpnmode by remember {
+    val vpnmode = remember {
         mutableStateOf(vpnbtn)
     }
-    var hideroot by remember {
+    val hideroot = remember {
         mutableStateOf(hiderootd)
     }
-    var killmode by remember {
+    val killmode = remember {
         mutableStateOf(crashmode)
     }
-    var launchanimation by remember {
-        mutableStateOf(false)
+    val launchanimation = remember {
+        mutableStateOf(splash)
     }
 
     Column(
@@ -114,11 +111,12 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
         }
         Box(modifier = Modifier
             .toggleable(
-                value = rootmode,
+                value = rootmode.value,
                 role = Role.Switch,
                 onValueChange = {
-                    rootmode = !rootmode
-
+                    rootmode.value = it
+                    prefseditor.putBoolean(any.rootmode,it)
+                    prefseditor.apply()
                 }
             )
             .padding(10.dp)
@@ -139,18 +137,21 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
                     )
                 }
-                Switch(checked = rootmode, onCheckedChange = {
-                    rootmode = it
+                Switch(checked = rootmode.value, onCheckedChange = {
+                    rootmode.value = it
+                    prefseditor.putBoolean(any.rootmode,it)
+                    prefseditor.apply()
                 })
             }
         }
-
         Box(modifier = Modifier
             .toggleable(
-                value = vpnmode,
+                value = vpnmode.value,
                 role = Role.Switch,
                 onValueChange = {
-                    vpnmode = !vpnmode
+                    vpnmode.value = it
+                    prefseditor.putBoolean(any.vpnmode,it)
+                    prefseditor.apply()
                 }
             )
             .padding(10.dp)
@@ -163,7 +164,6 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         modifier = Modifier.padding(10.dp)
                     )
                 }
-
                 Column(Modifier.padding(10.dp)) {
                     Text(
                         text = "Hide Vpn",
@@ -172,18 +172,22 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
                     )
                 }
-                Switch(checked = vpnmode, onCheckedChange = {
-                    vpnmode = it
+                Switch(checked = vpnmode.value, onCheckedChange = {
+                    vpnmode.value = it
+                    prefseditor.putBoolean(any.vpnmode,it)
+                    prefseditor.apply()
                 })
             }
         }
 
         Box(modifier = Modifier
             .toggleable(
-                value = hideroot,
+                value = hideroot.value,
                 role = Role.Switch,
                 onValueChange = {
-                    hideroot = !hideroot
+                    hideroot.value = it
+                    prefseditor.putBoolean(any.hideroot,it)
+                    prefseditor.apply()
                 }
             )
             .padding(10.dp)
@@ -204,8 +208,10 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         color = themetextcolour2()
                     )
                 }
-                Switch(checked = hideroot, onCheckedChange = {
-                    hideroot = it
+                Switch(checked = hideroot.value, onCheckedChange = {
+                    hideroot.value = it
+                    prefseditor.putBoolean(any.hideroot,it)
+                    prefseditor.apply()
                 })
             }
 
@@ -213,10 +219,12 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
         Box(modifier = Modifier
             .toggleable(
-                value = killmode,
+                value = killmode.value,
                 role = Role.Switch,
                 onValueChange = {
-                    killmode = !killmode
+                    killmode.value = it
+                    prefseditor.putBoolean(any.crashmode,it)
+                    prefseditor.apply()
                 }
             )
             .padding(10.dp)
@@ -237,17 +245,21 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         color = themetextcolour2()
                     )
                 }
-                Switch(checked = killmode, onCheckedChange = {
-                    killmode = it
+                Switch(checked = killmode.value, onCheckedChange = {
+                    killmode.value = it
+                    prefseditor.putBoolean(any.crashmode,it)
+                    prefseditor.apply()
                 })
             }
         }
         Box(modifier = Modifier
             .toggleable(
-                value = launchanimation,
+                value = launchanimation.value,
                 role = Role.Switch,
                 onValueChange = {
-                    launchanimation = !launchanimation
+                    launchanimation.value = it
+                    prefseditor.putBoolean(any.animation,it)
+                    prefseditor.apply()
                 }
             )
             .padding(10.dp)
@@ -267,11 +279,13 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         color = themetextcolour2()
                     )
                 }
-                Switch(checked = launchanimation, onCheckedChange = {
-                    launchanimation = it
+                Switch(checked = launchanimation.value, onCheckedChange = {
+                    launchanimation.value = it
+                    prefseditor.putBoolean(any.animation,it)
+                    prefseditor.apply()
+
                 })
             }
-
         }
         TextButton(onClick = {
             permissonpopup()

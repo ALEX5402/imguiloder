@@ -12,12 +12,9 @@ class modelmain : ViewModel() {
     var vngstatus   : Boolean = false
     var modownername  : String = ""
 
-
-
-
-
-    var libdownloadurl : String = ""
-
+    var liburlgl : String = ""
+    var libbgmiurl : String = ""
+    var globalmode : Boolean = false
 
 
 }

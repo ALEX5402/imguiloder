@@ -71,6 +71,8 @@ object Filesapi {
             })
         }
 
+    }
+    fun removegame(packagename: String){
 
     }
 

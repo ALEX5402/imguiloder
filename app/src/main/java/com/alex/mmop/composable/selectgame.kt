@@ -44,7 +44,6 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun Selectmode(version : String,
              icon : Int ,
-             liburl : String,
              apkname : String ,
              pkgstatus : Boolean,
              packagename :String,

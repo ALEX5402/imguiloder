@@ -122,8 +122,16 @@ object alexapi {
 //                                            Log.e("tocken", tocken)
                                             if (tocken == checktocken){
                                                 val viewmodel = modelmain()
-                                                viewmodel.libdownloadurl = getinfo.data.libs
+
                                                 viewmodel.bgmistatus = getinfo.data.bgmistatus
+                                                viewmodel.globalstatus = getinfo.data.globalstatus
+                                                viewmodel.chinastatus = getinfo.data.chinastatus
+                                                viewmodel.koreastatus = getinfo.data.koreastatus
+                                                viewmodel.vngstatus = getinfo.data.vngstatus
+                                                viewmodel.tiwanstatus = getinfo.data.tiwanstatus
+                                                viewmodel.modownername = getinfo.data.modname
+                                                viewmodel.liburlgl = getinfo.data.liburlgl
+                                                viewmodel.libbgmiurl = getinfo.data.libs
                                                 /* Log.i("kuroapi", "verified")
                                                  Log.i("kuroapi", "checktocken : $checktocken")
                                                  Log.i("kuroapi", tocken)*/
@@ -144,6 +152,7 @@ object alexapi {
                                             }
                                         }
                                     }else{
+
                                         CoroutineScope(Dispatchers.Main)
                                             .launch {
                                                 getinfo?.reason.let {
@@ -216,7 +225,7 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let { it ->
                                 try {
-                            Log.w("boom", it.toString())
+                         //   Log.w("boom", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
@@ -231,8 +240,16 @@ object alexapi {
 //                                            Log.e("tocken", tocken)
 
                                            if (tocken == checktocken){
-                                               viewmodel.libdownloadurl = getinfo.data.libs
+
                                                viewmodel.bgmistatus = getinfo.data.bgmistatus
+                                               viewmodel.globalstatus = getinfo.data.globalstatus
+                                               viewmodel.chinastatus = getinfo.data.chinastatus
+                                               viewmodel.koreastatus = getinfo.data.koreastatus
+                                               viewmodel.vngstatus = getinfo.data.vngstatus
+                                               viewmodel.tiwanstatus = getinfo.data.tiwanstatus
+                                               viewmodel.modownername = getinfo.data.modname
+                                               viewmodel.liburlgl = getinfo.data.liburlgl
+                                               viewmodel.libbgmiurl = getinfo.data.libs
                                                Log.w("alex", getinfo.data.libs)
                                                /* Log.i("kuroapi", "verified")
                                                 Log.i("kuroapi", "checktocken : $checktocken")

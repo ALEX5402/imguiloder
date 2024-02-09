@@ -43,6 +43,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.alex.mmop.R
+import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
 import com.alex.mmop.authapi.gamedata
@@ -117,12 +118,19 @@ class selectgame : ComponentActivity() {
                                 pkgstatus = it.gamestatus,
                                 packagename = it.packagename,
                                 oninstall = {
-                                 startActivity(Intent(this@selectgame,injectinto::class.java))
+                                    val intent = Intent(this@selectgame,injectinto::class.java)
+                                    intent.putExtra("packagename",it.packagename)
+                                    if (it.packagename.equals("com.pubg.imobile")){
+                                        intent.putExtra("libs",viewmodel.libbgmiurl)
+                                    }else{
+                                        intent.putExtra("libs",viewmodel.liburlgl)
+                                    }
+                                    startActivity(intent)
                                 }, onuninstall =
                                 {
-
+                                Filesapi.removegame(it.packagename)
                                 },
-                                liburl = viewmodel.libdownloadurl,
+
                             )
 
                             runBlocking {
@@ -238,7 +246,6 @@ class selectgame : ComponentActivity() {
             }
         }
     }
-
     @SuppressLint("Range")
     private fun getFilePathFromUri(uri: Uri, context: Context): String? {
         return if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -313,9 +320,9 @@ class selectgame : ComponentActivity() {
                                     }
                                     if (getinfo?.status == true){
                                         val viewmodel = modelmain()
-                                        viewmodel.libdownloadurl = getinfo.data.libs
+                                        viewmodel.libbgmiurl = getinfo.data.libs
                                         val tocken = getinfo.data.token
-                                        CoroutineScope(Dispatchers.Main).launch {
+                                    CoroutineScope(Dispatchers.Default).launch {
                                             val checktocken =
                                        alexapi.calculateMD5("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
                                             val verify = tocken == checktocken
@@ -328,7 +335,14 @@ class selectgame : ComponentActivity() {
                                                         System.exit(0)
                                                     }
                                             }
+                                        viewmodel.bgmistatus = getinfo.data.bgmistatus
+                                        viewmodel.globalstatus = getinfo.data.globalstatus
+                                        viewmodel.chinastatus = getinfo.data.chinastatus
+                                        viewmodel.koreastatus = getinfo.data.koreastatus
+                                        viewmodel.vngstatus = getinfo.data.vngstatus
+                                        viewmodel.tiwanstatus = getinfo.data.tiwanstatus
                                         }
+
                                     }else{
                                         CoroutineScope(Dispatchers.Main)
                                             .launch {

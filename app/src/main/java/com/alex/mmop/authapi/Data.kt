@@ -14,11 +14,20 @@ data class Data(
 
     // libapi extra remove if panel does't support it
     @SerializedName("libs") val libs: String,
-    @SerializedName("noticemode") val bgmistatus: Boolean, //fortemp
+    @SerializedName("liburlgl") val liburlgl: String,
+
+    @SerializedName("noticemode") val noticemode: Boolean, //fortemp
     @SerializedName("version") val version: String,
     @SerializedName("updatedapk") val updatedapk: String,
     @SerializedName("serverstatus") val serverstatus: Boolean,
-    @SerializedName("zippassmode") val zippassmode: Boolean
+    @SerializedName("zippassmode") val zippassmode: Boolean,
+
+    @SerializedName("bgmistatus") val bgmistatus: Boolean,
+    @SerializedName("globalstatus") val globalstatus: Boolean,
+    @SerializedName("koreastatus") val koreastatus: Boolean,
+    @SerializedName("chinastatus") val chinastatus: Boolean,
+    @SerializedName("tiwanstatus") val tiwanstatus: Boolean,
+    @SerializedName("vngstatus") val vngstatus: Boolean,
 
 
     /*
