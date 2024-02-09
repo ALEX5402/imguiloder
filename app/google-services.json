@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "632305820980",
+    "project_id": "imguiloder",
+    "storage_bucket": "imguiloder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632305820980:android:949d4d109f3707b36b3161",
+        "android_client_info": {
+          "package_name": "com.alex.mmop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHne6ie9NhRbo3mkm3NxIGm5FgQcHQZ8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

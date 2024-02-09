@@ -53,7 +53,8 @@ class injectinto() : ComponentActivity(){
                             onsucess = {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     showprogressbar.value = false
-                                    delay(1000)
+                                    FCore.get().init(this@injectinto,true)
+                                    delay(3000)
                                     FCore.get().launchApk(getpackage,0)
                                 }
                             },

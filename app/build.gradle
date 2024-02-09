@@ -2,9 +2,20 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+
+    
 }
 
 android {
+    signingConfigs {
+        alex {
+            storeFile file('privatekey.jks')
+            storePassword 'eglswapbugger'
+            keyAlias 'eglswapbugger'
+            keyPassword 'eglswapbugger'
+        }
+    }
     namespace 'com.alex.mmop'
     compileSdk 34
 
@@ -15,7 +26,7 @@ android {
         versionCode 1
         versionName "1.0"
         ndk.abiFilters(
-         
+                //noinspection ChromeOsAbiSupport
                 "arm64-v8a"
         )
 
@@ -35,6 +46,7 @@ android {
                 cppFlags ''
             }
         }
+        signingConfig signingConfigs.alex
     }
 
     buildTypes {
@@ -43,6 +55,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            signingConfig signingConfigs.alex
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -78,7 +91,11 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
 
-//    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation 'com.google.firebase:firebase-analytics'
+
+
+   implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"
