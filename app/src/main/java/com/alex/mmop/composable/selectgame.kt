@@ -1,5 +1,6 @@
 package com.alex.mmop.composable
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -190,6 +191,9 @@ fun Selectmode(version : String,
                                 .layoutId(any.installbtn) ,
                             shape = RoundedCornerShape(10.dp),
                             onClick = {
+                                if (!isAppInstalled(context,packagename))
+                                    return@Button Toast.makeText(context,"Please Install $packagename",Toast.LENGTH_LONG).show()
+
                                 if (!playbuttontext){
                                     showprogressbar = true
                                     Filesapi.copyobb(packagename = packagename,
@@ -204,10 +208,8 @@ fun Selectmode(version : String,
                                         }
                                     )
                                 }else{
-                                    oninstall()
+                                        oninstall()
 
-
-                                    //the fcore implimentetion
                                 }
                             }) {
 
@@ -246,6 +248,15 @@ fun Selectmode(version : String,
         Showprogressbar(showprogressbar,"Please Wait")
     }
 
+}
+fun isAppInstalled(context: Context, packageName: String): Boolean {
+    val packageManager = context.packageManager
+    return try {
+        val intent = packageManager.getLaunchIntentForPackage(packageName)
+        intent != null
+    } catch (e: Exception) {
+        false
+    }
 }
 
 /*

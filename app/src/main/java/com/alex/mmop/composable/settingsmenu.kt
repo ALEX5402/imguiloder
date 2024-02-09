@@ -25,12 +25,18 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.alex.mmop.api.any
+import com.alex.mmop.api.gmsapi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("CommitPrefEdits", "CoroutineCreationDuringComposition")
@@ -70,8 +76,8 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     Column(
         Modifier
             .padding(10.dp)
-            .verticalScroll(rememberScrollState(),true)
-            .horizontalScroll(rememberScrollState(),true)
+            .verticalScroll(rememberScrollState(), true)
+            .horizontalScroll(rememberScrollState(), true)
     )
     {
         Box(modifier = Modifier
@@ -80,7 +86,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     checkgms.value = it
-                    prefseditor.putBoolean(any.gmsmode,it)
+                    prefseditor.putBoolean(any.gmsmode, it)
                     prefseditor.apply()
                     restarttoast(context)
                 }
@@ -106,9 +112,49 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         checkgms.value = it
                         prefseditor.putBoolean(any.gmsmode,it)
                         prefseditor.apply()
-                    restarttoast(context)
-
                 })
+
+                var alertdialog by remember {
+                    mutableStateOf(false)
+                }
+
+                if (checkgms.value){
+                    alertdialog = true
+                    gmsapi.installgms(
+                        onsucess = {
+                                   CoroutineScope(Dispatchers.Main).launch {
+                                       alertdialog = false
+                                   }
+                        },
+                        onfail = {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                alertdialog = false
+                                Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    )
+                }else{
+                    alertdialog = true
+                    gmsapi.removegms(
+                        onsucess = {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                alertdialog = false
+                            }
+                        },
+                        onfail = {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                alertdialog = false
+                                Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    )
+
+                }
+                if (alertdialog){
+                    Showprogressbar(progressbarshow = alertdialog, alertindo = "Please Wait")
+                }else{
+                    Showprogressbar(progressbarshow = alertdialog, alertindo = "Please Wait")
+                }
             }
         }
         Box(modifier = Modifier
@@ -117,7 +163,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     rootmode.value = it
-                    prefseditor.putBoolean(any.rootmode,it)
+                    prefseditor.putBoolean(any.rootmode, it)
                     prefseditor.apply()
                     restarttoast(context)
                 }
@@ -154,7 +200,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     vpnmode.value = it
-                    prefseditor.putBoolean(any.vpnmode,it)
+                    prefseditor.putBoolean(any.vpnmode, it)
                     prefseditor.apply()
                     restarttoast(context)
                 }
@@ -192,7 +238,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     hideroot.value = it
-                    prefseditor.putBoolean(any.hideroot,it)
+                    prefseditor.putBoolean(any.hideroot, it)
                     prefseditor.apply()
                     restarttoast(context)
                 }
@@ -231,7 +277,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     killmode.value = it
-                    prefseditor.putBoolean(any.crashmode,it)
+                    prefseditor.putBoolean(any.crashmode, it)
                     prefseditor.apply()
                     restarttoast(context)
                 }
@@ -268,7 +314,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                 role = Role.Switch,
                 onValueChange = {
                     launchanimation.value = it
-                    prefseditor.putBoolean(any.animation,it)
+                    prefseditor.putBoolean(any.animation, it)
                     prefseditor.apply()
                     restarttoast(context)
                 }

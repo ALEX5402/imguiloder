@@ -219,6 +219,29 @@ class selectgame : ComponentActivity() {
                 context = this@selectgame
             )
         }
+      if (FCore.isClient())  {
+          runBlocking {
+              CoroutineScope(Dispatchers.Main).launch {
+                  try {
+                      val settingsmenu = getSharedPreferences(any.settings, MODE_PRIVATE)
+                      val rootbutton : Boolean = settingsmenu.getBoolean(any.rootmode,false)
+                      val hiderootd : Boolean = settingsmenu.getBoolean(any.hideroot,false)
+                      val vpnbtn : Boolean = settingsmenu.getBoolean(any.vpnmode,false)
+                      val crashmode : Boolean = settingsmenu.getBoolean(any.crashmode,false)
+                      val splash : Boolean = settingsmenu.getBoolean(any.animation,false)
+
+                      FCore.get().isEnableLauncherView = splash
+                      FCore.get().setHidePath(rootbutton)
+                      FCore.get().setHideRoot(hiderootd)
+                      FCore.get().setHideVPN(vpnbtn)
+                      FCore.get().setDisableKill(crashmode)
+                  }catch (err:Exception){
+                      err.printStackTrace()
+                  }
+              }
+          }
+      }
+
     }
 
     fun checkAndRequestFilePermission(activity: Activity): Boolean {
@@ -395,6 +418,7 @@ class selectgame : ComponentActivity() {
         super.onDestroy()
         FCore.get().stopAllPackages()
     }
+
 
     // this funtuion just set data to each veriable
     fun mutablelistfgames () : MutableList<gamedata>{
