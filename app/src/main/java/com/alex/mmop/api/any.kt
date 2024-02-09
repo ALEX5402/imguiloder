@@ -2,17 +2,18 @@ package com.alex.mmop.api
 
 object any {
     external fun valueof() : Array<String>
+    val source = valueof()
     const val installbtn = "box1"
     const val uninstallbtn = "box2"
     const val loginbtn = "login"
     const val register = "reg"
-    const val globaltag = "kuroapi"
-    val loginurl : String = "https://anogs.tech/xvip/connect"
-     val apikey : String = "Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"
+    const val globaltag = "alexapi"
+     val loginurl : String = source[4]
+     val apikey : String = source[5]
     const val prefskey = "userkeyinfo"
     const val usersafe = "usersafe"
     const val packageinstallpermisson = "packageinstallpermisson"
-    const val settings = ""
+    const val settings = "mainsettings"
     const val gmsmode = "gmsmode"
     const val crashmode = "crashmode"
     const val animation = "animation"
@@ -21,5 +22,17 @@ object any {
     const val vpnmode = "vpnmode"
     var facebook :String = "com.facebook.katana"
     var twitter :String = "com.twitter.android"
+    var zippass = source[1]
+
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -2,7 +2,6 @@ package com.alex.mmop.api
 
 import android.content.Context
 import android.util.Log
-import com.alex.mmop.viewmodels.modelmain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,19 +20,16 @@ object downloderapi {
     fun downloadlib(ondownloadsucess:()->Unit,
                     ondownloadfailed:(reason:String) ->Unit,
                     zippassword:String,
+                    librl:String,
                     context: Context){
-        val viewModel = modelmain()
-
         val ioscope = CoroutineScope(Dispatchers.IO)
-
-
         runBlocking {
             val tempdir = System.getProperty("java.io.tmpdir")
             val currtime = System.currentTimeMillis()
             val outputfile = File(tempdir,"$currtime.zip")
             ioscope.launch {
                try {
-                   val url= URL(viewModel.libdownloadurl)
+                   val url= URL(librl)
                    BufferedInputStream(url.openStream()).use { input->
                        FileOutputStream(outputfile).use {output->
                            val dataBuffer = ByteArray(1024)

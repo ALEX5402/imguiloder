@@ -78,7 +78,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
 
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+//    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"

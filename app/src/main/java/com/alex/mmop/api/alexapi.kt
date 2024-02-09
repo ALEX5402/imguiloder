@@ -92,7 +92,7 @@ object alexapi {
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Content-Type", "application/x-www-form-urlencoded")
-            .add("User-Agent" ,"Dalvik Hajajndbhaiakwn")
+            .add(any.source[6],any.source[7])
             .add("Charset", "UTF-8").build()
 
         val makerequest = Request.Builder()
@@ -209,7 +209,7 @@ object alexapi {
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Content-Type", "application/x-www-form-urlencoded")
-            .add("User-Agent" ,"Dalvik Hajajndbhaiakwn")
+            .add(any.source[6],any.source[7])
             .add("Charset", "UTF-8").build()
 
         val makerequest = Request.Builder()

@@ -30,5 +30,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Nonroot-Inject-1.0-alpha"
+rootProject.name = "Nonroot-Inject-1.0"
 include ':app'

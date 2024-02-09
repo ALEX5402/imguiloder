@@ -19,6 +19,8 @@ import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.composable.splashscreen
 import com.alex.mmop.ui.theme.ImguiloderTheme
+import com.fvbox.lib.FCore
+import com.fvbox.lib.rule.common.PackageRule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,6 +36,15 @@ class splash : ComponentActivity() {
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
+
+
+
+
+
+
         setContent {
             val prefffs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
 
@@ -98,6 +109,30 @@ class splash : ComponentActivity() {
         finish()
     }
     suspend fun donext(context: Context){
+        runBlocking {
+            try {
+                val settingsmenu = context.getSharedPreferences(any.settings, MODE_PRIVATE)
+                val rootbutton : Boolean = settingsmenu.getBoolean(any.rootmode,false)
+                val hiderootd : Boolean = settingsmenu.getBoolean(any.hideroot,false)
+                val vpnbtn : Boolean = settingsmenu.getBoolean(any.vpnmode,false)
+                val crashmode : Boolean = settingsmenu.getBoolean(any.crashmode,false)
+                val splash : Boolean = settingsmenu.getBoolean(any.animation,false)
+
+                val packagerule = PackageRule.Builder("")
+                    .isHidePath(rootbutton)
+                    .isHideRoot(hiderootd)
+                    .isHideVpn(vpnbtn)
+                    .isDisableKill(crashmode)
+                packagerule.build()
+                FCore.get().isEnableLauncherView = splash
+                FCore.get().setHidePath(rootbutton)
+                FCore.get().setHideRoot(hiderootd)
+                FCore.get().setHideVPN(vpnbtn)
+                FCore.get().setDisableKill(crashmode)
+            }catch (err:Exception){
+                err.printStackTrace()
+            }
+        }
         delay(3000)
         context.startActivity(Intent(this,Login::class.java))
         finish()

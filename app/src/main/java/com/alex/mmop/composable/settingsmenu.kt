@@ -82,6 +82,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     checkgms.value = it
                     prefseditor.putBoolean(any.gmsmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 }
             )
             .padding(10.dp)
@@ -105,6 +106,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         checkgms.value = it
                         prefseditor.putBoolean(any.gmsmode,it)
                         prefseditor.apply()
+                    restarttoast(context)
 
                 })
             }
@@ -117,6 +119,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     rootmode.value = it
                     prefseditor.putBoolean(any.rootmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 }
             )
             .padding(10.dp)
@@ -141,6 +144,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     rootmode.value = it
                     prefseditor.putBoolean(any.rootmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 })
             }
         }
@@ -152,6 +156,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     vpnmode.value = it
                     prefseditor.putBoolean(any.vpnmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 }
             )
             .padding(10.dp)
@@ -176,6 +181,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     vpnmode.value = it
                     prefseditor.putBoolean(any.vpnmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 })
             }
         }
@@ -188,6 +194,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     hideroot.value = it
                     prefseditor.putBoolean(any.hideroot,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 }
             )
             .padding(10.dp)
@@ -212,6 +219,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     hideroot.value = it
                     prefseditor.putBoolean(any.hideroot,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 })
             }
 
@@ -225,6 +233,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     killmode.value = it
                     prefseditor.putBoolean(any.crashmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 }
             )
             .padding(10.dp)
@@ -249,6 +258,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     killmode.value = it
                     prefseditor.putBoolean(any.crashmode,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 })
             }
         }
@@ -260,6 +270,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     launchanimation.value = it
                     prefseditor.putBoolean(any.animation,it)
                     prefseditor.apply()
+                    restarttoast(context)
                 }
             )
             .padding(10.dp)
@@ -283,7 +294,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     launchanimation.value = it
                     prefseditor.putBoolean(any.animation,it)
                     prefseditor.apply()
-
+                    restarttoast(context)
                 })
             }
         }
@@ -337,6 +348,9 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     }
 }
 
+fun restarttoast(context: Context){
+    Toast.makeText(context,"Restart the app to take effect",Toast.LENGTH_LONG).show()
+}
 
 
 /*

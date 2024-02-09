@@ -55,6 +55,7 @@ import com.alex.mmop.composable.Settingsmenu
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
 import com.alex.mmop.viewmodels.modelmain
+import com.fvbox.lib.FCore
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -129,6 +130,7 @@ class selectgame : ComponentActivity() {
                                 }, onuninstall =
                                 {
                                 Filesapi.removegame(it.packagename)
+                                 FCore.get().deleteUser(0)
                                 },
 
                             )
@@ -387,6 +389,11 @@ class selectgame : ComponentActivity() {
             }
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FCore.get().stopAllPackages()
     }
 
     // this funtuion just set data to each veriable
