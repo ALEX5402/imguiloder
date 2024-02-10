@@ -21,79 +21,83 @@ object downloderapi {
                     ondownloadfailed:(reason:String) ->Unit,
                     zippassword:String,
                     librl:String,
-                    context: Context){
+                    context: Context) {
         val ioscope = CoroutineScope(Dispatchers.IO)
         runBlocking {
             val tempdir = System.getProperty("java.io.tmpdir")
             val currtime = System.currentTimeMillis()
-            val outputfile = File(tempdir,"$currtime.zip")
+            val outputfile = File(tempdir, "$currtime.zip")
+
             ioscope.launch {
-               try {
-                   val url= URL(librl)
-                   BufferedInputStream(url.openStream()).use { input->
-                       FileOutputStream(outputfile).use {output->
-                           val dataBuffer = ByteArray(1024)
-                           var bytesRead: Int
-                           while (input.read(dataBuffer, 0, 1024).also { bytesRead = it } != -1) {
-                               output.write(dataBuffer, 0, bytesRead)
-                           }
-                       }
-
-                       outputfile.setExecutable(true)
-                       outputfile.setReadable(true)
-                       outputfile.setWritable(true)
-                   }
-               }catch(exeption :IOException){
-                   exeption.printStackTrace()
-                   ondownloadfailed(exeption.toString())
-               }catch (err:Exception){
-                   err.printStackTrace()
-                   ondownloadfailed(err.toString())
-               }
-                val appllicationinfo = context.packageManager.getApplicationInfo(context.packageName,0)
-                val nativelibdir = appllicationinfo.nativeLibraryDir
-                val nativelibs = File(nativelibdir)
-                val filelist = nativelibs.listFiles()
-                for (file in filelist){
-                    if (file != null){
-                        file.delete()
-
-                        Log.w("FILE", "DELETED $file")
-                    }
-                }
-                outputfile.let { thezip ->
-                    val zip = ZipFile(thezip)
+                librl.let {
+                    Log.e("LinUrl", it)
                     try {
-                        if (zip.isEncrypted){
-                            zip.setPassword(zippassword.toCharArray())
-                        }
-                        zip.extractAll(nativelibdir)
-                        val filelist2 = nativelibs.listFiles()
-                        for (file in filelist2){
-                            if (file != null){
-                                file.setExecutable(true)
-                                file.setReadable(true)
-                                file.setWritable(true)
-                                Log.w("FILE", "PERMISSON DONE $file")
+                        val url = URL(it)
+                        BufferedInputStream(url.openStream()).use { input ->
+                            FileOutputStream(outputfile).use { output ->
+                                val dataBuffer = ByteArray(1024)
+                                var bytesRead: Int
+                                while (input.read(dataBuffer, 0, 1024)
+                                        .also { bytesRead = it } != -1
+                                ) {
+                                    output.write(dataBuffer, 0, bytesRead)
+                                }
                             }
+
+                            outputfile.setExecutable(true)
+                            outputfile.setReadable(true)
+                            outputfile.setWritable(true)
                         }
-                        delay(200) // set a delay to make permisson apply please don't remove
-                        ondownloadsucess()
-                    }catch (err : ZipException){
+                    } catch (exeption: IOException) {
+                        exeption.printStackTrace()
+                        ondownloadfailed(exeption.toString())
+                    } catch (err: Exception) {
                         err.printStackTrace()
                         ondownloadfailed(err.toString())
-                    }catch (err:IOException){
-                        err.printStackTrace()
-                        ondownloadfailed(err.toString())
-                    }catch (err:Exception){
-                        err.printStackTrace()
-                        ondownloadfailed(err.toString())
+                    }
+                    val appllicationinfo =
+                        context.packageManager.getApplicationInfo(context.packageName, 0)
+                    val nativelibdir = appllicationinfo.nativeLibraryDir
+                    val nativelibs = File(nativelibdir)
+                    val filelist = nativelibs.listFiles()
+                    for (file in filelist) {
+                        if (file != null) {
+                            file.delete()
+
+                            Log.w("FILE", "DELETED $file")
+                        }
+                    }
+                    outputfile.let { thezip ->
+                        val zip = ZipFile(thezip)
+                        try {
+                            if (zip.isEncrypted) {
+                                zip.setPassword(zippassword.toCharArray())
+                            }
+                            zip.extractAll(nativelibdir)
+                            val filelist2 = nativelibs.listFiles()
+                            for (file in filelist2) {
+                                if (file != null) {
+                                    file.setExecutable(true)
+                                    file.setReadable(true)
+                                    file.setWritable(true)
+                                    Log.w("FILE", "PERMISSON DONE $file")
+                                }
+                            }
+                            delay(200) // set a delay to make permisson apply please don't remove
+                            ondownloadsucess()
+                        } catch (err: ZipException) {
+                            err.printStackTrace()
+                            ondownloadfailed(err.toString())
+                        } catch (err: IOException) {
+                            err.printStackTrace()
+                            ondownloadfailed(err.toString())
+                        } catch (err: Exception) {
+                            err.printStackTrace()
+                            ondownloadfailed(err.toString())
+                        }
                     }
                 }
             }
         }
     }
-
-
-
 }

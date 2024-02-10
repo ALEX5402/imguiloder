@@ -36,7 +36,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.alex.mmop.R
 import com.alex.mmop.api.any
-import com.alex.mmop.viewmodels.modelmain
 import com.fvbox.lib.FCore
 
 
@@ -80,7 +79,7 @@ fun Injectionview(onclicklaunch:() -> Unit) {
             top.linkTo(parent.top)
         }
     }
-    val viemodel = modelmain()
+
     ConstraintLayout(
         constraintSet = constraintsettt,
         modifier = Modifier
@@ -100,7 +99,7 @@ fun Injectionview(onclicklaunch:() -> Unit) {
 
         ) {
             Text(
-                text = viemodel.modownername,
+                text = any.modownername,
                 color = registercolour(),
                 fontSize = 30.sp
             )

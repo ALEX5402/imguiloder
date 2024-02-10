@@ -22,7 +22,8 @@ android {
     defaultConfig {
         applicationId "com.alex.mmop"
         minSdk 23
-        targetSdk 34
+        targetSdk 28
+        multiDexEnabled false
         versionCode 1
         versionName "1.0"
         ndk.abiFilters(
@@ -95,7 +96,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
 
-   implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+   implementation fileTree(dir: "libs", include: ["classes.jar","flib-release.aar"])
 
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"

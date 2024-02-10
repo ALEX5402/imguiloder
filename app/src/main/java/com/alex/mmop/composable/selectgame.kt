@@ -49,7 +49,7 @@ fun Selectmode(version : String,
              pkgstatus : Boolean,
              packagename :String,
              oninstall: () -> Unit,
-             onuninstall: () -> Unit
+             onuninstall: () -> Unit,
 ){
     val constraints = ConstraintSet {
         val uninstall_button = createRefFor(any.uninstallbtn)
@@ -67,6 +67,7 @@ fun Selectmode(version : String,
             bottom.linkTo(parent.bottom)
         }
     }
+
     val context = LocalContext.current
 
     val isobb: Boolean = Filesapi.isinternalobb(context = context, packagename = packagename)
@@ -208,11 +209,10 @@ fun Selectmode(version : String,
                                         }
                                     )
                                 }else{
-                                        oninstall()
+                                    oninstall()
 
                                 }
                             }) {
-
                             AnimatedVisibility(visible = !playbuttontext) {
                                 Text(text = "Setup Files")
                             }
@@ -235,9 +235,7 @@ fun Selectmode(version : String,
 
                     }
 
-
                 }
-
 
         }
     }
@@ -258,6 +256,7 @@ fun isAppInstalled(context: Context, packageName: String): Boolean {
         false
     }
 }
+
 
 /*
 @Preview(showBackground = true, device = "id:Nexus 5", name = "da")

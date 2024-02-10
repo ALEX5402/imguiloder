@@ -19,7 +19,6 @@ import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.composable.splashscreen
 import com.alex.mmop.ui.theme.ImguiloderTheme
-import com.fvbox.lib.FCore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -32,15 +31,10 @@ class splash : ComponentActivity() {
         System.loadLibrary("mmco")
     }
     private var getuserkey : String = ""
+
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
-
-
-
 
 
 
@@ -99,7 +93,7 @@ class splash : ComponentActivity() {
                     CoroutineScope(Dispatchers.Default).launch{
                         donext(context)
                     }
-                } )
+                })
             }
         }
     }

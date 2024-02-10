@@ -20,8 +20,10 @@ import com.alex.mmop.ui.theme.selectgametheme
 
 class Login : ComponentActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             selectgametheme {
                 Surface(
@@ -43,8 +45,7 @@ class Login : ComponentActivity() {
                             onloginfailed = {
                              Toast.makeText(this@Login, "${R.string.login_failed} $it" ,Toast.LENGTH_SHORT)
                                  .show()
-                        }
-                        )
+                        },)
                 }
             }
         }

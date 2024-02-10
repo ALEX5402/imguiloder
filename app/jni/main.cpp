@@ -1,6 +1,8 @@
 #include "Includes.h"
 #include "obfuscate.h"
-
+#include <unistd.h>
+#include <sys/system_properties.h>
+#include <dlfcn.h>
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL
@@ -14,6 +16,10 @@ Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
             OBFUSCATE("Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"), // lisence
             OBFUSCATE("User-Agent"),
             OBFUSCATE("Dalvik Hajajndbhaiakwn"),
+            OBFUSCATE("awd435"),
+            OBFUSCATE("awd435"),
+            OBFUSCATE("awd435"),
+            OBFUSCATE("awd435"),
             OBFUSCATE("awd435"),
             OBFUSCATE("awd435"),
             OBFUSCATE(""),
@@ -30,4 +36,3 @@ Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
     }
     return stringArray;
 }
-

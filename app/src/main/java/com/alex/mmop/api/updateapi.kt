@@ -4,7 +4,7 @@ import android.content.Context
 
 object updateapi {
 
-    fun downloadlibs(context: Context ,
+    fun downloadupdate(context: Context ,
                      url:String ,
                      zippass:String ,
                      onsucess : ()-> Unit,
@@ -12,6 +12,7 @@ object updateapi {
     )
     {
 
+        //soon
 
 
     }

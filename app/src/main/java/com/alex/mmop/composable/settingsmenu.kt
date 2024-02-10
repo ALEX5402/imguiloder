@@ -4,6 +4,7 @@ package com.alex.mmop.composable
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -72,7 +73,9 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     val launchanimation = remember {
         mutableStateOf(splash)
     }
-
+    var alertdialog by remember {
+        mutableStateOf(false)
+    }
     Column(
         Modifier
             .padding(10.dp)
@@ -88,7 +91,41 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                     checkgms.value = it
                     prefseditor.putBoolean(any.gmsmode, it)
                     prefseditor.apply()
-                    restarttoast(context)
+                    if (it){
+                        alertdialog = true
+                        gmsapi.installgms(
+                            onsucess = {
+                                Log.i("alex","install sucess")
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                }
+                            },
+                            onfail = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                    Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
+                                }
+
+                            }
+                        )
+                    }else{
+                        alertdialog = true
+                        gmsapi.removegms(
+                            onsucess = {
+                                Log.i("alex","remove sucess")
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                }
+                            },
+                            onfail = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                    Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        )
+
+                    }
                 }
             )
             .padding(10.dp)
@@ -108,48 +145,50 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
                         modifier = Modifier.requiredWidth(150.dp)
                     )
                 }
+
+
                 Switch(checked = checkgms.value, onCheckedChange = {
                         checkgms.value = it
                         prefseditor.putBoolean(any.gmsmode,it)
                         prefseditor.apply()
+                    if (it){
+                        alertdialog = true
+                        gmsapi.installgms(
+                            onsucess = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                    Toast.makeText(context,"Sucess",Toast.LENGTH_LONG).show()
+                                }
+                            },
+                            onfail = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                    Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        )
+                    }else{
+                        alertdialog = true
+                        gmsapi.removegms(
+                            onsucess = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                    Toast.makeText(context,"Sucess",Toast.LENGTH_LONG).show()
+                                }
+                            },
+                            onfail = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    alertdialog = false
+                                    Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        )
+
+                    }
                 })
 
-                var alertdialog by remember {
-                    mutableStateOf(false)
-                }
 
-                if (checkgms.value){
-                    alertdialog = true
-                    gmsapi.installgms(
-                        onsucess = {
-                                   CoroutineScope(Dispatchers.Main).launch {
-                                       alertdialog = false
-                                   }
-                        },
-                        onfail = {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                alertdialog = false
-                                Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    )
-                }else{
-                    alertdialog = true
-                    gmsapi.removegms(
-                        onsucess = {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                alertdialog = false
-                            }
-                        },
-                        onfail = {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                alertdialog = false
-                                Toast.makeText(context,"Error $it",Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    )
 
-                }
                 if (alertdialog){
                     Showprogressbar(progressbarshow = alertdialog, alertindo = "Please Wait")
                 }else{

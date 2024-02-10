@@ -46,6 +46,7 @@ import com.alex.mmop.R
 import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
+import com.alex.mmop.api.downloderapi
 import com.alex.mmop.authapi.gamedata
 import com.alex.mmop.authapi.getuserinfo
 import com.alex.mmop.authapi.kuroapi
@@ -54,7 +55,6 @@ import com.alex.mmop.composable.Selectmode
 import com.alex.mmop.composable.Settingsmenu
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
-import com.alex.mmop.viewmodels.modelmain
 import com.fvbox.lib.FCore
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -70,120 +70,128 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
+import java.io.File
 import java.io.IOException
 
 class selectgame : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            selectgametheme{
+
+            selectgametheme {
                 val constraintsss = ConstraintSet {
-                    val flot =  createRefFor("floatingbutton")
-                    constrain(flot){
+                    val flot = createRefFor("floatingbutton")
+                    constrain(flot) {
                         bottom.linkTo(parent.bottom)
                         end.linkTo(parent.end)
                     }
 
                 }
-                val viewmodel = modelmain()
                 checkAndRequestFilePermission(this)
 
                 val prefs = getSharedPreferences(any.packageinstallpermisson, MODE_PRIVATE)
-                val boollll = prefs.getBoolean("installpermisson",false)
+                val boollll = prefs.getBoolean("installpermisson", false)
 
-                if (!boollll){
+                if (!boollll) {
                     isUnknownSourcesPermissionAllowed(this)
                 }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ConstraintLayout(constraintSet = constraintsss,
+                    ConstraintLayout(
+                        constraintSet = constraintsss,
                         modifier = Modifier.fillMaxSize()
                     )
                     {
                         var isshowing by remember {
                             mutableStateOf(false)
-                        } 
+                        }
 
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(mutablelistfgames()) {
+                                Selectmode(
+                                    version = it.version,
+                                    icon = it.icon,
+                                    apkname = it.apkname,
+                                    pkgstatus = it.gamestatus,
+                                    packagename = it.packagename,
+                                    oninstall = {
 
-                        items(mutablelistfgames()) {
-                            Selectmode(
-                                version = it.version,
-                                icon = it.icon,
-                                apkname = it.apkname,
-                                pkgstatus = it.gamestatus,
-                                packagename = it.packagename,
-                                oninstall = {
-                                    val intent = Intent(this@selectgame,injectinto::class.java)
-                                    intent.putExtra("packagename",it.packagename)
-                                    if (it.packagename.equals("com.pubg.imobile")){
-                                        intent.putExtra("libs",viewmodel.libbgmiurl)
-                                    }else{
-                                        intent.putExtra("libs",viewmodel.liburlgl)
+
+
+                                     //  installpubgfromfile()
+
+                                        FCore.get().installPackageAsUser(it.packagename,0)
+                                        FCore.get().applicationCallback.apply {
+                                            System.loadLibrary("v2")
+                                        }
+
+
+
+                                        val intent = Intent(this@selectgame, injectinto::class.java)
+                                        intent.putExtra("package", it.packagename)
+                                        startActivity(intent)
+                                        FCore.get().init(this@selectgame, true)
+                                    }, onuninstall =
+                                    {
+                                        Filesapi.removegame(it.packagename)
+                                        FCore.get().deleteUser(0)
                                     }
-                                    startActivity(intent)
-                                }, onuninstall =
-                                {
-                                Filesapi.removegame(it.packagename)
-                                 FCore.get().deleteUser(0)
-                                },
-
-                            )
-
-                            runBlocking {
-                                val prefs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
-                                val userkey = prefs.getString(any.usersafe, "")
-                                val userinfoclass = userinfo(
-                                    userkey!!,
-                                    alexapi.GetAndroidID(),
-                                    alexapi.GetDeviceModel(),
-                                    alexapi.GetDeviceBrand()
                                 )
-                                val uuid = generateuuid(userinfoclass)
-                                val kuroapi = kuroapi(
-                                    userkey = userkey,
-                                    uuid = uuid,
-                                    androidid = userinfoclass.androidid,
-                                    devicemodel = userinfoclass.devicemodel,
-                                    devicebrand = userinfoclass.devicemodel
-                                )
-                                checkingagaun(
-                                    kuroapi = kuroapi,
-                                    context = this@selectgame
-                                )
-                            }
-
-                            if (isshowing){
-                                Dialog(onDismissRequest = {
-                                    isshowing = false
-                                }) {
-                                    Card(colors = CardDefaults.cardColors(
-                                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                runBlocking {
+                                    val prefs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
+                                    val userkey = prefs.getString(any.usersafe, "")
+                                    val userinfoclass = userinfo(
+                                        userkey!!,
+                                        alexapi.GetAndroidID(),
+                                        alexapi.GetDeviceModel(),
+                                        alexapi.GetDeviceBrand()
                                     )
-                                        , modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(400.dp)
-
-                                    ) {
-                                    Settingsmenu(this@selectgame, permissonpopup = {
-                                        isUnknownSourcesPermissionAllowed(this@selectgame)
-                                    } )
-                                    }
+                                    val uuid = generateuuid(userinfoclass)
+                                    val kuroapi = kuroapi(
+                                        userkey = userkey,
+                                        uuid = uuid,
+                                        androidid = userinfoclass.androidid,
+                                        devicemodel = userinfoclass.devicemodel,
+                                        devicebrand = userinfoclass.devicemodel
+                                    )
+                                    checkingagaun(
+                                        kuroapi = kuroapi,
+                                        context = this@selectgame
+                                    )
                                 }
 
+                                if (isshowing) {
+                                    Dialog(onDismissRequest = {
+                                        isshowing = false
+                                    }) {
+                                        Card(
+                                            colors = CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                            ), modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(400.dp)
+
+                                        ) {
+                                            Settingsmenu(this@selectgame, permissonpopup = {
+                                                isUnknownSourcesPermissionAllowed(this@selectgame)
+                                            })
+                                        }
+                                    }
+
+                                }
                             }
                         }
-                    }
-                        FloatingActionButton(onClick = {
-                            isshowing = true
-                        }, modifier = Modifier
-                            .layoutId("floatingbutton")
-                            .padding(30.dp)
+                        FloatingActionButton(
+                            onClick = {
+                                isshowing = true
+                            }, modifier = Modifier
+                                .layoutId("floatingbutton")
+                                .padding(30.dp)
                         ) {
                             Icon(Icons.Filled.Settings, "Settings button")
                         }
@@ -219,6 +227,7 @@ class selectgame : ComponentActivity() {
                 context = this@selectgame
             )
         }
+        /*
       if (FCore.isClient())  {
           runBlocking {
               CoroutineScope(Dispatchers.Main).launch {
@@ -241,12 +250,17 @@ class selectgame : ComponentActivity() {
               }
           }
       }
+*/
 
     }
 
     fun checkAndRequestFilePermission(activity: Activity): Boolean {
         val filePermission = Manifest.permission.READ_EXTERNAL_STORAGE
-        if (ContextCompat.checkSelfPermission(activity, filePermission) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                filePermission
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(activity, arrayOf(filePermission), 1001)
             return false
         }
@@ -257,13 +271,15 @@ class selectgame : ComponentActivity() {
         const val FILE_PICKER_REQUEST_CODE = 1
     }
 
-   @Deprecated("Deprecated in Java")
-   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
-                val filePath = getFilePathFromUri(uri,this)
+                val filePath = getFilePathFromUri(uri, this)
                 if (filePath != null) {
+                    val sourceFile = File(filePath)
+
                     Toast.makeText(this, "File selected: $filePath", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Failed to get file path", Toast.LENGTH_SHORT).show()
@@ -271,6 +287,7 @@ class selectgame : ComponentActivity() {
             }
         }
     }
+
     @SuppressLint("Range")
     private fun getFilePathFromUri(uri: Uri, context: Context): String? {
         return if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -288,30 +305,31 @@ class selectgame : ComponentActivity() {
 
 
     @SuppressLint("CommitPrefEdits")
-    fun isUnknownSourcesPermissionAllowed(context: Context){
+    fun isUnknownSourcesPermissionAllowed(context: Context) {
         val prefs = getSharedPreferences(any.packageinstallpermisson, MODE_PRIVATE)
         val editor = prefs.edit()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val permissonquery = ContextCompat.checkSelfPermission(context , REQUEST_INSTALL_PACKAGES)
-            if(permissonquery.equals(PackageManager.PERMISSION_GRANTED)){
+            val permissonquery =
+                ContextCompat.checkSelfPermission(context, REQUEST_INSTALL_PACKAGES)
+            if (permissonquery.equals(PackageManager.PERMISSION_GRANTED)) {
                 Log.i("Permisson", "done")
                 return
-            }else{
+            } else {
                 val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
                 startActivity(intent)
-                editor.putBoolean("installpermisson",true)
+                editor.putBoolean("installpermisson", true)
                 editor.apply()
             }
-        }else{
+        } else {
             val intent = Intent(Settings.ACTION_SECURITY_SETTINGS)
             startActivity(intent)
-            editor.putBoolean("installpermisson",true)
+            editor.putBoolean("installpermisson", true)
             editor.apply()
         }
     }
 
-    fun checkingagaun(kuroapi: kuroapi, context: Context){
-        Log.i("check","done")
+    fun checkingagaun(kuroapi: kuroapi, context: Context) {
+        Log.i("check", "done")
         // kuro login api made by alex5402 using kotlin and okhttp and google gson
         val scope = CoroutineScope(Dispatchers.Default)
         val clint = OkHttpClient()
@@ -323,7 +341,7 @@ class selectgame : ComponentActivity() {
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Content-Type", "application/x-www-form-urlencoded")
-            .add("User-Agent" ,"Dalvik Hajajndbhaiakwn")
+            .add("User-Agent", "Dalvik Hajajndbhaiakwn")
             .add("Charset", "UTF-8").build()
 
         val makerequest = Request.Builder()
@@ -333,47 +351,51 @@ class selectgame : ComponentActivity() {
             .build()
         scope.launch {
             try {
-                clint .newCall(makerequest).enqueue(object : Callback {
+                clint.newCall(makerequest).enqueue(object : Callback {
                     override fun onResponse(call: Call, response: Response) {
-                        if (response.isSuccessful){
+                        if (response.isSuccessful) {
                             val extramethoods = response.body?.string()
                             extramethoods.let {
                                 try {
-                               //       Log.w("boom", it.toString())
+                                    //       Log.w("boom", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
-                                    if (getinfo?.status == true){
-                                        val viewmodel = modelmain()
-                                        viewmodel.libbgmiurl = getinfo.data.libs
+                                    if (getinfo?.status == true) {
+
+                                        any.liburlgl = getinfo.data.libs
                                         val tocken = getinfo.data.token
-                                    CoroutineScope(Dispatchers.Default).launch {
+                                        CoroutineScope(Dispatchers.Default).launch {
                                             val checktocken =
-                                       alexapi.calculateMD5("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
+                                                alexapi.calculateMD5("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
                                             val verify = tocken == checktocken
-                                            if (!verify){
+                                            if (!verify) {
                                                 CoroutineScope(Dispatchers.Main)
                                                     .launch {
-                                                        Toast.makeText(context, R.string.iscrack,
-                                                            Toast.LENGTH_LONG).show()
+                                                        Toast.makeText(
+                                                            context, R.string.iscrack,
+                                                            Toast.LENGTH_LONG
+                                                        ).show()
                                                         delay(3000)
                                                         System.exit(0)
                                                     }
                                             }
-                                        viewmodel.bgmistatus = getinfo.data.bgmistatus
-                                        viewmodel.globalstatus = getinfo.data.globalstatus
-                                        viewmodel.chinastatus = getinfo.data.chinastatus
-                                        viewmodel.koreastatus = getinfo.data.koreastatus
-                                        viewmodel.vngstatus = getinfo.data.vngstatus
-                                        viewmodel.tiwanstatus = getinfo.data.tiwanstatus
+                                            any.bgmistatus = getinfo.data.bgmistatus
+                                            any.globalstatus = getinfo.data.globalstatus
+                                            any.chinastatus = getinfo.data.chinastatus
+                                            any.koreastatus = getinfo.data.koreastatus
+                                            any.vngstatus = getinfo.data.vngstatus
+                                            any.tiwanstatus = getinfo.data.tiwanstatus
                                         }
 
-                                    }else{
+                                    } else {
                                         CoroutineScope(Dispatchers.Main)
                                             .launch {
                                                 getinfo?.reason.let {
-                                                    Toast.makeText(context ,"Login error : $it",
-                                                        Toast.LENGTH_LONG).show()
+                                                    Toast.makeText(
+                                                        context, "Login error : $it",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
                                                     Log.w("login", it.toString())
                                                 }
                                                 delay(5000)
@@ -381,38 +403,86 @@ class selectgame : ComponentActivity() {
                                             }
 
                                     }
-                                }catch (err : Exception){
+                                } catch (err: Exception) {
                                     CoroutineScope(Dispatchers.Main)
                                         .launch {
-                                           Toast.makeText(context,R.string.somethingwrong,Toast.LENGTH_SHORT)
-                                               .show()
+                                            Toast.makeText(
+                                                context,
+                                                R.string.somethingwrong,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
                                         }
                                     err.printStackTrace()
                                 }
                             }
                         }
                     }
+
                     override fun onFailure(call: Call, e: IOException) {
                         CoroutineScope(Dispatchers.Main)
                             .launch {
-                                Toast.makeText(context,"${R.string.somethingwrong} $e",Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    context,
+                                    "${R.string.somethingwrong} $e",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                     }
 
 
                 })
-            }catch (err : Exception){
+            } catch (err: Exception) {
                 err.printStackTrace()
                 CoroutineScope(Dispatchers.Main)
                     .launch {
 
                     }
-                Log.e("kuroapi",err.toString())
+                Log.e("kuroapi", err.toString())
             }
 
         }
     }
+
+
+
+    fun Setuplibswithclone(packagename: String ,
+                           context: Context,
+                           libs:String,
+                           zippassword:String,
+                           onsucess:()->Unit,
+                           onfailed:(reason:String)->Unit
+    ){
+        val check = FCore.get().isInstalled(packagename,0)
+        if (check){
+            downloderapi.downloadlib(
+                ondownloadsucess = {
+                    onsucess()
+                },
+                ondownloadfailed = {
+                    onfailed(it)
+                },
+                zippassword = zippassword,
+                librl = libs,
+                context = context)
+        }else{
+           val reasult = FCore.get().installPackageAsUser(packagename,0)
+
+            Toast.makeText(context,reasult.toString(),Toast.LENGTH_SHORT).show()
+            downloderapi.downloadlib(
+                ondownloadsucess = {
+                    onsucess()
+                },
+                ondownloadfailed = {
+                    onfailed(it)
+                },
+                zippassword = zippassword,
+                librl = libs,
+                context = context)
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -430,15 +500,15 @@ class selectgame : ComponentActivity() {
             R.drawable.ic_launcher_foreground,
             R.drawable.ic_launcher_foreground
         )
-        val viewnodel = modelmain()
+
 
         val gamestatus = listOf(
-            viewnodel.bgmistatus,
-            viewnodel.globalstatus,
-            viewnodel.koreastatus,
-            viewnodel.chinastatus,
-            viewnodel.tiwanstatus,
-            viewnodel.vngstatus,
+            any.bgmistatus,
+            any.globalstatus,
+            any.koreastatus,
+            any.chinastatus,
+            any.tiwanstatus,
+            any.vngstatus,
         )
 
         val versions = listOf(

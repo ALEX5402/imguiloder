@@ -46,7 +46,6 @@ import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
 import com.alex.mmop.authapi.kuroapi
 import com.alex.mmop.authapi.userinfo
-import com.alex.mmop.viewmodels.modelmain
 import kotlinx.coroutines.runBlocking
 
 fun savestring(context: Context, key: String, value: String) {
@@ -64,9 +63,12 @@ fun getstring(context: Context, key: String): String? {
 }
 
 @Composable
-fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reason:String) -> Unit ){
+fun Loginpage(context: Context ,
+              onlogindone : () -> Unit,
+              onloginfailed : (reason:String) -> Unit,
+
+){
     val localcontext  = LocalContext.current
-    val mainmodel = modelmain() //viewmodel
     val usersave = getstring(localcontext, any.usersafe)
 
     var userkey by remember {
@@ -168,7 +170,8 @@ fun Loginpage(context: Context , onlogindone : () -> Unit,onloginfailed : (reaso
                         } , onfailed = {
                             progressbarshow.value = false
                             onloginfailed(it)
-                        })
+                        },
+                            )
 
                     }, modifier = Modifier
                         .fillMaxWidth()

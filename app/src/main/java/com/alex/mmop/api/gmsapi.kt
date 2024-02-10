@@ -3,6 +3,7 @@ package com.alex.mmop.api
 import com.fvbox.lib.FCore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -21,21 +22,15 @@ object gmsapi {
                 "com.google.android.feedback",
                 "com.google.android.onetimeinitializer",
                 "com.google.android.partnersetup",
-                "com.google.android.setupwizard",
-                "com.google.android.syncadapters.calendar"
+                "com.google.android.setupwizard"
             )
             CoroutineScope(Dispatchers.Default).launch {
                 try {
-
                     for (apk in packages){
-                        val check = FCore.get().isInstalled(apk,0)
-                        if (check){
                             FCore.get().uninstallPackageAsUser(apk,0)
-                            onsucess()
-                        }else{
-                            onsucess()
-                        }
                     }
+                    delay(2000)
+                    onsucess()
                 }catch (err :Exception){
                     err.printStackTrace()
                     onfail(err.toString())
@@ -57,20 +52,15 @@ object gmsapi {
                 "com.google.android.feedback",
                 "com.google.android.onetimeinitializer",
                 "com.google.android.partnersetup",
-                "com.google.android.setupwizard",
-                "com.google.android.syncadapters.calendar"
+                "com.google.android.setupwizard"
             )
             CoroutineScope(Dispatchers.Default).launch {
                 try {
                     for (apk in packages){
-                        val check = FCore.get().isInstalled(apk,0)
-                        if (!check){
                             FCore.get().installPackageAsUser(apk,0)
-                            onsucess()
-                        }else{
-                            onsucess()
-                        }
                     }
+                    delay(2000)
+                    onsucess()
                 }catch (err :Exception){
                     err.printStackTrace()
                     onfail(err.toString())
