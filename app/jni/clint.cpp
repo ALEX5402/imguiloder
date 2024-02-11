@@ -17,7 +17,8 @@ void *main_thread(void *) {
 
     void *handle = dlopen(fullPath, RTLD_NOW);
     if (handle == NULL) {
-        __android_log_print(ANDROID_LOG_ERROR, "LoadLib", "Failed to load library: %s", dlerror());
+      //  __android_log_print(ANDROID_LOG_ERROR, "LoadLib", "Failed to load library: %s", dlerror());
+        __android_log_print(ANDROID_LOG_ERROR, "LoadLib", "Failed to load");
     } else {
         __android_log_print(ANDROID_LOG_INFO, "LoadLib", "Library loaded successfully");
     }

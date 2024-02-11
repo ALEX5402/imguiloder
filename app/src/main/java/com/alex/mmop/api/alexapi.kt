@@ -92,10 +92,12 @@ object alexapi {
             "application/x-www-form-urlencoded".toMediaTypeOrNull(),
             "game=PUBG&user_key=${kuroapi.userkey}&serial=${kuroapi.uuid}"
         )
+        val agent = any.source[6]
+        val header4111 = any.source[7]
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Content-Type", "application/x-www-form-urlencoded")
-            .add(any.source[6],any.source[7])
+            .add(agent,header4111)
             .add("Charset", "UTF-8").build()
 
         val makerequest = Request.Builder()
@@ -125,8 +127,8 @@ object alexapi {
 //                                            Log.e("tocken", tocken)
                                             if (tocken == checktocken){
 
-                                            //    any.bgmistatus = getinfo.data.bgmistatus
-                                             any.globalstatus = getinfo.data.globalstatus
+                                   //           any.bgmistatus = getinfo.data.bgmistatus
+                                              any.globalstatus = getinfo.data.globalstatus
                                                 any.chinastatus = getinfo.data.chinastatus
                                                 any.koreastatus = getinfo.data.koreastatus
                                                 any.vngstatus = getinfo.data.vngstatus
@@ -162,7 +164,7 @@ object alexapi {
                                                     onfailed(it!!)
                                                     Toast.makeText(context ,"Login error : $it",
                                                         Toast.LENGTH_LONG).show()
-                                                    Log.w("login", it.toString())
+                                              //      Log.w("login", it.toString())
                                                 }
 
                                             }
@@ -184,7 +186,7 @@ object alexapi {
                             .launch {
                                 onfailed(e.toString())
                             }
-                        Log.e("kuroapi",e.toString())
+                   //     Log.e("kuroapi",e.toString())
                     }
                 })
             }catch (err : Exception){
@@ -193,7 +195,7 @@ object alexapi {
                     .launch {
                         onfailed(err.toString())
                     }
-                Log.e("kuroapi",err.toString())
+             //   Log.e("kuroapi",err.toString())
             }
 
         }
@@ -212,10 +214,12 @@ object alexapi {
             "application/x-www-form-urlencoded".toMediaTypeOrNull(),
             "game=PUBG&user_key=${kuroapi.userkey}&serial=${kuroapi.uuid}"
         )
+        val agent = any.source[6]
+        val header4111 = any.source[7]
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Content-Type", "application/x-www-form-urlencoded")
-            .add(any.source[6],any.source[7])
+            .add(agent,header4111)
             .add("Charset", "UTF-8").build()
 
         val makerequest = Request.Builder()
@@ -231,7 +235,7 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let { it ->
                                 try {
-                            Log.w("alexapi", it.toString())
+//                            Log.w("alexapi", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
@@ -246,7 +250,7 @@ object alexapi {
 
                                            if (tocken == checktocken){
 
-                                      //         any.bgmistatus = getinfo.data.bgmistatus
+                                       //        any.bgmistatus = getinfo.data.bgmistatus
                                                 any.globalstatus = getinfo.data.globalstatus
                                                any.chinastatus = getinfo.data.chinastatus
                                                any.koreastatus = getinfo.data.koreastatus
@@ -283,7 +287,7 @@ object alexapi {
                                                     onfailed(it!!)
                                                     Toast.makeText(context ,"Login error : $it",
                                                         Toast.LENGTH_LONG).show()
-                                                    Log.w("login", it.toString())
+                                          ///          Log.w("login", it.toString())
                                                 }
 
                                             }
@@ -305,7 +309,7 @@ object alexapi {
                             .launch {
                                 onfailed(e.toString())
                             }
-                        Log.e("kuroapi",e.toString())
+                   //     Log.e("kuroapi",e.toString())
                     }
                 })
             }catch (err : Exception){
@@ -314,7 +318,7 @@ object alexapi {
                     .launch {
                         onfailed(err.toString())
                     }
-                Log.e("kuroapi",err.toString())
+             ///   Log.e("kuroapi",err.toString())
             }
 
         }

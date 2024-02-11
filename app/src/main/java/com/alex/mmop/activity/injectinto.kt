@@ -7,12 +7,18 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.alex.mmop.composable.Injectionview
+import com.alex.mmop.composable.Showprogressbar
 import com.alex.mmop.ui.theme.selectgametheme
 import com.fvbox.lib.FCore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class injectinto() : ComponentActivity(){
@@ -20,11 +26,48 @@ class injectinto() : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val getpackage = intent.getStringExtra("package")
-        Log.w("haha",getpackage.toString())
-        Log.w("haha",getpackage.toString())
 
+        setContent {
+
+            var showdialog by remember{
+                mutableStateOf(false)
+            }
+
+            selectgametheme{
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                 Injectionview(onclicklaunch = {
+                     CoroutineScope(Dispatchers.Main).launch {
+                         showdialog = true
+                         delay(3000)
+                         showdialog = false
+                         getpackage?.let {
+                             FCore.get().launchApk(it,0)
+                             clean()
+                         }
+                      }
+                    })
+                    if (showdialog){
+                        Showprogressbar(showdialog)
+                    }else{
+                        Showprogressbar(showdialog)
+                    }
+                }
+
+            }
+        }
+
+
+
+    }
+
+
+    fun clean ( ){
         CoroutineScope(Dispatchers.Default).launch {
             val getfiles = filesDir.listFiles()
+            delay(3000)
             getfiles?.let {
                 for (files in getfiles) {
                     val getfile = files.name.endsWith(
@@ -36,22 +79,6 @@ class injectinto() : ComponentActivity(){
                         Log.w("FILE DELETED", files.toString())
                     }
                 }
-            }
-        }
-
-        setContent {
-            selectgametheme{
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                 Injectionview(onclicklaunch = {
-                      getpackage?.let {
-                         FCore.get().launchApk(it,0)
-                     }
-                    })
-                }
-
             }
         }
     }

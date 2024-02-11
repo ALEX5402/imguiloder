@@ -1,35 +1,33 @@
 package com.alex.mmop.composable
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -49,35 +47,65 @@ fun Injectionview(onclicklaunch:() -> Unit) {
             .clip(RoundedCornerShape(30.dp))
             .background(Color.Transparent),
     ) {
-        Image(
+     /*   Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
-        )
+        )*/
     }
+
+/*
+    Column(
+        Modifier
+            .layoutId("borderbox")
+            .fillMaxSize()
+            .border(
+                BorderStroke(
+                    width = 2.dp,
+                    color = Color(255, 255, 255, 255)
+                ),
+                shape = MaterialTheme.shapes.medium
+            )
+            .padding(vertical = 20.dp)
+        , horizontalAlignment =  Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {}
+*/
+
     val constraintsettt = ConstraintSet {
 
-        val textview = createRefFor("text11")
-        val card = createRefFor("card11")
-        val boxmodname = createRefFor("modname")
-        constrain(textview) {
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-        constrain(card) {
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(parent.top)
+        val modname = createRefFor("modname")
+        val launchbutton = createRefFor("launchbutton")
+        val socialmedia = createRefFor("socialmedia")
+        val bottomcredit = createRefFor("bottomcredit")
 
-        }
-        constrain(boxmodname) {
+        constrain(modname){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             top.linkTo(parent.top)
         }
+        constrain(launchbutton){
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        constrain(socialmedia){
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        constrain(bottomcredit){
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            bottom.linkTo(parent.bottom)
+        }
+
+        createVerticalChain(
+            modname,
+            launchbutton,
+            socialmedia,
+            bottomcredit
+        )
+
     }
 
     ConstraintLayout(
@@ -86,440 +114,73 @@ fun Injectionview(onclicklaunch:() -> Unit) {
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        Box(modifier = Modifier.layoutId("text11")) {
-            Text(
-                text = "Ui Desined By ALEX5402", color = Color.Red,
-                fontFamily = FontFamily.Monospace
 
-            )
-        }
         Box(
-            modifier = Modifier.padding(30.dp)
+            modifier = Modifier
+                .padding(30.dp)
                 .layoutId("modname")
 
         ) {
             Text(
                 text = any.modownername,
                 color = registercolour(),
-                fontSize = 30.sp
+                fontSize = 15.sp,
+                textAlign = TextAlign.Center
             )
         }
-        Box(
-            Modifier
-                .layoutId("card11")
-                .border(
-                    BorderStroke(
-                        width = 2.dp,
-                        color = Color(255, 255, 255, 255)
-                    ),
-                    shape = MaterialTheme.shapes.medium
-                )
-                .padding(vertical = 20.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding()
-                    .heightIn(200.dp)
-                    .width(300.dp)
-                    .padding(horizontal = 20.dp)
 
-            ) {
-                Column {
-
-
-                    Row(
-                        Modifier.padding(10.dp)
-                    ) {
-
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-                        )
-                    }
-
-                    Row(
-                        Modifier.padding(10.dp)
-                    ) {
-
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-                        )
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-                        )
-                    }
-                    Row(
-                        Modifier.padding(10.dp)
-                    ) {
-
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-                        )
-                    }
-                    Row(
-                        Modifier.padding(10.dp)
-                    ) {
-
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-
-                        )
-                        Image(painter = painterResource(id = R.drawable.facebook),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .padding(10.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.facebook)
-                                    }
-                                )
-
-
-                        )
-
-                        Image(painter = painterResource(id = R.drawable.twitter),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clickable(
-                                    role = Role.Image,
-                                    onClick = {
-                                        launchsocial(any.twitter)
-                                    }
-                                )
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Button(
-                            onClick =
-                            {
-                                onclicklaunch()
-                            },
-                            modifier = Modifier,
-                        ) {
-                            Text(text = "Launch Game")
+        Column(modifier = Modifier.layoutId("launchbutton")) {
+            Image(painter = painterResource(id = R.drawable.start),
+                contentDescription = null,
+                modifier = Modifier.height(50.dp)
+                    .width(100.dp)
+                    .height(50.dp)
+                    .clickable(
+                        role = Role.Image,
+                        onClick = {
+                            onclicklaunch()
                         }
+                    )
+            )
+            Text(text = "Start")
 
+        }
+
+        Row(modifier = Modifier.layoutId("socialmedia")) {
+            Image(painter = painterResource(id = R.drawable.facebook),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(50.dp)
+                    .padding(10.dp)
+
+                    .clickable(
+                        role = Role.Image,
+                        onClick = {
+                            launchsocial(any.facebook)
+                        }
+                    )
+
+            )
+            Spacer(modifier = Modifier.size(20.dp))
+            Image(painterResource(id = R.drawable.twitter), null, Modifier
+                .height(50.dp)
+                .width(50.dp)
+                .height(50.dp)
+                .clickable(
+                    role = Role.Image,
+                    onClick = {
+                        launchsocial(any.twitter)
                     }
+                )
+            )
+        }
 
-                }
+        Box(modifier = Modifier.layoutId("bottomcredit")) {
+            Text(
+                text = "Ui Desined By ALEX5402", color = Color.Red,
+                fontFamily = FontFamily.Monospace
 
-            }
-
+            )
         }
 
     }
@@ -530,6 +191,7 @@ fun launchsocial(packagename: String) {
         FCore.get().launchApk(packagename,0)
     }else{
         val reasult =  FCore.get().installPackageAsUser(packagename,0)
+         
         if (reasult != null){
             FCore.get().launchApk(packagename,0)
         }
@@ -537,7 +199,9 @@ fun launchsocial(packagename: String) {
 }
 
 
-/*
+
+
+
 
 @Preview(device = "spec:parent=Nexus 5")
 @Composable
@@ -546,15 +210,10 @@ fun Priview(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Injectionview()
+        Injectionview(onclicklaunch = {
+
+        })
 
     }
 }
-
-
-
-
-
-*/
-
 

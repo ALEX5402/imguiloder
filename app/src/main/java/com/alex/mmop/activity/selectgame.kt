@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -112,7 +113,7 @@ class selectgame : ComponentActivity() {
                         var showprogressbar by remember {
                             mutableStateOf(false)
                         }
-
+                        val contextee = LocalContext.current
                         LazyColumn(
                             modifier = Modifier.fillMaxSize()
                         ) {
@@ -134,6 +135,7 @@ class selectgame : ComponentActivity() {
                                         }else{
                                             any.liburlgl
                                         }
+                                        
                                         Setuplibswithclone(
                                             packagename = it.packagename,
                                             context = this@selectgame,
@@ -147,8 +149,9 @@ class selectgame : ComponentActivity() {
                                             },
                                             onsucess = {
                                                 CoroutineScope(Dispatchers.Main).launch {
-                                                    FCore.get().init(this@selectgame, true)
-                                                    delay(3000)
+                                                    FCore.get().stopAllPackages()
+                                                    FCore.get().restartCoreSystem()
+                                                    FCore.get().init(contextee,true)
                                                     showprogressbar = false
                                                     val intent = Intent(this@selectgame, injectinto::class.java)
                                                     intent.putExtra("package", it.packagename)
@@ -184,7 +187,7 @@ class selectgame : ComponentActivity() {
                                         context = this@selectgame
                                     )
                                 }
-
+                                
                                 if (isshowing) {
                                     Dialog(onDismissRequest = {
                                         isshowing = false
@@ -226,7 +229,9 @@ class selectgame : ComponentActivity() {
                 }
             }
         }
+
         runBlocking {
+
             if (FCore.isClient())  {
                 runBlocking {
                     CoroutineScope(Dispatchers.Main).launch {
@@ -251,7 +256,6 @@ class selectgame : ComponentActivity() {
             }
         }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -355,7 +359,7 @@ class selectgame : ComponentActivity() {
     }
 
     fun checkingagaun(kuroapi: kuroapi, context: Context) {
-        Log.i("check", "done")
+       // Log.i("check", "done")
         // kuro login api made by alex5402 using kotlin and okhttp and google gson
         val scope = CoroutineScope(Dispatchers.Default)
         val clint = OkHttpClient()
@@ -364,10 +368,13 @@ class selectgame : ComponentActivity() {
             "application/x-www-form-urlencoded".toMediaTypeOrNull(),
             "game=PUBG&user_key=${kuroapi.userkey}&serial=${kuroapi.uuid}"
         )
+
+        val agent = any.source[6]
+        val header4111 = any.source[7]
         val headers = Headers.Builder()
             .add("Accept", "application/json")
             .add("Content-Type", "application/x-www-form-urlencoded")
-            .add("User-Agent", "Dalvik Hajajndbhaiakwn")
+            .add(agent,header4111)
             .add("Charset", "UTF-8").build()
 
         val makerequest = Request.Builder()
@@ -406,12 +413,16 @@ class selectgame : ComponentActivity() {
                                                         System.exit(0)
                                                     }
                                             }
-                                            any.bgmistatus = getinfo.data.bgmistatus
+
+                        //                   any.bgmistatus = getinfo.data.bgmistatus
                                             any.globalstatus = getinfo.data.globalstatus
                                             any.chinastatus = getinfo.data.chinastatus
                                             any.koreastatus = getinfo.data.koreastatus
                                             any.vngstatus = getinfo.data.vngstatus
                                             any.tiwanstatus = getinfo.data.tiwanstatus
+                                            any.modownername = getinfo.data.modname
+                                            any.liburlgl = getinfo.data.liburlgl
+                                            any.libbgmiurl = getinfo.data.libs
                                         }
 
                                     } else {
@@ -422,7 +433,7 @@ class selectgame : ComponentActivity() {
                                                         context, "Login error : $it",
                                                         Toast.LENGTH_LONG
                                                     ).show()
-                                                    Log.w("login", it.toString())
+                                                //    Log.w("login", it.toString())
                                                 }
                                                 delay(5000)
                                                 System.exit(1)
@@ -465,13 +476,11 @@ class selectgame : ComponentActivity() {
                     .launch {
 
                     }
-                Log.e("kuroapi", err.toString())
+       //        Log.e("kuroapi", err.toString())
             }
 
         }
     }
-
-
 
     fun Setuplibswithclone(packagename: String ,
                            context: Context,

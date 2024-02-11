@@ -22,7 +22,7 @@ android {
     defaultConfig {
         applicationId "com.alex.mmop"
         minSdk 23
-        targetSdk 28
+        targetSdk 34
         multiDexEnabled false
         versionCode 1
         versionName "1.0"
