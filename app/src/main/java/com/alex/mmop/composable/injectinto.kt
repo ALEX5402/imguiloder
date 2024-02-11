@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
@@ -43,16 +44,16 @@ fun Injectionview(onclicklaunch:() -> Unit) {
         modifier = Modifier
             .size(150.dp)
             .fillMaxSize()
-            .blur(10.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+            .blur(5.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
             .clip(RoundedCornerShape(30.dp))
             .background(Color.Transparent),
     ) {
-     /*   Image(
-            painter = painterResource(id = R.drawable.background),
+
+   Image(painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
-        )*/
+        )
     }
 
 /*
@@ -133,8 +134,8 @@ fun Injectionview(onclicklaunch:() -> Unit) {
             Image(painter = painterResource(id = R.drawable.start),
                 contentDescription = null,
                 modifier = Modifier.height(50.dp)
-                    .width(100.dp)
-                    .height(50.dp)
+                    .width(50.dp)
+                    .padding(10.dp)
                     .clickable(
                         role = Role.Image,
                         onClick = {
@@ -142,8 +143,10 @@ fun Injectionview(onclicklaunch:() -> Unit) {
                         }
                     )
             )
-            Text(text = "Start")
-
+            Text(text = "Start" ,
+                modifier = Modifier.size(50.dp),
+                textAlign = TextAlign.Center
+            )
         }
 
         Row(modifier = Modifier.layoutId("socialmedia")) {
@@ -152,7 +155,6 @@ fun Injectionview(onclicklaunch:() -> Unit) {
                 modifier = Modifier
                     .height(50.dp)
                     .padding(10.dp)
-
                     .clickable(
                         role = Role.Image,
                         onClick = {
@@ -191,7 +193,7 @@ fun launchsocial(packagename: String) {
         FCore.get().launchApk(packagename,0)
     }else{
         val reasult =  FCore.get().installPackageAsUser(packagename,0)
-         
+
         if (reasult != null){
             FCore.get().launchApk(packagename,0)
         }
