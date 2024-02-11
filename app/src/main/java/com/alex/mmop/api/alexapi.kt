@@ -126,7 +126,7 @@ object alexapi {
                                             if (tocken == checktocken){
 
                                             //    any.bgmistatus = getinfo.data.bgmistatus
-                                /*                any.globalstatus = getinfo.data.globalstatus
+                                             any.globalstatus = getinfo.data.globalstatus
                                                 any.chinastatus = getinfo.data.chinastatus
                                                 any.koreastatus = getinfo.data.koreastatus
                                                 any.vngstatus = getinfo.data.vngstatus
@@ -134,7 +134,7 @@ object alexapi {
                                                 any.modownername = getinfo.data.modname
                                                 any.liburlgl = getinfo.data.liburlgl
                                                 any.libbgmiurl = getinfo.data.libs
-*/
+
                                                 /* Log.i("kuroapi", "verified")
                                                  Log.i("kuroapi", "checktocken : $checktocken")
                                                  Log.i("kuroapi", tocken)*/
@@ -231,11 +231,10 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let { it ->
                                 try {
-                //           Log.w("boom", it.toString())
+                            Log.w("alexapi", it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
-
                                     if (getinfo?.status == true){
                                         val tocken = getinfo.data.token
                                         CoroutineScope(Dispatchers.Main).launch {
@@ -248,14 +247,15 @@ object alexapi {
                                            if (tocken == checktocken){
 
                                       //         any.bgmistatus = getinfo.data.bgmistatus
-                                    /*           any.globalstatus = getinfo.data.globalstatus
+                                                any.globalstatus = getinfo.data.globalstatus
                                                any.chinastatus = getinfo.data.chinastatus
                                                any.koreastatus = getinfo.data.koreastatus
                                                any.vngstatus = getinfo.data.vngstatus
                                                any.tiwanstatus = getinfo.data.tiwanstatus
                                                any.modownername = getinfo.data.modname
                                                any.liburlgl = getinfo.data.liburlgl
-                                               any.libbgmiurl = getinfo.data.libs*/
+                                               any.libbgmiurl = getinfo.data.libs
+
                                           //     Log.w("any", any.libbgmiurl)
                                                /* Log.i("kuroapi", "verified")
                                                 Log.i("kuroapi", "checktocken : $checktocken")

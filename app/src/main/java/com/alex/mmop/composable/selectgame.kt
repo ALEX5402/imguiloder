@@ -210,7 +210,6 @@ fun Selectmode(version : String,
                                     )
                                 }else{
                                     oninstall()
-
                                 }
                             }) {
                             AnimatedVisibility(visible = !playbuttontext) {

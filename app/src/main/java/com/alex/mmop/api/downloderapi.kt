@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.lingala.zip4j.ZipFile
@@ -43,7 +42,6 @@ object downloderapi {
                                     output.write(dataBuffer, 0, bytesRead)
                                 }
                             }
-
                             outputfile.setExecutable(true)
                             outputfile.setReadable(true)
                             outputfile.setWritable(true)
@@ -55,16 +53,12 @@ object downloderapi {
                         err.printStackTrace()
                         ondownloadfailed(err.toString())
                     }
-                    val appllicationinfo =
-                        context.packageManager.getApplicationInfo(context.packageName, 0)
-                    val nativelibdir = appllicationinfo.nativeLibraryDir
-                    val nativelibs = File(nativelibdir)
-                    val filelist = nativelibs.listFiles()
+                    val datadir = context.filesDir
+                    val filelist = datadir.listFiles()
                     for (file in filelist) {
                         if (file != null) {
                             file.delete()
-
-                            Log.w("FILE", "DELETED $file")
+                            Log.w("FILES", "CLEARED $file")
                         }
                     }
                     outputfile.let { thezip ->
@@ -73,18 +67,22 @@ object downloderapi {
                             if (zip.isEncrypted) {
                                 zip.setPassword(zippassword.toCharArray())
                             }
-                            zip.extractAll(nativelibdir)
-                            val filelist2 = nativelibs.listFiles()
-                            for (file in filelist2) {
-                                if (file != null) {
-                                    file.setExecutable(true)
-                                    file.setReadable(true)
-                                    file.setWritable(true)
-                                    Log.w("FILE", "PERMISSON DONE $file")
+                            zip.extractAll(datadir.absolutePath)
+                            val filelist2 = datadir.listFiles()
+                            filelist2?.let { files->
+                                for (file in files) {
+                                    if (file != null) {
+                                        val mainlib = file.name.equals("crashinfo.ttf")
+                                        if (mainlib){
+                                            file.setExecutable(true)
+                                            file.setReadable(true)
+                                            file.setWritable(true)
+                                            Log.w("FILE", "PERMISSON DONE $file")
+                                            ondownloadsucess()
+                                        }
+                                    }
                                 }
                             }
-                            delay(200) // set a delay to make permisson apply please don't remove
-                            ondownloadsucess()
                         } catch (err: ZipException) {
                             err.printStackTrace()
                             ondownloadfailed(err.toString())

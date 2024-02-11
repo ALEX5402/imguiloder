@@ -5,6 +5,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="liblode">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

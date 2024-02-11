@@ -36,3 +36,4 @@ Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
     }
     return stringArray;
 }
+

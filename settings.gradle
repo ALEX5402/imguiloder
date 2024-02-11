@@ -31,4 +31,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Nonroot-Inject-1.0"
-include ':app'
+include ':app'/*,':liblode'*/

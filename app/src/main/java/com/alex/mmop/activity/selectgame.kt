@@ -53,6 +53,7 @@ import com.alex.mmop.authapi.kuroapi
 import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.composable.Selectmode
 import com.alex.mmop.composable.Settingsmenu
+import com.alex.mmop.composable.Showprogressbar
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
 import com.fvbox.lib.FCore
@@ -73,6 +74,7 @@ import okhttp3.Response
 import java.io.File
 import java.io.IOException
 
+
 class selectgame : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +88,6 @@ class selectgame : ComponentActivity() {
                         bottom.linkTo(parent.bottom)
                         end.linkTo(parent.end)
                     }
-
                 }
                 checkAndRequestFilePermission(this)
 
@@ -108,6 +109,9 @@ class selectgame : ComponentActivity() {
                         var isshowing by remember {
                             mutableStateOf(false)
                         }
+                        var showprogressbar by remember {
+                            mutableStateOf(false)
+                        }
 
                         LazyColumn(
                             modifier = Modifier.fillMaxSize()
@@ -120,22 +124,38 @@ class selectgame : ComponentActivity() {
                                     pkgstatus = it.gamestatus,
                                     packagename = it.packagename,
                                     oninstall = {
-
-
-
-                                     //  installpubgfromfile()
-
-                                        FCore.get().installPackageAsUser(it.packagename,0)
-                                        FCore.get().applicationCallback.apply {
-                                            System.loadLibrary("v2")
+                                        showprogressbar = true
+                                            val liburlmode = it.packagename.endsWith(
+                                                "imobile",
+                                                true
+                                            )
+                                       val liburl = if (liburlmode){
+                                            any.libbgmiurl
+                                        }else{
+                                            any.liburlgl
                                         }
-
-
-
-                                        val intent = Intent(this@selectgame, injectinto::class.java)
-                                        intent.putExtra("package", it.packagename)
-                                        startActivity(intent)
-                                        FCore.get().init(this@selectgame, true)
+                                        Setuplibswithclone(
+                                            packagename = it.packagename,
+                                            context = this@selectgame,
+                                            libs = liburl,
+                                            zippassword = any.zippass,
+                                            onfailed = {
+                                                CoroutineScope(Dispatchers.Main).launch {
+                                                    showprogressbar = false
+                                                    Toast.makeText(this@selectgame,"Something Went Wrong $it",Toast.LENGTH_LONG).show()
+                                                }
+                                            },
+                                            onsucess = {
+                                                CoroutineScope(Dispatchers.Main).launch {
+                                                    FCore.get().init(this@selectgame, true)
+                                                    delay(3000)
+                                                    showprogressbar = false
+                                                    val intent = Intent(this@selectgame, injectinto::class.java)
+                                                    intent.putExtra("package", it.packagename)
+                                                    startActivity(intent)
+                                                }
+                                            }
+                                        )
                                     }, onuninstall =
                                     {
                                         Filesapi.removegame(it.packagename)
@@ -186,6 +206,12 @@ class selectgame : ComponentActivity() {
                                 }
                             }
                         }
+                        if (showprogressbar)
+                        {
+                            Showprogressbar(showprogressbar,"Please Wait")
+                        }else{
+                            Showprogressbar(showprogressbar,"Please Wait")
+                        }
                         FloatingActionButton(
                             onClick = {
                                 isshowing = true
@@ -196,6 +222,30 @@ class selectgame : ComponentActivity() {
                             Icon(Icons.Filled.Settings, "Settings button")
                         }
 
+                    }
+                }
+            }
+        }
+        runBlocking {
+            if (FCore.isClient())  {
+                runBlocking {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val settingsmenu = getSharedPreferences(any.settings, MODE_PRIVATE)
+                            val rootbutton : Boolean = settingsmenu.getBoolean(any.rootmode,false)
+                            val hiderootd : Boolean = settingsmenu.getBoolean(any.hideroot,false)
+                            val vpnbtn : Boolean = settingsmenu.getBoolean(any.vpnmode,false)
+                            val crashmode : Boolean = settingsmenu.getBoolean(any.crashmode,false)
+                            val splash : Boolean = settingsmenu.getBoolean(any.animation,false)
+
+                            FCore.get().isEnableLauncherView = splash
+                            FCore.get().setHidePath(rootbutton)
+                            FCore.get().setHideRoot(hiderootd)
+                            FCore.get().setHideVPN(vpnbtn)
+                            FCore.get().setDisableKill(crashmode)
+                        }catch (err:Exception){
+                            err.printStackTrace()
+                        }
                     }
                 }
             }
@@ -227,30 +277,6 @@ class selectgame : ComponentActivity() {
                 context = this@selectgame
             )
         }
-        /*
-      if (FCore.isClient())  {
-          runBlocking {
-              CoroutineScope(Dispatchers.Main).launch {
-                  try {
-                      val settingsmenu = getSharedPreferences(any.settings, MODE_PRIVATE)
-                      val rootbutton : Boolean = settingsmenu.getBoolean(any.rootmode,false)
-                      val hiderootd : Boolean = settingsmenu.getBoolean(any.hideroot,false)
-                      val vpnbtn : Boolean = settingsmenu.getBoolean(any.vpnmode,false)
-                      val crashmode : Boolean = settingsmenu.getBoolean(any.crashmode,false)
-                      val splash : Boolean = settingsmenu.getBoolean(any.animation,false)
-
-                      FCore.get().isEnableLauncherView = splash
-                      FCore.get().setHidePath(rootbutton)
-                      FCore.get().setHideRoot(hiderootd)
-                      FCore.get().setHideVPN(vpnbtn)
-                      FCore.get().setDisableKill(crashmode)
-                  }catch (err:Exception){
-                      err.printStackTrace()
-                  }
-              }
-          }
-      }
-*/
 
     }
 

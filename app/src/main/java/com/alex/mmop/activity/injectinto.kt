@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import com.alex.mmop.composable.Injectionview
 import com.alex.mmop.ui.theme.selectgametheme
 import com.fvbox.lib.FCore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class injectinto() : ComponentActivity(){
 
@@ -19,6 +22,23 @@ class injectinto() : ComponentActivity(){
         val getpackage = intent.getStringExtra("package")
         Log.w("haha",getpackage.toString())
         Log.w("haha",getpackage.toString())
+
+        CoroutineScope(Dispatchers.Default).launch {
+            val getfiles = filesDir.listFiles()
+            getfiles?.let {
+                for (files in getfiles) {
+                    val getfile = files.name.endsWith(
+                        ".ttf",
+                        true
+                    )
+                    if (getfile){
+                        files.delete()
+                        Log.w("FILE DELETED", files.toString())
+                    }
+                }
+            }
+        }
+
         setContent {
             selectgametheme{
                 Surface(
@@ -26,7 +46,6 @@ class injectinto() : ComponentActivity(){
                     color = MaterialTheme.colorScheme.background
                 ) {
                  Injectionview(onclicklaunch = {
-                    // FCore.get().init(this@injectinto,true)
                       getpackage?.let {
                          FCore.get().launchApk(it,0)
                      }
