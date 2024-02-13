@@ -414,7 +414,7 @@ class selectgame : ComponentActivity() {
                                                     }
                                             }
 
-                        //                   any.bgmistatus = getinfo.data.bgmistatus
+                                         any.bgmistatus = getinfo.data.bgmistatus
                                             any.globalstatus = getinfo.data.globalstatus
                                             any.chinastatus = getinfo.data.chinastatus
                                             any.koreastatus = getinfo.data.koreastatus

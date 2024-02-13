@@ -24,17 +24,17 @@ object any {
     var twitter :String = "com.twitter.android"
     var zippass = source[1]
 
-    var bgmistatus  : Boolean = true
-    var globalstatus : Boolean = false
-    var koreastatus  : Boolean = false
-    var chinastatus  : Boolean = false
-    var tiwanstatus  : Boolean = false
-    var vngstatus   : Boolean = false
+    var bgmistatus  : String  = ""
+    var globalstatus : String = ""
+    var koreastatus  : String = ""
+    var chinastatus  : String = ""
+    var tiwanstatus  : String = ""
+    var vngstatus   : String = ""
     var modownername  : String = ""
 
     var liburlgl : String = ""
     var libbgmiurl : String = ""
-    var globalmode : Boolean = false
+    var globalmode : String = ""
 
 
 

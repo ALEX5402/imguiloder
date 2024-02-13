@@ -9,5 +9,5 @@ data class gamedata (
     val icon : Int,
     val apkname : String,
     val version: String,
-    val gamestatus : Boolean
+    val gamestatus : String
 )

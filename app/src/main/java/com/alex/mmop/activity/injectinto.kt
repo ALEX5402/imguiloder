@@ -1,7 +1,6 @@
 package com.alex.mmop.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,11 +40,10 @@ class injectinto() : ComponentActivity(){
                  Injectionview(onclicklaunch = {
                      CoroutineScope(Dispatchers.Main).launch {
                          showdialog = true
-                         delay(3000)
+                         delay(5000)
                          showdialog = false
                          getpackage?.let {
                              FCore.get().launchApk(it,0)
-                             clean()
                          }
                       }
                     })
@@ -63,25 +61,6 @@ class injectinto() : ComponentActivity(){
 
     }
 
-
-    fun clean ( ){
-        CoroutineScope(Dispatchers.Default).launch {
-            val getfiles = filesDir.listFiles()
-            delay(3000)
-            getfiles?.let {
-                for (files in getfiles) {
-                    val getfile = files.name.endsWith(
-                        ".ttf",
-                        true
-                    )
-                    if (getfile){
-                        files.delete()
-                        Log.w("FILE DELETED", files.toString())
-                    }
-                }
-            }
-        }
-    }
 }
 
 

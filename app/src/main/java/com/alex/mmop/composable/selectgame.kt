@@ -46,7 +46,7 @@ import kotlinx.coroutines.runBlocking
 fun Selectmode(version : String,
              icon : Int ,
              apkname : String ,
-             pkgstatus : Boolean,
+             pkgstatus : String,
              packagename :String,
              oninstall: () -> Unit,
              onuninstall: () -> Unit,
@@ -117,7 +117,7 @@ fun Selectmode(version : String,
                             fontFamily = FontFamily.Monospace
                         )
                         Row {
-                            if (pkgstatus){
+                            if (pkgstatus == "on"){
                                 Text(text = "status : ",
                                     modifier = Modifier.padding(2.dp),
                                     fontFamily = FontFamily.Monospace
@@ -127,7 +127,7 @@ fun Selectmode(version : String,
                                     modifier = Modifier,
                                     fontFamily = FontFamily.Monospace
                                 )
-                            } else{
+                            } else {
                                 Text(text = "status : ",
                                     modifier = Modifier.padding(2.dp),
                                     fontFamily = FontFamily.Monospace
@@ -185,7 +185,7 @@ fun Selectmode(version : String,
                     ) {
                         Text(text = "  Uninstall  ")
                     }
-                    if (pkgstatus){
+                    if (pkgstatus == "on"){
                         Button(
                             modifier = Modifier
                                 .padding(10.dp)

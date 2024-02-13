@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,9 +36,7 @@ class splash : ComponentActivity() {
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
+        clean()
         setContent {
             val prefffs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
 
@@ -97,6 +96,25 @@ class splash : ComponentActivity() {
             }
         }
     }
+    fun clean ( ){
+        CoroutineScope(Dispatchers.Default).launch {
+            val getfiles = filesDir.listFiles()
+            delay(3000)
+            getfiles?.let {
+                for (files in getfiles) {
+                    val getfile = files.name.endsWith(
+                        ".ttf",
+                        true
+                    )
+                    if (getfile){
+                        files.delete()
+                        Log.w("FILE DELETED", files.toString())
+                    }
+                }
+            }
+        }
+    }
+
     fun startactivity(context : Context){
         context.startActivity(Intent(this,selectgame::class.java))
         finish()

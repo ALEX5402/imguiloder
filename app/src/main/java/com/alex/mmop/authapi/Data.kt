@@ -19,18 +19,18 @@ data class Data(
     @SerializedName("libs") val libs: String,
     @SerializedName("liburlgl") val liburlgl: String,
 
-    @SerializedName("noticemode") val noticemode: Boolean, //fortemp
+    @SerializedName("noticemode") val noticemode: String, //fortemp
     @SerializedName("version") val version: String,
     @SerializedName("updatedapk") val updatedapk: String,
-    @SerializedName("serverstatus") val serverstatus: Boolean,
-    @SerializedName("zippassmode") val zippassmode: Boolean,
+    @SerializedName("serverstatus") val serverstatus: String,
+    @SerializedName("zippassmode") val zippassmode: String,
 
-    @SerializedName("bgmistatus") val bgmistatus: Boolean,
-    @SerializedName("globalstatus") val globalstatus: Boolean,
-    @SerializedName("koreastatus") val koreastatus: Boolean,
-    @SerializedName("chinastatus") val chinastatus: Boolean,
-    @SerializedName("tiwanstatus") val tiwanstatus: Boolean,
-    @SerializedName("vngstatus") val vngstatus: Boolean,
+    @SerializedName("bgmistatus") val bgmistatus: String,
+    @SerializedName("globalstatus") val globalstatus: String,
+    @SerializedName("koreastatus") val koreastatus: String,
+    @SerializedName("chinastatus") val chinastatus: String,
+    @SerializedName("tiwanstatus") val tiwanstatus: String,
+    @SerializedName("vngstatus") val vngstatus: String,
 
 
     /*

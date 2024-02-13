@@ -127,7 +127,7 @@ object alexapi {
 //                                            Log.e("tocken", tocken)
                                             if (tocken == checktocken){
 
-                                   //           any.bgmistatus = getinfo.data.bgmistatus
+                                             any.bgmistatus = getinfo.data.bgmistatus
                                               any.globalstatus = getinfo.data.globalstatus
                                                 any.chinastatus = getinfo.data.chinastatus
                                                 any.koreastatus = getinfo.data.koreastatus
@@ -250,7 +250,7 @@ object alexapi {
 
                                            if (tocken == checktocken){
 
-                                       //        any.bgmistatus = getinfo.data.bgmistatus
+                                              any.bgmistatus = getinfo.data.bgmistatus
                                                 any.globalstatus = getinfo.data.globalstatus
                                                any.chinastatus = getinfo.data.chinastatus
                                                any.koreastatus = getinfo.data.koreastatus
