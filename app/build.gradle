@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 
     
 }
@@ -57,7 +58,7 @@ android {
         }
         release {
             signingConfig signingConfigs.alex
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -89,7 +90,6 @@ android {
 }
 
 dependencies {
-//    implementation project(':liblode')
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
   
@@ -98,7 +98,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
 
-   implementation fileTree(dir: "libs", include: ["classes.jar", "flib-release.aar"])
+  implementation fileTree(dir: "libs", include: ["classes.jar", "flib-release.aar"])
 
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"
@@ -121,12 +121,17 @@ dependencies {
     implementation "com.tencent:mmkv-static:1.2.10"
     implementation 'com.guolindev.permissionx:permissionx:1.6.4'
     implementation 'com.github.nukc:StateView:v3.0.2'
-
     implementation "io.coil-kt:coil:2.1.0"
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.2.0'
     implementation 'com.github.Othershe:CornerLabelView:1.0.0'
     implementation 'com.elvishew:xlog:1.10.1'
 
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     //extra but need to work
     implementation "com.squareup.retrofit2:adapter-rxjava:2.9.0"

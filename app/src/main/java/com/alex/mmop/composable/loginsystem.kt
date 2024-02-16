@@ -123,7 +123,7 @@ fun Loginpage(context: Context ,
                     OutlinedTextField(value = userkey!!, onValueChange =
                     {
                         userkey = it
-                        savestring(localcontext,any.usersafe,it)
+
                     },
                         label = {
                             Text(text = " Put User key here" )
@@ -149,6 +149,13 @@ fun Loginpage(context: Context ,
                         if (!alexapi.isInternetAvailable(context))
                             return@TextButton Toast.makeText(context, "Unable to connect to internet",Toast.LENGTH_LONG).show()
 
+
+                        runBlocking {
+                            userkey?.let {
+                                savestring(localcontext,any.usersafe,it)
+                            }
+
+                        }
                         val userinfoclass = userinfo(
                             userkey!!,
                             alexapi.GetAndroidID(),
@@ -186,13 +193,14 @@ fun Loginpage(context: Context ,
                             color = themetextcolour2()
                         )
                     }
+
                     Row (modifier = Modifier
                         .layoutId(any.register)
                         .padding(20.dp)
                         ){
                         ClickableText(text = AnnotatedString("! Register"),
                          onClick = {
-                                   alexapi.openLink(localcontext,"https://t.me/esp68")
+                                   alexapi.openLink(localcontext,any.telegram_link)
                          } ,
                             style = TextStyle(color = registercolour())
                         )

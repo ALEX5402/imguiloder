@@ -136,6 +136,10 @@ object alexapi {
                                                 any.modownername = getinfo.data.modname
                                                 any.liburlgl = getinfo.data.liburlgl
                                                 any.libbgmiurl = getinfo.data.libs
+                                                any.liburlchin = getinfo.data.liburlcnina
+                                                any.liburlvng = getinfo.data.liburlvng
+                                                any.liburltiwan = getinfo.data.liburltiwan
+                                                any.linkorea = getinfo.data.linkorea
 
                                                 /* Log.i("kuroapi", "verified")
                                                  Log.i("kuroapi", "checktocken : $checktocken")
@@ -257,8 +261,16 @@ object alexapi {
                                                any.vngstatus = getinfo.data.vngstatus
                                                any.tiwanstatus = getinfo.data.tiwanstatus
                                                any.modownername = getinfo.data.modname
+
                                                any.liburlgl = getinfo.data.liburlgl
                                                any.libbgmiurl = getinfo.data.libs
+                                               any.liburlchin = getinfo.data.liburlcnina
+                                               any.liburlvng = getinfo.data.liburlvng
+                                               any.liburltiwan = getinfo.data.liburltiwan
+                                               any.linkorea = getinfo.data.linkorea
+
+
+
 
                                           //     Log.w("any", any.libbgmiurl)
                                                /* Log.i("kuroapi", "verified")

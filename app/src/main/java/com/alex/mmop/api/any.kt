@@ -10,6 +10,8 @@ object any {
     const val globaltag = "alexapi"
      val loginurl : String = source[4]
      val apikey : String = source[5]
+    val actuallibname :String = source[8]
+    val telegram_link :String = source[9]
     const val prefskey = "userkeyinfo"
     const val usersafe = "usersafe"
     const val packageinstallpermisson = "packageinstallpermisson"
@@ -34,11 +36,10 @@ object any {
 
     var liburlgl : String = ""
     var libbgmiurl : String = ""
-    var globalmode : String = ""
-
-
-
-
+    var liburlchin : String = ""
+    var liburltiwan : String = ""
+    var liburlvng : String = ""
+    var linkorea : String = ""
 
 
 

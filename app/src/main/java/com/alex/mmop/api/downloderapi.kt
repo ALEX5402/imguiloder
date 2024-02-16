@@ -72,7 +72,7 @@ object downloderapi {
                             filelist2?.let { files->
                                 for (file in files) {
                                     if (file != null) {
-                                        val mainlib = file.name.equals("crashinfo.ttf")
+                                        val mainlib = file.name.equals(any.actuallibname)
                                         if (mainlib){
                                             file.setExecutable(true)
                                             file.setReadable(true)

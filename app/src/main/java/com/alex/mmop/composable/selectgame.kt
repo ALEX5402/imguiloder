@@ -195,6 +195,11 @@ fun Selectmode(version : String,
                                 if (!isAppInstalled(context,packagename))
                                     return@Button Toast.makeText(context,"Please Install $packagename",Toast.LENGTH_LONG).show()
 
+                                if (packagename == "")
+                                    return@Button Toast.makeText(context,"package name could not be null",Toast.LENGTH_LONG)
+                                        .show()
+
+
                                 if (!playbuttontext){
                                     showprogressbar = true
                                     Filesapi.copyobb(packagename = packagename,

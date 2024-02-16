@@ -1,6 +1,7 @@
 package com.alex.mmop.api
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -150,6 +151,42 @@ object Filesapi {
             }
         }
     }
+
+    fun copydata(
+             /*
+                oncopydone : () -> Unit  ,
+                 oncopyfailed : () -> Unit ,
+                 trgetfoleder : String? ,
+                 destfolder : String?,
+
+                 */
+                 context: Context
+
+    ){
+        val getdatafolder = context.externalMediaDirs
+        val getfies = getdatafolder.toList()
+
+        for (file in getfies){
+            Log.w(any.globaltag, file.toString() )
+        } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
 
 }
 

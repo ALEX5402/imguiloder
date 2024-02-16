@@ -18,6 +18,10 @@ data class Data(
     // libapi extra remove if panel does't support it
     @SerializedName("libs") val libs: String,
     @SerializedName("liburlgl") val liburlgl: String,
+    @SerializedName("liburlvng") val liburlvng: String,
+    @SerializedName("liburltiwan") val liburltiwan: String,
+    @SerializedName("liburlcnina") val liburlcnina: String,
+    @SerializedName("linkorea") val linkorea: String,
 
     @SerializedName("noticemode") val noticemode: String, //fortemp
     @SerializedName("version") val version: String,

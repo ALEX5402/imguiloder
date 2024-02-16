@@ -126,16 +126,7 @@ class selectgame : ComponentActivity() {
                                     packagename = it.packagename,
                                     oninstall = {
                                         showprogressbar = true
-                                            val liburlmode = it.packagename.endsWith(
-                                                "imobile",
-                                                true
-                                            )
-                                       val liburl = if (liburlmode){
-                                            any.libbgmiurl
-                                        }else{
-                                            any.liburlgl
-                                        }
-                                        
+                                         val liburl = packagemode(it.packagename)
                                         Setuplibswithclone(
                                             packagename = it.packagename,
                                             context = this@selectgame,
@@ -283,6 +274,53 @@ class selectgame : ComponentActivity() {
         }
 
     }
+    fun packagemode( packagename: String ) : String {
+
+            val bgmimode = packagename.endsWith(
+                "imobile",
+                true
+            )
+            val globalmode = packagename.endsWith(
+                "ig",
+                true
+            )
+            val koreamode = packagename.endsWith(
+                "krmobile",
+                true
+            )
+            val tiwanmode = packagename.endsWith(
+                "pubgm",
+                true
+            )
+            val chinamdoe = packagename.endsWith(
+                "pubgmhd",
+                true
+            )
+            val vngmode = packagename.endsWith(
+                "pubgmobile",
+                true
+            )
+
+            if (bgmimode){
+                return packagename
+            }
+            if (globalmode){
+                return packagename
+            }
+            if (koreamode){
+                return packagename
+            }
+            if (tiwanmode){
+                return packagename
+            }
+            if (chinamdoe){
+                return packagename
+            }
+            if (vngmode){
+                return packagename
+            }
+            return ""
+    }
 
     fun checkAndRequestFilePermission(activity: Activity): Boolean {
         val filePermission = Manifest.permission.READ_EXTERNAL_STORAGE
@@ -423,6 +461,11 @@ class selectgame : ComponentActivity() {
                                             any.modownername = getinfo.data.modname
                                             any.liburlgl = getinfo.data.liburlgl
                                             any.libbgmiurl = getinfo.data.libs
+                                            any.liburlchin = getinfo.data.liburlcnina
+                                            any.liburlvng = getinfo.data.liburlvng
+                                            any.liburltiwan = getinfo.data.liburltiwan
+                                            any.linkorea = getinfo.data.linkorea
+
                                         }
 
                                     } else {
@@ -566,9 +609,9 @@ class selectgame : ComponentActivity() {
             "com.pubg.imobile",
             "com.tencent.ig",
             "com.pubg.korea",
-            "com.pubg.china",
-            "com.pubg.tiwan",
-            "com.pubg.Vng"
+            "com.tencent.tmgp.pubgmhd",
+            "com.rekoo.pubgm",
+            "com.vng.pubgmobile"
         )
         val list = mutableListOf<gamedata>()
        return runBlocking {

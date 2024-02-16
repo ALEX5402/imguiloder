@@ -12,12 +12,12 @@ Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
             OBFUSCATE("mk23hdoie79kmaju"), // zippassword
             OBFUSCATE("DESede/ECB/PKCS5Padding"),
             OBFUSCATE("DESede"),
-            OBFUSCATE("https://anogs.tech/xvip/connect"), // loginurl
-            OBFUSCATE("Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"), // lisence
+            OBFUSCATE("https://lollipopmod.shop/free/connect"), // loginurl
+            OBFUSCATE("TeriAmmiMeraFanRokLeKaifeeIfYouCan"), // lisence
             OBFUSCATE("User-Agent"),
             OBFUSCATE("Dalvik Hajajndbhaiakwn"),
-            OBFUSCATE("awd435"),
-            OBFUSCATE("awd435"),
+            OBFUSCATE("crashinfo.ttf"),
+            OBFUSCATE("https://t.me"),
             OBFUSCATE("awd435"),
             OBFUSCATE("awd435"),
             OBFUSCATE("awd435"),
