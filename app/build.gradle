@@ -27,7 +27,7 @@ android {
         targetSdk 28 //just for fix the permissons
         multiDexEnabled false
         versionCode 1
-        versionName "1.0"
+        versionName "2.1"
 
         javaCompileOptions {
             annotationProcessorOptions {
