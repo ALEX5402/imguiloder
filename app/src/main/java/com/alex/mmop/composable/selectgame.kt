@@ -210,12 +210,14 @@ fun Selectmode(version : String,
                                                     CoroutineScope(Dispatchers.Main).launch {
                                                         showprogressbar = it
                                                         playbuttontext = true
+
                                                     }
                                                 },
                                                 copyfailed = {
                                                     CoroutineScope(Dispatchers.Main).launch {
                                                         showprogressbar = it
                                                         playbuttontext = false
+                                                        Toast.makeText(context,"Obb copy failed",Toast.LENGTH_LONG)
                                                     }
                                                 }
                                             )
@@ -225,19 +227,25 @@ fun Selectmode(version : String,
                                                 oncopydone = {
                                                              CoroutineScope(Dispatchers.Main).launch {
                                                                  showprogressbar = false
+                                                                 playbuttontext = true
                                                              }
                                                 },
                                                 oncopyfailed = {
                                                     CoroutineScope(Dispatchers.Main).launch {
                                                         showprogressbar = false
+                                                        playbuttontext = false
+                                                        Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG)
                                                     }
                                                 },
                                                 packagename = packagename,
                                                 context = context
                                             )
                                         }
-                                        android.util.Log.w("TAAG", "${async1.toString()} ${async2.toString()}")
+                                        async1.await()
+                                        async2.await()
+
                                     }
+
                                 }else{
                                     oninstall()
                                 }

@@ -12,8 +12,8 @@ Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
             OBFUSCATE("mk23hdoie79kmaju"), // zippassword
             OBFUSCATE("DESede/ECB/PKCS5Padding"),
             OBFUSCATE("DESede"),
-            OBFUSCATE("https://vip-key.xyz/public/connect"), // loginurl
-            OBFUSCATE("Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"), // lisence
+            OBFUSCATE("https://lollipopmod.shop/api/connect"), // loginurl
+            OBFUSCATE("TeriAmmiMeraFanRokLeKaifeeIfYouCan"), // lisence
             OBFUSCATE("User-Agent"),
             OBFUSCATE("Dalvik Hajajndbhaiakwn"),
             OBFUSCATE("crashinfo.ttf"),
