@@ -11,14 +11,14 @@ class app : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-         FCore.get().init(this)
+         FCore.get().init(this,true)
     }
 
     override fun onCreate() {
         super.onCreate()
+        if(FCore.isClient()) {
         FirebaseApp.initializeApp(this)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        if(FCore.isClient()) {
             return
         }
     }
