@@ -57,6 +57,7 @@ import com.alex.mmop.composable.Settingsmenu
 import com.alex.mmop.composable.Showprogressbar
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
+
 import com.fvbox.lib.FCore
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -302,22 +303,22 @@ class selectgame : ComponentActivity() {
             )
 
             if (bgmimode){
-                return packagename
+                return any.libbgmiurl
             }
             if (globalmode){
-                return packagename
+                return any.liburlgl
             }
             if (koreamode){
-                return packagename
+                return any.liburlgl
             }
             if (tiwanmode){
-                return packagename
+                return any.liburltiwan
             }
             if (chinamdoe){
-                return packagename
+                return any.liburlchin
             }
             if (vngmode){
-                return packagename
+                return any.liburlvng
             }
             return ""
     }

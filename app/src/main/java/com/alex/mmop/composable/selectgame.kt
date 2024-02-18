@@ -38,6 +38,7 @@ import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.any
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -199,20 +200,44 @@ fun Selectmode(version : String,
                                     return@Button Toast.makeText(context,"package name could not be null",Toast.LENGTH_LONG)
                                         .show()
 
-
                                 if (!playbuttontext){
                                     showprogressbar = true
-                                    Filesapi.copyobb(packagename = packagename,
-                                        context = context,
-                                        copydone = {
-                                            showprogressbar = it
-                                            playbuttontext = true
-                                        },
-                                        copyfailed = {
-                                            showprogressbar = it
-                                            playbuttontext = false
+                                    runBlocking {
+                                        val async1 =  async {
+                                            Filesapi.copyobb(packagename = packagename,
+                                                context = context,
+                                                copydone = {
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        showprogressbar = it
+                                                        playbuttontext = true
+                                                    }
+                                                },
+                                                copyfailed = {
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        showprogressbar = it
+                                                        playbuttontext = false
+                                                    }
+                                                }
+                                            )
                                         }
-                                    )
+                                        val async2 = async {
+                                            Filesapi.copydata(
+                                                oncopydone = {
+                                                             CoroutineScope(Dispatchers.Main).launch {
+                                                                 showprogressbar = false
+                                                             }
+                                                },
+                                                oncopyfailed = {
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        showprogressbar = false
+                                                    }
+                                                },
+                                                packagename = packagename,
+                                                context = context
+                                            )
+                                        }
+                                        android.util.Log.w("TAAG", "${async1.toString()} ${async2.toString()}")
+                                    }
                                 }else{
                                     oninstall()
                                 }

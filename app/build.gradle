@@ -23,14 +23,11 @@ android {
     defaultConfig {
         applicationId "com.alex.mmop"
         minSdk 26
-        targetSdk 33
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk 28 //just for fix the permissons
         multiDexEnabled false
         versionCode 1
         versionName "1.0"
-        ndk.abiFilters(
-                //noinspection ChromeOsAbiSupport
-                "arm64-v8a"
-        )
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -86,19 +83,29 @@ android {
         }
         ndkVersion = "24.0.8215888"
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            //noinspection ChromeOsAbiSupport
+            include 'armeabi-v7a', "arm64-v8a"
+            universalApk false
+        }
+    }
 
 }
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
-  
+    implementation(project(":Fcore"))
+    implementation fileTree(dir: "libs", include: ["classes.jar", "flib-release.aar"])
 
     implementation platform('com.google.firebase:firebase-bom:32.7.1')
     implementation 'com.google.firebase:firebase-analytics'
 
 
-  implementation fileTree(dir: "libs", include: ["classes.jar", "flib-release.aar"])
+ 
 
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"
@@ -116,7 +123,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
-
+ 
     //tencent stuff
     implementation "com.tencent:mmkv-static:1.2.10"
     implementation 'com.guolindev.permissionx:permissionx:1.6.4'

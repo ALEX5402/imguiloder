@@ -1,7 +1,6 @@
 package com.alex.mmop.api
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +11,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 object Filesapi {
     fun isinternalobb(context: Context, packagename: String): Boolean {
@@ -35,7 +36,7 @@ object Filesapi {
     }
 
     fun isexternalobb(packagename: String): Boolean {
-        val obbpathsource = File("/storage/emulated/0/Android/obb/$packagename")
+        val obbpathsource = File("/storage/emulated/0/Android/vSdcard/Android/obb/$packagename")
 
         return runBlocking {
             if (obbpathsource != null) {
@@ -78,7 +79,7 @@ object Filesapi {
     }
 
 
-    fun copyobb(packagename: String,context: Context,copydone : (reasult : Boolean)-> Unit, copyfailed : (reasult : Boolean)-> Unit) {
+    suspend fun copyobb(packagename: String,context: Context,copydone : (reasult : Boolean)-> Unit, copyfailed : (reasult : Boolean)-> Unit) {
         runBlocking {
             val internalobb = isinternalobb(context,packagename)
             val external = isexternalobb(packagename)
@@ -89,7 +90,7 @@ object Filesapi {
                         Toast.makeText(context,"Obb already there", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    val sourceobbdir = File("/storage/emulated/0/Android/obb/$packagename")
+                    val sourceobbdir = File("/storage/emulated/0/Android/vSdcard/Android/obb/$packagename")
                     val destinationpath = context.getExternalFilesDir("/fv/storage/emulated/0/Android/obb/$packagename")
                     val getobb = sourceobbdir.listFiles { file ->
                         file.isFile && file.name.endsWith(".obb", ignoreCase = true)
@@ -152,42 +153,64 @@ object Filesapi {
         }
     }
 
-    fun copydata(
-             /*
-                oncopydone : () -> Unit  ,
-                 oncopyfailed : () -> Unit ,
-                 trgetfoleder : String? ,
-                 destfolder : String?,
 
-                 */
-                 context: Context
+    suspend fun copyFolder(sourceFolder: File,
+                   oncopydone : () -> Unit  ,
+                   oncopyfailed : () -> Unit ,
+                   destinationFolder: File
+    ) {
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                if (!destinationFolder.exists()) {
+                    destinationFolder.mkdirs()
+                }
+                sourceFolder.listFiles()?.forEach { entry ->
+                    val destinationPath = File(destinationFolder, entry.name)
+                    if (entry.isDirectory) {
+                        entry.mkdirs()
+                     // copyFolder(entry, destinationPath)
+                    } else {
+                        Files.copy(entry.toPath(), destinationPath.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                        oncopydone()
+                    }
+                }
+            }
+        }catch (err : IOException){
+            err.printStackTrace()
+            oncopyfailed()
+        }catch (Err :Exception){
+            oncopyfailed()
+            Err.printStackTrace()
 
-    ){
-        val getdatafolder = context.externalMediaDirs
-        val getfies = getdatafolder.toList()
-
-        for (file in getfies){
-            Log.w(any.globaltag, file.toString() )
-        } 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        }
     }
 
+    suspend fun copydata(
+                 oncopydone : () -> Unit  ,
+                 oncopyfailed : () -> Unit ,
+                 packagename : String? ,
+                 context: Context
+    ) : String {
+        val sourceFolder = File("/storage/emulated/0/Android/vSdcard/Android/data/$packagename")
+        val destinationFolder = context.getExternalFilesDir("/fv/storage/emulated/0/Android/data/$packagename")
 
-
-
-
+        try {
+            copyFolder(sourceFolder =  sourceFolder,
+                destinationFolder = destinationFolder!!,
+                oncopydone = {
+                      oncopydone()
+                },
+                oncopyfailed = {
+                    oncopyfailed()
+                }
+                )
+            return "done"
+        }catch (err : Exception){
+             oncopyfailed()
+            err.printStackTrace()
+        }
+        return "done"
+    }
 }
 
     /* //   val obbpath = getExternalFilesDir("/fv/storage/emulated/0/Android/obb") // storage/emulated/0/Android/data/com.alex.mmop/files/Android/obb

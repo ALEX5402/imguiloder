@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="compress_error">Compression failed, unable to export</string>
+    <string name="decompression_error">Failed to decompress data, unable to import</string>
+    <string name="export_data_error">Export Data Error</string>
+    <string name="fv_service_name">:system_process</string>
+    <string name="get_package_archive_error">getPackageArchiveInfo Error parsing APK, please check whether APK is normal</string>
+    <string name="install_error">Install Error</string>
+    <string name="not_install_app">The app is not installed</string>
+    <string name="not_support_32bit">This kernel does not support 32-bit applications</string>
+    <string name="not_support_64bit">This kernel does not support 64-bit applications</string>
+    <string name="open_error">Open Apk Fail</string>
+    <string name="open_with">Open With…</string>
+    <string name="parse_apk_error">Error parsing apk</string>
+    <string name="parse_data_error">Parse Data Error</string>
+    <style name="FTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+    <style name="FTranslucentTheme">
+        <item name="android:windowBackground">#00000000</item> <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>
