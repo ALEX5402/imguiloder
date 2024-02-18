@@ -31,5 +31,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Nonroot-Inject-2.0"
-include ':app'/*,':liblode'*/
-include ':Fcore'
+include ':app'
+
