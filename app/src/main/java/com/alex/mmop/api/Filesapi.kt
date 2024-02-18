@@ -71,6 +71,7 @@ object Filesapi {
                         copydone(false)
                     }
                 }catch (err :IOException){
+                    LOGS.error(err.toString())
                     err.printStackTrace()
                     copyfailed(false,err.toString())
                 }
@@ -137,6 +138,7 @@ object Filesapi {
                                     .show()
                             }
                         } catch (err: IOException) {
+                            LOGS.error(err.toString())
                             err.printStackTrace()
                             copyfailed(false)
                             CoroutineScope(Dispatchers.Main).launch {
@@ -183,6 +185,7 @@ object Filesapi {
             }
         }catch (err : IOException){
             err.printStackTrace()
+            LOGS.error(err.toString())
             oncopyfailed(err.toString())
         }catch (Err :Exception){
             oncopyfailed(Err.toString())

@@ -55,7 +55,7 @@ android {
         }
         release {
             signingConfig signingConfigs.alex
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -91,6 +91,10 @@ android {
             include 'armeabi-v7a', "arm64-v8a"
             universalApk false
         }
+    }
+
+    buildFeatures{
+        buildConfig = true
     }
 
 }

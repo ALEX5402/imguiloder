@@ -46,7 +46,7 @@ object alexapi {
         context.startActivity(intent)
     }
     fun GetDeviceModel():String {
-        Log.i(any.globaltag, Build.MODEL)
+        LOGS.info(Build.MODEL)
         return Build.MODEL
     }
     fun GetDeviceBrand() :String{
@@ -57,9 +57,9 @@ object alexapi {
         val androi_id = Settings.Secure.ANDROID_ID
          if(androi_id !== null)
          {
-             Log.i(any.globaltag, androi_id)
+             LOGS.info(androi_id)
              return androi_id
-         }else{
+         }else {
              return "androidid err"
          }
     }
@@ -113,7 +113,7 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let {
                                 try {
-                                Log.w("boom", it.toString())
+                                    LOGS.warn(it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
@@ -121,10 +121,10 @@ object alexapi {
                                         val tocken = getinfo.data.token
                                         CoroutineScope(Dispatchers.Main).launch {
                                             val checktocken = calculateMD5("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
-//                                            Log.w("kuro", extramethoods.toString())
-//                                            Log.w("kuro", "PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
-//                                            Log.i("kuroapi", checktocken)
-//                                            Log.e("tocken", tocken)
+                                         LOGS.warn( extramethoods.toString())
+                                          LOGS.warn("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
+                                          LOGS.warn(checktocken)
+                                          LOGS.warn(tocken)
                                             if (tocken == checktocken){
 
                                              any.bgmistatus = getinfo.data.bgmistatus
@@ -141,9 +141,9 @@ object alexapi {
                                                 any.liburltiwan = getinfo.data.liburltiwan
                                                 any.linkorea = getinfo.data.linkorea
 
-                                                /* Log.i("kuroapi", "verified")
-                                                 Log.i("kuroapi", "checktocken : $checktocken")
-                                                 Log.i("kuroapi", tocken)*/
+                                                LOGS.warn("verified")
+                                                LOGS.warn("checktocken : $checktocken")
+                                                LOGS.warn( tocken)
                                                 CoroutineScope(Dispatchers.Main)
                                                     .launch {
                                                         onsucess()
@@ -168,7 +168,7 @@ object alexapi {
                                                     onfailed(it!!)
                                                     Toast.makeText(context ,"Login error : $it",
                                                         Toast.LENGTH_LONG).show()
-                                              //      Log.w("login", it.toString())
+                                                    LOGS.warn(it.toString())
                                                 }
 
                                             }
@@ -190,7 +190,7 @@ object alexapi {
                             .launch {
                                 onfailed(e.toString())
                             }
-                   //     Log.e("kuroapi",e.toString())
+                        LOGS.error(e.toString())
                     }
                 })
             }catch (err : Exception){
@@ -199,7 +199,7 @@ object alexapi {
                     .launch {
                         onfailed(err.toString())
                     }
-             //   Log.e("kuroapi",err.toString())
+                LOGS.error(err.toString())
             }
 
         }
@@ -239,7 +239,7 @@ object alexapi {
                             val extramethoods = response.body?.string()
                             extramethoods.let { it ->
                                 try {
-//                            Log.w("alexapi", it.toString())
+                              LOGS.warn( it.toString())
                                     val getinfo = it?.let {
                                         gson.fromJson(it, getuserinfo::class.java)
                                     }
@@ -247,10 +247,10 @@ object alexapi {
                                         val tocken = getinfo.data.token
                                         CoroutineScope(Dispatchers.Main).launch {
                                             val checktocken = calculateMD5("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
-//                                            Log.w("kuro", extramethoods.toString())
-//                                            Log.w("kuro", "PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
-//                                            Log.i("kuroapi", checktocken)
-//                                            Log.e("tocken", tocken)
+                                            LOGS.warn( extramethoods.toString())
+                                            LOGS.warn("PUBG-${kuroapi.userkey}-${kuroapi.uuid}-${any.apikey}")
+                                            LOGS.warn( checktocken)
+                                            LOGS.warn( tocken)
 
                                            if (tocken == checktocken){
 
@@ -272,10 +272,10 @@ object alexapi {
 
 
 
-                                          //     Log.w("any", any.libbgmiurl)
-                                               /* Log.i("kuroapi", "verified")
-                                                Log.i("kuroapi", "checktocken : $checktocken")
-                                                Log.i("kuroapi", tocken)*/
+                                               LOGS.warn(any.libbgmiurl)
+                                               LOGS.warn( "verified")
+                                               LOGS.warn("checktocken : $checktocken")
+                                               LOGS.warn(tocken)
                                                CoroutineScope(Dispatchers.Main)
                                                    .launch {
                                                        onsucess()
@@ -299,7 +299,7 @@ object alexapi {
                                                     onfailed(it!!)
                                                     Toast.makeText(context ,"Login error : $it",
                                                         Toast.LENGTH_LONG).show()
-                                          ///          Log.w("login", it.toString())
+                                                    LOGS.warn( it.toString())
                                                 }
 
                                             }
@@ -321,7 +321,7 @@ object alexapi {
                             .launch {
                                 onfailed(e.toString())
                             }
-                   //     Log.e("kuroapi",e.toString())
+                        LOGS.error(e.toString())
                     }
                 })
             }catch (err : Exception){
@@ -330,7 +330,7 @@ object alexapi {
                     .launch {
                         onfailed(err.toString())
                     }
-             ///   Log.e("kuroapi",err.toString())
+                LOGS.error(err.toString())
             }
 
         }

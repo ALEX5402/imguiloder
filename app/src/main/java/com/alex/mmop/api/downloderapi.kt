@@ -58,7 +58,7 @@ object downloderapi {
                     for (file in filelist) {
                         if (file != null) {
                             file.delete()
-                            Log.w("FILES", "CLEARED $file")
+                            LOGS.warn("CLEARED $file")
                         }
                     }
                     outputfile.let { thezip ->
@@ -77,7 +77,7 @@ object downloderapi {
                                             file.setExecutable(true)
                                             file.setReadable(true)
                                             file.setWritable(true)
-                                            Log.w("FILE", "PERMISSON DONE $file")
+                                            LOGS.warn( "PERMISSON DONE $file")
                                             ondownloadsucess()
                                         }
                                     }

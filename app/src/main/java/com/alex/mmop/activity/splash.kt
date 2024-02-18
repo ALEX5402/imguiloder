@@ -88,7 +88,7 @@ class splash : ComponentActivity() {
                 }, onfailed = {
                     Toast.makeText(context , "${R.string.login_failed} $it",Toast.LENGTH_LONG)
                         .show()
-                    alexapi.openLink(context,"https://t.me/esp68")
+                    alexapi.openLink(context,any.telegram_link)
                     CoroutineScope(Dispatchers.Default).launch{
                         donext(context)
                     }

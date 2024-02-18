@@ -8,7 +8,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class app : Application() {
 
-
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
          FCore.get().init(this,true)
