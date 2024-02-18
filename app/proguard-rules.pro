@@ -1,1 +1,1 @@
--keep class com.alex.mmop.api.any
+-keep class com.alex.mmop.api.*
