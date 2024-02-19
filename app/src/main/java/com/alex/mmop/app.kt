@@ -7,7 +7,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class app : Application() {
-
+19.02.24
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
          FCore.get().init(this,true)
@@ -15,9 +15,9 @@ class app : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if(FCore.isClient()) {
         FirebaseApp.initializeApp(this)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        if(FCore.isClient()) {
             return
         }
     }
