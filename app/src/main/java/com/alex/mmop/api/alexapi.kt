@@ -136,7 +136,7 @@ object alexapi {
                                                 any.modownername = getinfo.data.modname
                                                 any.liburlgl = getinfo.data.liburlgl
                                                 any.libbgmiurl = getinfo.data.libs
-                                                any.liburlchin = getinfo.data.liburlcnina
+                                                any.liburlchin = getinfo.data.liburlcnin
                                                 any.liburlvng = getinfo.data.liburlvng
                                                 any.liburltiwan = getinfo.data.liburltiwan
                                                 any.linkorea = getinfo.data.linkorea
@@ -264,7 +264,7 @@ object alexapi {
 
                                                any.liburlgl = getinfo.data.liburlgl
                                                any.libbgmiurl = getinfo.data.libs
-                                               any.liburlchin = getinfo.data.liburlcnina
+                                               any.liburlchin = getinfo.data.liburlcnin
                                                any.liburlvng = getinfo.data.liburlvng
                                                any.liburltiwan = getinfo.data.liburltiwan
                                                any.linkorea = getinfo.data.linkorea
