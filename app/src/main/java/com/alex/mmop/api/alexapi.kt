@@ -127,19 +127,30 @@ object alexapi {
                                           LOGS.warn(tocken)
                                             if (tocken == checktocken){
 
-                                             any.bgmistatus = getinfo.data.bgmistatus
-                                              any.globalstatus = getinfo.data.globalstatus
-                                                any.chinastatus = getinfo.data.chinastatus
-                                                any.koreastatus = getinfo.data.koreastatus
-                                                any.vngstatus = getinfo.data.vngstatus
-                                                any.tiwanstatus = getinfo.data.tiwanstatus
+                                                val logs =
+
+
+                                                LOGS.warn(getinfo.data.liburlgl+
+                                                        getinfo.data.libs+
+                                                        getinfo.data.liburlcnin+
+                                                        getinfo.data.liburlvng+
+                                                        getinfo.data.liburltiwan+
+                                                        getinfo.data.linkorea   )
+
+
+                                                any.bgmistatus =   getinfo.data.bgmistatus
+                                                any.globalstatus = getinfo.data.globalstatus
+                                                any.chinastatus =  getinfo.data.chinastatus
+                                                any.koreastatus =  getinfo.data.koreastatus
+                                                any.vngstatus =    getinfo.data.vngstatus
+                                                any.tiwanstatus =  getinfo.data.tiwanstatus
                                                 any.modownername = getinfo.data.modname
-                                                any.liburlgl = getinfo.data.liburlgl
-                                                any.libbgmiurl = getinfo.data.libs
-                                                any.liburlchin = getinfo.data.liburlcnin
-                                                any.liburlvng = getinfo.data.liburlvng
-                                                any.liburltiwan = getinfo.data.liburltiwan
-                                                any.linkorea = getinfo.data.linkorea
+                                                any.liburlgl =     getinfo.data.liburlgl
+                                                any.libbgmiurl =   getinfo.data.libs
+                                                any.liburlchin =   getinfo.data.liburlcnin
+                                                any.liburlvng =    getinfo.data.liburlvng
+                                                any.liburltiwan =  getinfo.data.liburltiwan
+                                                any.linkorea =     getinfo.data.linkorea
 
                                                 LOGS.warn("verified")
                                                 LOGS.warn("checktocken : $checktocken")
@@ -253,6 +264,13 @@ object alexapi {
                                             LOGS.warn( tocken)
 
                                            if (tocken == checktocken){
+
+                                               LOGS.warn(getinfo.data.liburlgl+
+                                                       getinfo.data.libs+
+                                                       getinfo.data.liburlcnin+
+                                                       getinfo.data.liburlvng+
+                                                       getinfo.data.liburltiwan+
+                                                       getinfo.data.linkorea   )
 
                                               any.bgmistatus = getinfo.data.bgmistatus
                                                 any.globalstatus = getinfo.data.globalstatus
