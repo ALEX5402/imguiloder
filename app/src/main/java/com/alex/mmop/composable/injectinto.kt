@@ -204,18 +204,3 @@ fun launchsocial(packagename: String) {
 
 
 
-
-@Preview(device = "spec:parent=Nexus 5")
-@Composable
-fun Priview(){
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Injectionview(onclicklaunch = {
-
-        })
-
-    }
-}
-

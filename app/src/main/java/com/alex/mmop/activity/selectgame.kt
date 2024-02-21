@@ -45,6 +45,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.alex.mmop.R
 import com.alex.mmop.api.Filesapi
+import com.alex.mmop.api.LOGS
 import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
 import com.alex.mmop.api.downloderapi
@@ -127,7 +128,8 @@ class selectgame : ComponentActivity() {
                                     packagename = it.packagename,
                                     oninstall = {
                                         showprogressbar = true
-                                         val liburl = packagemode(it.packagename)
+                                        val liburl = packagemode(it.packagename)
+
                                         Setuplibswithclone(
                                             packagename = it.packagename,
                                             context = this@selectgame,
@@ -275,6 +277,7 @@ class selectgame : ComponentActivity() {
         }
 
     }
+
     fun packagemode( packagename: String ) : String {
 
             val bgmimode = packagename.endsWith(
@@ -435,7 +438,7 @@ class selectgame : ComponentActivity() {
                                     }
                                     if (getinfo?.status == true) {
 
-                                        any.liburlgl = getinfo.data.libs
+                                      //  any.liburlgl = getinfo.data.libs
                                         val tocken = getinfo.data.token
                                         CoroutineScope(Dispatchers.Default).launch {
                                             val checktocken =
@@ -460,7 +463,7 @@ class selectgame : ComponentActivity() {
                                             any.vngstatus = getinfo.data.vngstatus
                                             any.tiwanstatus = getinfo.data.tiwanstatus
                                             any.modownername = getinfo.data.modname
-                                            any.liburlgl = getinfo.data.liburlgl
+                                           any.liburlgl = getinfo.data.liburlgl
                                             any.libbgmiurl = getinfo.data.libs
                                             any.liburlchin = getinfo.data.liburlcnin
                                             any.liburlvng = getinfo.data.liburlvng
@@ -477,7 +480,8 @@ class selectgame : ComponentActivity() {
                                                         context, "Login error : $it",
                                                         Toast.LENGTH_LONG
                                                     ).show()
-                                                //    Log.w("login", it.toString())
+
+                                                    LOGS.warn(it.toString())
                                                 }
                                                 delay(5000)
                                                 System.exit(1)
@@ -520,7 +524,7 @@ class selectgame : ComponentActivity() {
                     .launch {
 
                     }
-       //        Log.e("kuroapi", err.toString())
+                LOGS.warn(err.toString())
             }
 
         }

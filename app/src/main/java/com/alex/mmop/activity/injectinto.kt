@@ -64,24 +64,6 @@ class injectinto() : ComponentActivity(){
 }
 
 
-/*
-@Preview(device = "spec:parent=Nexus S")
-@Composable
-fun Priview(){
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-
-    }
-}
-
-*/
-
-
-
-
-
 
 
 

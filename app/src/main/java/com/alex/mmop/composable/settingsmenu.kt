@@ -35,11 +35,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alex.mmop.api.Filesapi
 import com.alex.mmop.api.any
 import com.alex.mmop.api.gmsapi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 @SuppressLint("CommitPrefEdits", "CoroutineCreationDuringComposition")
@@ -78,12 +80,21 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     var alertdialog by remember {
         mutableStateOf(false)
     }
+    val packagenames = listOf(
+        "com.pubg.imobile",
+        "com.tencent.ig",
+        "com.pubg.korea",
+        "com.tencent.tmgp.pubgmhd",
+        "com.rekoo.pubgm",
+        "com.vng.pubgmobile"
+    )
     Column(
         Modifier
             .padding(10.dp)
             .verticalScroll(rememberScrollState(), true)
             .horizontalScroll(rememberScrollState(), true)
     )
+
     {
         Box(modifier = Modifier
             .toggleable(
@@ -394,64 +405,159 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
 
         }
         TextButton(onClick = {
-            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
+            alertdialog = true
+            runBlocking {
+                Filesapi.copydata(
+                    oncopydone = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                        }
+                    },
+                    oncopyfailed = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    packagename = packagenames[0],
+                    context = context
+                )
+            }
         },
             modifier = Modifier.padding(5.dp)
         ) {
-            Text(text = "Copy Obb With Documents Provider")
+            Text(text = "Copy BGMI data from vSdcard")
+        }
+        TextButton(onClick = {
+            alertdialog = true
+            runBlocking {
+                Filesapi.copydata(
+                    oncopydone = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                        }
+                    },
+                    oncopyfailed = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    packagename = packagenames[1],
+                    context = context
+                )
+            }
+        },
+            modifier = Modifier.padding(5.dp)
+        ) {
+            Text(text = "Copy Global data from VSdcard")
 
         }
         TextButton(onClick = {
-            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
+            alertdialog = true
+            runBlocking {
+                Filesapi.copydata(
+                    oncopydone = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                        }
+                    },
+                    oncopyfailed = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    packagename = packagenames[2],
+                    context = context
+                )
+            }
         },
             modifier = Modifier.padding(5.dp)
         ) {
-            Text(text = "Copy All Obb With Documents Provider")
+
+            Text(text = "Copy Pubg KOREA DATA VSdcard")
 
         }
         TextButton(onClick = {
-            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
+            alertdialog = true
+            runBlocking {
+                Filesapi.copydata(
+                    oncopydone = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                        }
+                    },
+                    oncopyfailed = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    packagename = packagenames[3],
+                    context = context
+                )
+            }
+
         },
             modifier = Modifier.padding(5.dp)
         ) {
-            Text(text = "Copy Pubg Global Obb With Documents Provider")
+            Text(text = "Copy Pubg CHINA Data from vSdcard")
+        }
+        TextButton(onClick = {
+            alertdialog = true
+            runBlocking {
+                Filesapi.copydata(
+                    oncopydone = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                        }
+                    },
+                    oncopyfailed = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    packagename = packagenames[4],
+                    context = context
+                )
+            }
+        },
+            modifier = Modifier.padding(5.dp)
+        ) {
+            Text(text = "Copy Pubg Tiwan Data From vSdcard")
 
         }
         TextButton(onClick = {
-            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
+            runBlocking {
+                alertdialog = true
+                Filesapi.copydata(
+                    oncopydone = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                        }
+                    },
+                    oncopyfailed = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            alertdialog = false
+                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    packagename = packagenames[5],
+                    context = context
+                )
+            }
         },
             modifier = Modifier.padding(5.dp)
         ) {
-            Text(text = "Copy Pubg India Obb With Documents Provider")
-        }
-        TextButton(onClick = {
-            Toast.makeText(context,"Soon",Toast.LENGTH_SHORT).show()
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-            Text(text = "Copy Pubg Korea Obb With Documents Provider")
+            Text(text = "Copy Pubg VNG Data From vSdcard")
 
         }
+
     }
 }
 
 fun restarttoast(context: Context){
     Toast.makeText(context,"Restart the app to take effect",Toast.LENGTH_LONG).show()
 }
-
-
-
-@Preview
-@Composable
-fun showpriview()
-{
-    val con = LocalContext.current
-
-
-
-    Settingsmenu(con,{
-
-
-    })
-}
-

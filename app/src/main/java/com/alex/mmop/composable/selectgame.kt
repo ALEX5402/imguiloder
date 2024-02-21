@@ -203,7 +203,6 @@ fun Selectmode(version : String,
                                 if (!playbuttontext){
                                     showprogressbar = true
                                     runBlocking {
-                                        val async1 =  async {
                                             Filesapi.copyobb(packagename = packagename,
                                                 context = context,
                                                 copydone = {
@@ -217,33 +216,10 @@ fun Selectmode(version : String,
                                                     CoroutineScope(Dispatchers.Main).launch {
                                                         showprogressbar = it
                                                         playbuttontext = false
-                                                        Toast.makeText(context,"Obb copy failed",Toast.LENGTH_LONG)
+                                                        Toast.makeText(context,"Obb copy failed",Toast.LENGTH_LONG).show()
                                                     }
                                                 }
                                             )
-                                        }
-                                        val async2 = async {
-                                            Filesapi.copydata(
-                                                oncopydone = {
-                                                             CoroutineScope(Dispatchers.Main).launch {
-                                                                 showprogressbar = false
-                                                                 playbuttontext = true
-                                                             }
-                                                },
-                                                oncopyfailed = {
-                                                    CoroutineScope(Dispatchers.Main).launch {
-                                                        showprogressbar = false
-                                                        playbuttontext = false
-                                                        Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG)
-                                                    }
-                                                },
-                                                packagename = packagename,
-                                                context = context
-                                            )
-                                        }
-                                        async1.await()
-                                        async2.await()
-
                                     }
 
                                 }else{
@@ -273,9 +249,9 @@ fun Selectmode(version : String,
                     }
 
                 }
+          }
+     }
 
-        }
-    }
     if (showprogressbar)
     {
         Showprogressbar(showprogressbar,"Please Wait")
@@ -295,41 +271,3 @@ fun isAppInstalled(context: Context, packageName: String): Boolean {
 }
 
 
-/*
-@Preview(showBackground = true, device = "id:Nexus 5", name = "da")
-@Composable
-fun GreetingPreview() {
-    selectgametheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .padding()
-                    .fillMaxSize()
-            ) {
-
-                LazyColumn(
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                ) {
-                    item {
-                        Selectmode(
-                            version = "it.version",
-                            icon = R.drawable.bgmi_icon,
-                            apkname = "it.apkname",
-                            oninstall = {
-
-                            }, onuninstall =
-                            {
-
-                            }
-                        )
-
-                    }
-                }
-            }
-        }
-    }
-}*/

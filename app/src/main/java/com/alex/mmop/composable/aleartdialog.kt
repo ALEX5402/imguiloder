@@ -56,22 +56,3 @@ fun Progressdialog( text: String ){
     }
 }
 
-
-/*
-
-@Preview(device = "spec:parent=Nexus S")
-@Composable
-fun Priviewdawd(){
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Showprogressbar(progressbarshow = true,"dddd")
-
-    }
-}
-
-
-
-*/
-

@@ -145,6 +145,8 @@ object alexapi {
                                                 any.vngstatus =    getinfo.data.vngstatus
                                                 any.tiwanstatus =  getinfo.data.tiwanstatus
                                                 any.modownername = getinfo.data.modname
+
+
                                                 any.liburlgl =     getinfo.data.liburlgl
                                                 any.libbgmiurl =   getinfo.data.libs
                                                 any.liburlchin =   getinfo.data.liburlcnin
@@ -290,7 +292,7 @@ object alexapi {
 
 
 
-                                               LOGS.warn(any.libbgmiurl)
+//                                               LOGS.warn(any.libbgmiurl)
                                                LOGS.warn( "verified")
                                                LOGS.warn("checktocken : $checktocken")
                                                LOGS.warn(tocken)

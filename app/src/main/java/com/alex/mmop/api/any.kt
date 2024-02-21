@@ -34,12 +34,14 @@ object any {
     var vngstatus   : String = ""
     var modownername  : String = ""
 
+
     var liburlgl : String = ""
     var libbgmiurl : String = ""
     var liburlchin : String = ""
     var liburltiwan : String = ""
     var liburlvng : String = ""
     var linkorea : String = ""
+
 
 
 

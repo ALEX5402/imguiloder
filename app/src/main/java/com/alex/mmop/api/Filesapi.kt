@@ -1,7 +1,6 @@
 package com.alex.mmop.api
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +36,7 @@ object Filesapi {
     }
 
     fun isexternalobb(packagename: String): Boolean {
-        val obbpathsource = File("/storage/emulated/0/vSdcard/Android/obb/$packagename")
+        val obbpathsource = File("/storage/emulated/0/Android/obb/$packagename")
 
         return runBlocking {
             if (obbpathsource != null) {
@@ -96,7 +95,7 @@ object Filesapi {
                         Toast.makeText(context,"Obb already there", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    val sourceobbdir = File("/storage/emulated/0/vSdcard/Android/obb/$packagename")
+                    val sourceobbdir = File("/storage/emulated/0/Android/obb/$packagename")
                     val destinationpath = context.getExternalFilesDir("/fv/storage/emulated/0/Android/obb/$packagename")
                     val getobb = sourceobbdir.listFiles { file ->
                         file.isFile && file.name.endsWith(".obb", ignoreCase = true)
@@ -175,7 +174,7 @@ object Filesapi {
                     val destinationPath = File(destinationFolder, entry.name)
                     if (entry.isDirectory) {
                         entry.mkdirs()
-                        Log.w("ALex", entry.name )
+                      LOGS.warn(entry.name)
                      // copyFolder(entry, destinationPath)
                     } else {
                         Files.copy(entry.toPath(), destinationPath.toPath(), StandardCopyOption.REPLACE_EXISTING)
@@ -194,7 +193,7 @@ object Filesapi {
         }
     }
 
-    suspend fun copydata(
+     fun copydata(
                  oncopydone : () -> Unit  ,
                  oncopyfailed : (reason : String) -> Unit ,
                  packagename : String? ,
