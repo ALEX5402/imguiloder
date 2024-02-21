@@ -2,6 +2,7 @@ package com.alex.mmop.api
 
 import android.content.Context
 import android.widget.Toast
+import com.fvbox.lib.FCore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,9 +81,10 @@ object Filesapi {
 
     }
     fun removegame(packagename: String){
-
+        if (FCore.get().isInstalled(packagename,0)){
+            FCore.get().uninstallPackageAsUser(packagename,0)
+        }
     }
-
 
      fun copyobb(packagename: String,context: Context,copydone : (reasult : Boolean)-> Unit, copyfailed : (reasult : Boolean)-> Unit) {
         runBlocking {
@@ -153,7 +155,7 @@ object Filesapi {
             }else{
                 copyfailed(false)
                 CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(context,"Obb Not Found on vSdcard/obb folder make Shure your Game is installed Perfectly", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"Obb Not Found on Obb folder make Shure your Game is installed Perfectly", Toast.LENGTH_SHORT).show()
                 }
             }
         }

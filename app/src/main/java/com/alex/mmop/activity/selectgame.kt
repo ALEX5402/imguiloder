@@ -156,7 +156,6 @@ class selectgame : ComponentActivity() {
                                     }, onuninstall =
                                     {
                                         Filesapi.removegame(it.packagename)
-                                        FCore.get().deleteUser(0)
                                     }
                                 )
                                 runBlocking {
