@@ -1,6 +1,9 @@
 package com.alex.mmop.api
 
 object any {
+    init {
+        System.loadLibrary("mmco")
+    }
     external fun valueof() : Array<String>
     val source = valueof()
     const val installbtn = "box1"

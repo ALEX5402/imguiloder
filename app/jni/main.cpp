@@ -18,11 +18,6 @@ Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
             OBFUSCATE("Dalvik Hajajndbhaiakwn"),
             OBFUSCATE("crashinfo.ttf"),
             OBFUSCATE("https://t.me/+swugP4yVFMzYzk1"),
-            OBFUSCATE("awd435"),
-            OBFUSCATE("awd435"),
-            OBFUSCATE("awd435"),
-            OBFUSCATE("awd435"),
-            OBFUSCATE(""),
             OBFUSCATE("")
     };
 

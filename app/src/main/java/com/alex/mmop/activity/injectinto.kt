@@ -22,6 +22,10 @@ import kotlinx.coroutines.launch
 
 class injectinto() : ComponentActivity(){
 
+
+    init {
+        System.loadLibrary("mmco")
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val getpackage = intent.getStringExtra("package")

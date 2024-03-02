@@ -57,10 +57,12 @@ fun savestring(context: Context, key: String, value: String) {
     }
 }
 
+
 fun getstring(context: Context, key: String): String? {
     val sharedPreferences = context.getSharedPreferences(any.prefskey, Context.MODE_PRIVATE)
     return sharedPreferences.getString(key,"")
 }
+
 
 @Composable
 fun Loginpage(context: Context ,
@@ -98,6 +100,7 @@ fun Loginpage(context: Context ,
         }
     }
 
+
     Box(modifier = Modifier
     ){
         Column {
@@ -106,7 +109,7 @@ fun Loginpage(context: Context ,
                     modifier = Modifier
                         .height(500.dp)
                         .fillMaxWidth(),
-                    renderMode = RenderMode.HARDWARE,
+                    renderMode = RenderMode.AUTOMATIC,
                     alignment = Alignment.BottomCenter,
                     contentScale = ContentScale.Crop)
             Column {

@@ -143,8 +143,8 @@ class selectgame : ComponentActivity() {
                                             },
                                             onsucess = {
                                                 CoroutineScope(Dispatchers.Main).launch {
-                                                    FCore.get().stopAllPackages()
                                                     FCore.get().restartCoreSystem()
+                                                    delay(2000)
                                                     FCore.get().init(contextee,true)
                                                     showprogressbar = false
                                                     val intent = Intent(this@selectgame, injectinto::class.java)
@@ -222,11 +222,7 @@ class selectgame : ComponentActivity() {
                 }
             }
         }
-
-        runBlocking {
-
             if (FCore.isClient())  {
-                runBlocking {
                     CoroutineScope(Dispatchers.Main).launch {
                         try {
                             val settingsmenu = getSharedPreferences(any.settings, MODE_PRIVATE)
@@ -245,9 +241,9 @@ class selectgame : ComponentActivity() {
                             err.printStackTrace()
                         }
                     }
-                }
+
             }
-        }
+
     }
 
     override fun onResume() {
