@@ -79,7 +79,10 @@ import java.io.IOException
 
 
 class selectgame : ComponentActivity() {
-
+    
+ init {
+        System.loadLibrary("mmco")
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
