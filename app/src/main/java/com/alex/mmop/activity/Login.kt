@@ -19,7 +19,9 @@ import com.alex.mmop.composable.Loginpage
 import com.alex.mmop.ui.theme.selectgametheme
 
 class Login : ComponentActivity() {
-
+ init {
+        System.loadLibrary("mmco")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
