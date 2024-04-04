@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Loder 2.0</string>
+    <string name="app_name">Loder 3.0</string>
     <string name="splashtost">Looks Good</string>
     <string name="error">Something went wrong</string>
     <string name="login_failed">Login failed reason is </string>
