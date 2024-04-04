@@ -54,7 +54,7 @@ android {
         }
         release {
             signingConfig signingConfigs.alex
-            minifyEnabled true
+            minifyEnabled false
             debuggable true
             zipAlignEnabled true
             multiDexEnabled true
@@ -67,7 +67,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
