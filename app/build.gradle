@@ -2,8 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services' // firebase
+    id 'com.google.firebase.crashlytics'  // firebase
 
     
 }
@@ -25,9 +25,8 @@ android {
         minSdk 26
         //noinspection ExpiredTargetSdkVersion
         targetSdk 28 //just for fix the permissons
-        multiDexEnabled false
         versionCode 1
-        versionName "2.3"
+        versionName "3.1"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -55,7 +54,11 @@ android {
         }
         release {
             signingConfig signingConfigs.alex
-            minifyEnabled false
+            minifyEnabled true
+            debuggable true
+            zipAlignEnabled true
+            multiDexEnabled true
+            jniDebuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -102,13 +105,10 @@ android {
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     implementation 'net.lingala.zip4j:zip4j:2.11.5'
-    implementation fileTree(dir: "libs", include: ["classes.jar", "flib-release.aar"])
+    implementation fileTree(dir: "libs", include: ["fix.aar"])
 
-    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation platform('com.google.firebase:firebase-bom:32.8.0')
     implementation 'com.google.firebase:firebase-analytics'
-
-
- 
 
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"
@@ -118,7 +118,7 @@ dependencies {
 
     //courotines and stdlibs
     implementation "androidx.appcompat:appcompat:1.6.1"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.21"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.22"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
 
@@ -136,7 +136,7 @@ dependencies {
     implementation 'com.elvishew:xlog:1.10.1'
 
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
 
     // Add the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
@@ -160,7 +160,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
     implementation 'androidx.activity:activity-compose:1.8.2'
-    implementation platform('androidx.compose:compose-bom:2023.08.00')
+    implementation platform('androidx.compose:compose-bom:2024.03.00')
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
@@ -168,7 +168,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation platform('androidx.compose:compose-bom:2023.08.00')
+    androidTestImplementation platform('androidx.compose:compose-bom:2024.03.00')
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'

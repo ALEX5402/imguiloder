@@ -36,6 +36,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.alex.mmop.R
 import com.alex.mmop.api.any
 import com.fvbox.lib.FCore
+import top.canyie.pine.Pine
 
 
 @Composable
@@ -192,11 +193,7 @@ fun launchsocial(packagename: String) {
     if (check){
         FCore.get().launchApk(packagename,0)
     }else{
-        val reasult =  FCore.get().installPackageAsUser(packagename,0)
-
-        if (reasult != null){
-            FCore.get().launchApk(packagename,0)
-        }
+        FCore.get().launchApk(packagename,0)
     }
 }
 

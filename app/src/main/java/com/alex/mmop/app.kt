@@ -15,7 +15,7 @@ class app : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseApp.initializeApp(this)
+        FirebaseApp.initializeApp(this)  // firebase
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         if(FCore.isClient()) {
             return
