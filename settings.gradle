@@ -30,6 +30,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Nonroot-Inject-2.0"
+rootProject.name = "Nonroot-Inject-3.0"
 include ':app'
 
