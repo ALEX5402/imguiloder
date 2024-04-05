@@ -43,19 +43,7 @@ class splash : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         clean()
-
-        try {
-            val alex = dataDir.absolutePath
-
-            LOGS.warn(alex)
-
-        }catch (err : Exception)
-        {
-            err.printStackTrace()
-        }
-
-
-
+        
         setContent {
             val prefffs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
 
