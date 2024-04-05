@@ -3,6 +3,7 @@ package com.alex.mmop.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,6 +14,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.alex.mmop.R
+import com.alex.mmop.api.LOGS
 import com.alex.mmop.api.alexapi
 import com.alex.mmop.api.any
 import com.alex.mmop.authapi.kuroapi
@@ -20,11 +22,15 @@ import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.composable.splashscreen
 import com.alex.mmop.ui.theme.ImguiloderTheme
+import com.fvbox.lib.FCore
+import com.fvbox.lib.system.proxy.FIStorageManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
+import java.nio.file.Files
 
 
 class splash : ComponentActivity() {
@@ -37,6 +43,19 @@ class splash : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         clean()
+
+        try {
+            val alex = dataDir.absolutePath
+
+            LOGS.warn(alex)
+
+        }catch (err : Exception)
+        {
+            err.printStackTrace()
+        }
+
+
+
         setContent {
             val prefffs = getSharedPreferences(any.prefskey, MODE_PRIVATE)
 

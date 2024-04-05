@@ -98,7 +98,8 @@ object Filesapi {
                     }
                 } else {
                     val sourceobbdir = File("/storage/emulated/0/Android/obb/$packagename")
-                    val destinationpath = context.getExternalFilesDir("/fv/storage/emulated/0/Android/obb/$packagename")
+                    val internaldatadir = context.dataDir.absolutePath
+                    val destinationpath = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
                     val getobb = sourceobbdir.listFiles { file ->
                         file.isFile && file.name.endsWith(".obb", ignoreCase = true)
                     }
