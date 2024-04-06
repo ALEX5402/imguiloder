@@ -1,8 +1,6 @@
 package com.alex.mmop.authapi
 
-import com.google.errorprone.annotations.Keep
 import com.google.gson.annotations.SerializedName
-
 
 
 data class Data(

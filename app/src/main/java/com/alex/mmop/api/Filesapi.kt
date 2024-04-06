@@ -17,7 +17,8 @@ import java.nio.file.StandardCopyOption
 
 object Filesapi {
     fun isinternalobb(context: Context, packagename: String): Boolean {
-        val obbpath = context.getExternalFilesDir("/fv/storage/emulated/0/Android/obb/$packagename")
+        val internaldatadir = context.dataDir.absolutePath
+        val obbpath = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
         return runBlocking {
             if (obbpath != null) {
                 if (!obbpath.exists()) {
@@ -59,7 +60,10 @@ object Filesapi {
                     copydone : (reasult : Boolean)-> Unit,
                     copyfailed : (reasult : Boolean,
                                   reason:String)-> Unit){
-        val obbdir = context.getExternalFilesDir("/fv/storage/emulated/0/Android/obb/$packagename")
+
+        val internaldatadir = context.dataDir.absolutePath
+        val obbdir = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
+
         runBlocking {
             val getobb = obbdir?.listFiles { file ->
                 file.isFile && file.name.endsWith(".obb", ignoreCase = true)
@@ -203,8 +207,8 @@ object Filesapi {
                  context: Context
     )  {
         val sourceFolder = File("/storage/emulated/0/vSdcard/Android/data/$packagename")
-        val destinationFolder = context.getExternalFilesDir("/fv/storage/emulated/0/Android/data/$packagename")
-
+         val internaldatadir = context.dataDir.absolutePath
+         val destinationFolder = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
         try {
             copyFolder(sourceFolder =  sourceFolder,
                 destinationFolder = destinationFolder!!,

@@ -84,7 +84,7 @@ object alexapi {
                  onfailed: ( reason : String ) -> Unit,
     )
     {
-        // kuro login api made by alex5402 using kotlin and okhttp and google gson
+        // kuro login api made by alex5402 using kotlin and okhttp and google gson sorry guys i just ignored null safety here 😅
         val scope = CoroutineScope(Dispatchers.Default)
         val clint = OkHttpClient()
         val gson = Gson()

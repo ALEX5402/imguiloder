@@ -9,10 +9,10 @@ JNIEXPORT jobjectArray JNICALL
 Java_com_alex_mmop_api_any_valueof(JNIEnv *env, jobject thiz) {
     const char *strings[] = {
             OBFUSCATE("nothing"),
-            OBFUSCATE("mk23hdoie79kmaju"), // zippassword
+            OBFUSCATE("BadshahPapa123"), // zippassword
             OBFUSCATE("DESede/ECB/PKCS5Padding"),
             OBFUSCATE("DESede"),
-            OBFUSCATE("https://anogs.tech/aviwa/connect"), // loginurl
+            OBFUSCATE("https://api-key.xyz/BadshahOp/connect"), // loginurl
             OBFUSCATE("Vm8Lk7Uj2JmsjCPVPVjrLa7zgfx3uz9E"), // lisence
             OBFUSCATE("User-Agent"),
             OBFUSCATE("Dalvik Hajajndbhaiakwn"),
