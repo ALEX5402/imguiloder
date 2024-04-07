@@ -1,5 +1,7 @@
 package com.alex.mmop.composable
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
@@ -36,6 +39,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.alex.mmop.R
 import com.alex.mmop.api.any
 import com.fvbox.lib.FCore
+import org.checkerframework.checker.i18n.qual.LocalizableKey
 import top.canyie.pine.Pine
 
 
@@ -149,6 +153,7 @@ fun Injectionview(onclicklaunch:() -> Unit) {
                 textAlign = TextAlign.Center
             )
         }
+        val context = LocalContext.current
 
         Row(modifier = Modifier.layoutId("socialmedia")) {
             Image(painter = painterResource(id = R.drawable.facebook),
@@ -159,7 +164,7 @@ fun Injectionview(onclicklaunch:() -> Unit) {
                     .clickable(
                         role = Role.Image,
                         onClick = {
-                            launchsocial(any.facebook)
+                            launchsocial(any.facebook,context)
                         }
                     )
 
@@ -172,7 +177,7 @@ fun Injectionview(onclicklaunch:() -> Unit) {
                 .clickable(
                     role = Role.Image,
                     onClick = {
-                        launchsocial(any.twitter)
+                        launchsocial(any.twitter,context)
                     }
                 )
             )
@@ -188,12 +193,14 @@ fun Injectionview(onclicklaunch:() -> Unit) {
 
     }
 }
-fun launchsocial(packagename: String) {
+fun launchsocial(packagename: String, context: Context) {
     val check = FCore.get().isInstalled(packagename,0)
     if (check){
         FCore.get().launchApk(packagename,0)
     }else{
-        FCore.get().launchApk(packagename,0)
+        FCore.get().installPackageAsUser(packagename,0)
+        Toast.makeText(context , "the package $packagename is installing please click again after that",Toast.LENGTH_LONG).show()
+
     }
 }
 
