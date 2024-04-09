@@ -78,7 +78,8 @@
         android:resizeableActivity="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:largeHeap="true"
         android:theme="@style/Theme.Imguiloder">
@@ -86,6 +87,7 @@
             android:name=".activity.splash"
             android:exported="true"
             android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Imguiloder"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -99,6 +101,15 @@
             android:name=".activity.selectgame"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <provider
+            android:authorities="${applicationId}.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/path" />
+        </provider>
 
         <activity
             android:name=".activity.injectinto"

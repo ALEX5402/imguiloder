@@ -10,7 +10,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
@@ -56,9 +58,9 @@ import com.alex.mmop.authapi.userinfo
 import com.alex.mmop.composable.Selectmode
 import com.alex.mmop.composable.Settingsmenu
 import com.alex.mmop.composable.Showprogressbar
+import com.alex.mmop.composable.Zarchiver
 import com.alex.mmop.composable.generateuuid
 import com.alex.mmop.ui.theme.selectgametheme
-
 import com.fvbox.lib.FCore
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -75,14 +77,16 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 
 class selectgame : ComponentActivity() {
-    
+    private val FILE_PICKER_REQUEST_CODE = 123
  init {
         System.loadLibrary("mmco")
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -122,6 +126,17 @@ class selectgame : ComponentActivity() {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize()
                         ) {
+                            item {
+                                Zarchiver(onimportclick = {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                                        intent.type = "*/*"
+                                        startActivityForResult(intent, FILE_PICKER_REQUEST_CODE)
+                                    }
+                                }
+                                )
+                            }
                             items(mutablelistfgames()) {
                                 Selectmode(
                                     version = it.version,
@@ -183,7 +198,6 @@ class selectgame : ComponentActivity() {
                                         context = this@selectgame
                                     )
                                 }
-                                
                                 if (isshowing) {
                                     Dialog(onDismissRequest = {
                                         isshowing = false
@@ -275,6 +289,43 @@ class selectgame : ComponentActivity() {
         }
 
     }
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+            if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                data?.data?.let { uri ->
+                    Filesapi.importFile(
+                        uri,
+                        this@selectgame,
+                        {
+                        Toast.makeText(this, "File Imported", Toast.LENGTH_LONG).show()
+                        },
+                        {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Toast.makeText(this@selectgame , "Import failed $it" , Toast.LENGTH_LONG ).show()
+                            }
+                        },{
+                            Toast.makeText(this, "copying Wait",Toast.LENGTH_LONG).show()
+                        }
+
+                    )
+                }
+            }
+
+
+    }
+    @SuppressLint("Range")
+    private fun getFileName(uri: Uri): String {
+        var result = ""
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                result = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+            }
+        }
+        return result
+    }
+
 
     fun packagemode( packagename: String ) : String {
 
@@ -335,27 +386,6 @@ class selectgame : ComponentActivity() {
             return false
         }
         return true
-    }
-
-    companion object {
-        const val FILE_PICKER_REQUEST_CODE = 1
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                val filePath = getFilePathFromUri(uri, this)
-                if (filePath != null) {
-                    val sourceFile = File(filePath)
-
-                    Toast.makeText(this, "File selected: $filePath", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Failed to get file path", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
     }
 
     @SuppressLint("Range")

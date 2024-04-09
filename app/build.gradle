@@ -26,7 +26,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdk 28 //just for fix the permissons
         versionCode 1
-        versionName "3.1"
+        versionName "3.1.1"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -54,7 +54,7 @@ android {
         }
         release {
             signingConfig signingConfigs.alex
-            minifyEnabled false
+            minifyEnabled true
             debuggable true
             zipAlignEnabled true
             multiDexEnabled true

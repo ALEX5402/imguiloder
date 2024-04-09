@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -80,14 +81,7 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
     var alertdialog by remember {
         mutableStateOf(false)
     }
-    val packagenames = listOf(
-        "com.pubg.imobile",
-        "com.tencent.ig",
-        "com.pubg.korea",
-        "com.tencent.tmgp.pubgmhd",
-        "com.rekoo.pubgm",
-        "com.vng.pubgmobile"
-    )
+
     Column(
         Modifier
             .padding(10.dp)
@@ -404,158 +398,10 @@ fun Settingsmenu(context: Context, permissonpopup: () -> Unit){
             Text(text = "Give Permission Unknown apps")
 
         }
-        TextButton(onClick = {
-            alertdialog = true
-            runBlocking {
-                Filesapi.copydata(
-                    oncopydone = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                        }
-                    },
-                    oncopyfailed = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
-                        }
-                    },
-                    packagename = packagenames[0],
-                    context = context
-                )
-            }
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-            Text(text = "Copy BGMI data from vSdcard")
-        }
-        TextButton(onClick = {
-            alertdialog = true
-            runBlocking {
-                Filesapi.copydata(
-                    oncopydone = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                        }
-                    },
-                    oncopyfailed = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
-                        }
-                    },
-                    packagename = packagenames[1],
-                    context = context
-                )
-            }
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-            Text(text = "Copy Global data from VSdcard")
 
-        }
-        TextButton(onClick = {
-            alertdialog = true
-            runBlocking {
-                Filesapi.copydata(
-                    oncopydone = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                        }
-                    },
-                    oncopyfailed = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
-                        }
-                    },
-                    packagename = packagenames[2],
-                    context = context
-                )
-            }
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-
-            Text(text = "Copy Pubg KOREA DATA VSdcard")
-
-        }
-        TextButton(onClick = {
-            alertdialog = true
-            runBlocking {
-                Filesapi.copydata(
-                    oncopydone = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                        }
-                    },
-                    oncopyfailed = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
-                        }
-                    },
-                    packagename = packagenames[3],
-                    context = context
-                )
-            }
-
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-            Text(text = "Copy Pubg CHINA Data from vSdcard")
-        }
-        TextButton(onClick = {
-            alertdialog = true
-            runBlocking {
-                Filesapi.copydata(
-                    oncopydone = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                        }
-                    },
-                    oncopyfailed = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
-                        }
-                    },
-                    packagename = packagenames[4],
-                    context = context
-                )
-            }
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-            Text(text = "Copy Pubg Tiwan Data From vSdcard")
-
-        }
-        TextButton(onClick = {
-            runBlocking {
-                alertdialog = true
-                Filesapi.copydata(
-                    oncopydone = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                        }
-                    },
-                    oncopyfailed = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            alertdialog = false
-                            Toast.makeText(context,"DATA copy failed $it",Toast.LENGTH_LONG).show()
-                        }
-                    },
-                    packagename = packagenames[5],
-                    context = context
-                )
-            }
-        },
-            modifier = Modifier.padding(5.dp)
-        ) {
-            Text(text = "Copy Pubg VNG Data From vSdcard")
-
-        }
 
     }
+
 }
 
 fun restarttoast(context: Context){

@@ -1,6 +1,11 @@
 package com.alex.mmop.api
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
+import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener
 import android.widget.Toast
 import com.fvbox.lib.FCore
 import kotlinx.coroutines.CoroutineScope
@@ -12,11 +17,13 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.reflect.Field
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
 object Filesapi {
     fun isinternalobb(context: Context, packagename: String): Boolean {
+
         val internaldatadir = context.dataDir.absolutePath
         val obbpath = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
         return runBlocking {
@@ -60,12 +67,10 @@ object Filesapi {
                     copydone : (reasult : Boolean)-> Unit,
                     copyfailed : (reasult : Boolean,
                                   reason:String)-> Unit){
-
         val internaldatadir = context.dataDir.absolutePath
         val obbdir = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
-
         runBlocking {
-            val getobb = obbdir?.listFiles { file ->
+            val getobb = obbdir.listFiles { file ->
                 file.isFile && file.name.endsWith(".obb", ignoreCase = true)
             }
             withContext(Dispatchers.IO, block = {
@@ -87,6 +92,75 @@ object Filesapi {
     fun removegame(packagename: String){
         if (FCore.get().isInstalled(packagename,0)){
             FCore.get().uninstallPackageAsUser(packagename,0)
+        }
+    }
+
+
+     @SuppressLint("Range")
+     fun importFile(
+        receivedFileUri: Uri?,
+        context: Context,
+        onCopyDone: () -> Unit,
+        onFailed: (reason: String) -> Unit,
+        onstarted: () -> Unit
+    ) {
+        try {
+            receivedFileUri ?: throw IllegalArgumentException("Received file URI is null")
+
+            // Open input stream from received file URI
+            val inputStream = context.contentResolver.openInputStream(receivedFileUri)
+                ?: throw IllegalArgumentException("Failed to open input stream for URI: $receivedFileUri")
+
+            val time = System.currentTimeMillis()
+            val dataDir = File("${context.dataDir}/storage/emulated/0/Imported-files")
+
+            // Extract original file name and extension
+            val originalFileName = context.contentResolver.query(receivedFileUri, null, null, null, null)
+                ?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        cursor.getString(cursor.getColumnIndex("_display_name"))
+                    } else {
+                        throw IllegalArgumentException("Failed to retrieve original file name")
+                    }
+                } ?: throw IllegalArgumentException("Failed to retrieve original file name")
+
+            val originalFileExtension = originalFileName.substringAfterLast('.', "")
+
+            val destination = File(dataDir, "imported_file_$time.$originalFileExtension")
+
+            // Open output stream to destination file
+
+            if (!dataDir.isDirectory){
+                dataDir.mkdirs()
+            }
+            val outputStream = FileOutputStream(destination)
+            onstarted()
+            // Copy file contents from input stream to output stream
+            inputStream.use { input ->
+                outputStream.use { output ->
+                    val buffer = ByteArray(1024)
+                    var length: Int
+                    var byteread = 0
+                    val totalBytes = inputStream.available()
+                    while (input.read(buffer).also { length = it } > 0) {
+                        output.write(buffer, 0, length)
+                        byteread += length
+                        val newProgress = (byteread * 1000) / totalBytes
+
+                    }
+
+                }
+            }
+
+            // Notify onCopyDone on the main thread
+            CoroutineScope(Dispatchers.Main).launch {
+                onCopyDone()
+            }
+        } catch (err: Exception) {
+            // Notify onFailed with error message on the main thread
+            CoroutineScope(Dispatchers.Main).launch {
+                onFailed(err.message ?: "Unknown error")
+            }
         }
     }
 
@@ -119,7 +193,7 @@ object Filesapi {
                         }
                         obbname = it
                     }
-                    if (!destinationpath!!.exists()) {
+                    if (!destinationpath.exists()) {
                         destinationpath.mkdirs()
                     }
                     val destFile = obbname?.name?.let {
@@ -167,83 +241,7 @@ object Filesapi {
     }
 
 
-     fun copyFolder(sourceFolder: File,
-                   oncopydone : () -> Unit  ,
-                   oncopyfailed : (reason : String) -> Unit ,
-                   destinationFolder: File
-    ) {
-        try {
-            CoroutineScope(Dispatchers.IO).launch {
-                if (!destinationFolder.exists()) {
-                    destinationFolder.mkdirs()
-                }
-                sourceFolder.listFiles()?.forEach { entry ->
-                    val destinationPath = File(destinationFolder, entry.name)
-                    if (entry.isDirectory) {
-                        entry.mkdirs()
-                      LOGS.warn(entry.name)
-                     // copyFolder(entry, destinationPath)
-                    } else {
-                        Files.copy(entry.toPath(), destinationPath.toPath(), StandardCopyOption.REPLACE_EXISTING)
-                        oncopydone()
-                    }
-                }
-            }
-        }catch (err : IOException){
-            err.printStackTrace()
-            LOGS.error(err.toString())
-            oncopyfailed(err.toString())
-        }catch (Err :Exception){
-            oncopyfailed(Err.toString())
-            Err.printStackTrace()
 
-        }
-    }
 
-     fun copydata(
-                 oncopydone : () -> Unit  ,
-                 oncopyfailed : (reason : String) -> Unit ,
-                 packagename : String? ,
-                 context: Context
-    )  {
-        val sourceFolder = File("/storage/emulated/0/vSdcard/Android/data/$packagename")
-         val internaldatadir = context.dataDir.absolutePath
-         val destinationFolder = File("${internaldatadir}/storage/emulated/0/Android/obb/$packagename")
-        try {
-            copyFolder(sourceFolder =  sourceFolder,
-                destinationFolder = destinationFolder!!,
-                oncopydone = {
-                      oncopydone()
-                },
-                oncopyfailed = {
-                    oncopyfailed(it)
-                }
-                )
-        }catch (err : Exception){
-             oncopyfailed(err.toString())
-            err.printStackTrace()
-        }
-    }
+
 }
-
-    /* //   val obbpath = getExternalFilesDir("/fv/storage/emulated/0/Android/obb") // storage/emulated/0/Android/data/com.alex.mmop/files/Android/obb
-        if (obbpath != null) {
-            if (!obbpath.exists())
-                obbpath.mkdirs()
-        }
-        val obbpath2 = File("/storage/emulated/0/Android/obb/com.pubg.imobile")
-        val filelist = obbpath2.listFiles()
-
-        Log.w("alex", obbpath.toString())
-        for (file in filelist){
-            Log.w("obpath2", file.toString())
-        }
-*/
-    /*    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/octet-stream" // Set MIME type to allow only .obb files
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/octet-stream")) // Set MIME type filter
-        }
-        startActivityForResult(intent, selectgame.FILE_PICKER_REQUEST_CODE)
-
-*/
